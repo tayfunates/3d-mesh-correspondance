@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\core\CommandLineParser.h" />
     <ClInclude Include="..\..\..\include\core\Defs.h" />
     <ClInclude Include="..\..\..\include\core\PathUtil.h" />
     <ClInclude Include="..\..\..\include\core\StringUtil.h" />
