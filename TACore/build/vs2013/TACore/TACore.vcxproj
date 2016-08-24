@@ -124,9 +124,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\core\Defs.h" />
+    <ClInclude Include="..\..\..\include\core\PathUtil.h" />
     <ClInclude Include="..\..\..\include\core\StringUtil.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\core\PathUtil.cpp" />
     <ClCompile Include="..\..\..\src\core\StringUtil.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
