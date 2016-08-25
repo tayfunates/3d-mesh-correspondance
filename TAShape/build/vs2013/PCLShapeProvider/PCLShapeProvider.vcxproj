@@ -27,8 +27,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5880454A-37AC-40BA-BEE1-B7DEC99DFCC5}</ProjectGuid>
-    <RootNamespace>TACore</RootNamespace>
+    <ProjectGuid>{C1610C4C-CA44-4DCD-9037-2278F4A5CE53}</ProjectGuid>
+    <RootNamespace>PCLShapeProvider</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -98,8 +98,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BOOST_ALL_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -110,8 +109,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;BOOST_ALL_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,8 +120,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/pcl/include/pcl-1.7;$(DEV_HOME)/pcl/3rdParty/VTK/include/vtk-6.2;$(DEV_HOME)/pcl/3rdParty/FLANN/include;$(DEV_HOME)/pcl/3rdParty/Boost/include/boost-1_57;$(DEV_HOME)/pcl/3rdParty/Eigen/eigen3;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_LIB;BOOST_ALL_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -136,8 +134,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;BOOST_ALL_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -152,8 +149,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;BOOST_ALL_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -168,24 +164,29 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_LIB;BOOST_ALL_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/pcl/include/pcl-1.7;$(DEV_HOME)/pcl/3rdParty/VTK/include/vtk-6.2;$(DEV_HOME)/pcl/3rdParty/FLANN/include;$(DEV_HOME)/pcl/3rdParty/Boost/include/boost-1_57;$(DEV_HOME)/pcl/3rdParty/Eigen/eigen3;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_ALL_DYN_LINK;WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(PCL_ROOT)\3rdParty\Boost\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\core\CommandLineParser.h" />
-    <ClInclude Include="..\..\..\include\core\Defs.h" />
-    <ClInclude Include="..\..\..\include\core\PathUtil.h" />
-    <ClInclude Include="..\..\..\include\core\StringUtil.h" />
+    <ProjectReference Include="..\..\..\..\TACore\build\vs2013\TACore\TACore.vcxproj">
+      <Project>{5880454a-37ac-40ba-bee1-b7dec99dfcc5}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ShapeCore\ShapeCore.vcxproj">
+      <Project>{8ea86bef-1610-4d6f-a8c4-4b19bb6cae95}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\core\PathUtil.cpp" />
-    <ClCompile Include="..\..\..\src\core\StringUtil.cpp" />
+    <ClCompile Include="..\..\..\src\pcl\ThreeDimPCLShape.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\pcl\ThreeDimPCLShape.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
