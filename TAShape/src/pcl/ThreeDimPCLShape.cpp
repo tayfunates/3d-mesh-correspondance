@@ -7,10 +7,14 @@ namespace TAShape
 	TACore::Result ThreeDimPCLShape::load(const std::string& pPath)
 	{
 		TACORE_CHECK_ARGS(pPath != "");
+
+		//Clear the all shape
+		clear();
+
 		int loadRes = pcl::io::load(pPath, this->m_3DShape);
 		if (loadRes < 0)
 		{
-			return TACore::TACORE_INVALID_OPERATION;
+			return TACore::TACORE_ERROR;
 		}
 		return TACore::TACORE_OK;
 	}
@@ -21,7 +25,7 @@ namespace TAShape
 		int saveRes = pcl::io::save(pPath, this->m_3DShape);
 		if (saveRes < 0)
 		{
-			return TACore::TACORE_INVALID_OPERATION;
+			return TACore::TACORE_ERROR;
 		}
 		return TACore::TACORE_OK;
 	}

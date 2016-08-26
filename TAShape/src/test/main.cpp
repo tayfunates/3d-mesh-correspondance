@@ -1,4 +1,4 @@
-#include <pcl/ThreeDimPCLShape.h>
+//#include <pcl/ThreeDimPCLShape.h>
 #include <oi/ThreeDimOIShape.h>
 #include <iostream>
 #include <core/CommandLineParser.h>
@@ -32,16 +32,17 @@ int main(int argc, char* argv[])
 	std::string inputFile = parser.get("input");
 	std::string outputFile = parser.get("output");
 
-	ThreeDimPCLShape pclShape1;
-	pclShape1.load(inputFile);
-	pclShape1.save(outputFile);
-	pclShape1.show();
+	//ThreeDimPCLShape pclShape1;
+	//pclShape1.load(inputFile);
+	//pclShape1.save(outputFile);
+	//pclShape1.show();
 
-	ThreeDimPCLShape pclShape2;
-	pclShape2.load(outputFile);
-	pclShape2.show();
+	//ThreeDimPCLShape pclShape2;
+	//pclShape2.load(outputFile);
+	//pclShape2.show();
 
 	ThreeDimOIShape oiShape;
+	oiShape.load(inputFile);
 	oiShape.show();
 
 	return mainRet(1, "Main Test Successfully Ended");

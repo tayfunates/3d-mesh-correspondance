@@ -98,7 +98,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/pcl/include/pcl-1.7;$(DEV_HOME)/pcl/3rdParty/VTK/include/vtk-6.2;$(DEV_HOME)/pcl/3rdParty/FLANN/include;$(DEV_HOME)/pcl/3rdParty/Boost/include/boost-1_57;$(DEV_HOME)/pcl/3rdParty/Eigen/eigen3;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -134,7 +134,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/pcl/include/pcl-1.7;$(DEV_HOME)/pcl/3rdParty/VTK/include/vtk-6.2;$(DEV_HOME)/pcl/3rdParty/FLANN/include;$(DEV_HOME)/pcl/3rdParty/Boost/include/boost-1_57;$(DEV_HOME)/pcl/3rdParty/Eigen/eigen3;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

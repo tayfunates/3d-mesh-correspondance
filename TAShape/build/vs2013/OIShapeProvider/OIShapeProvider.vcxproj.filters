@@ -18,9 +18,15 @@
     <ClInclude Include="..\..\..\include\oi\ThreeDimOIShape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\oi\OIPainter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\oi\ThreeDimOIShape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\oi\OIPainter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

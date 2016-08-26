@@ -3,6 +3,7 @@
 
 #include <core/CoreDefs.h>
 #include <core/ThreeDimShape.h>
+#include <core/PolygonMesh.h>
 
 namespace TAShape
 {
@@ -15,6 +16,7 @@ namespace TAShape
 		virtual TACore::Result show() OVERRIDE;
 
 	private:
+		TAShape::PolygonMesh m_3DShape;
 	};
 }
 
