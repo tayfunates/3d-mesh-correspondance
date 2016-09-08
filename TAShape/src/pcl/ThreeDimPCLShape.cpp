@@ -55,4 +55,14 @@ namespace TAShape
 		viewer->close();
 		return TACore::TACORE_OK;
 	}
+
+	PCL_POLYGON_LIST& ThreeDimPCLShape::getPolygons()
+	{
+		return this->m_3DShape.polygons;
+	}
+
+	PCL_POINT_CLOUD& ThreeDimPCLShape::getCloud()
+	{
+		return this->m_3DShape.cloud;
+	}
 }

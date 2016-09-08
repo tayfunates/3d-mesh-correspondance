@@ -13,6 +13,8 @@ namespace TAShape
 	class ThreeDimShape
 	{
 	public:
+		virtual ~ThreeDimShape() {}
+
 		/**
 		* @brief			Abstract method which loads the shape from a file provided by a path
 		*					Different extensions are provided for different libs.

@@ -85,13 +85,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(DEV_HOME)/Coin3D/include;$(DEV_HOME)/pcl/include/pcl-1.7;$(DEV_HOME)/pcl/3rdParty/VTK/include/vtk-6.2;$(DEV_HOME)/pcl/3rdParty/FLANN/include;$(DEV_HOME)/pcl/3rdParty/Boost/include/boost-1_57;$(DEV_HOME)/pcl/3rdParty/Eigen/eigen3;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/pcl/include/pcl-1.7;$(DEV_HOME)/pcl/3rdParty/VTK/include/vtk-6.2;$(DEV_HOME)/pcl/3rdParty/FLANN/include;$(DEV_HOME)/pcl/3rdParty/Boost/include/boost-1_57;$(DEV_HOME)/pcl/3rdParty/Eigen/eigen3;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_ALL_DYN_LINK;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_LIB;COIN_DLL;SOWIN_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DEV_HOME)/Coin3D/lib/x64;$(DEV_HOME)/pcl/lib;$(DEV_HOME)/pcl/3rdParty/Boost/lib;$(DEV_HOME)/pcl/3rdParty/FLANN/lib;$(DEV_HOME)/pcl/3rdParty/VTK/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>pcl_common_release.lib;pcl_features_release.lib;pcl_filters_release.lib;pcl_io_ply_release.lib;pcl_io_release.lib;pcl_kdtree_release.lib;pcl_keypoints_release.lib;pcl_octree_debug.lib;pcl_outofcore_debug.lib;pcl_people_debug.lib;pcl_recognition_debug.lib;pcl_registration_debug.lib;pcl_sample_consensus_debug.lib;pcl_search_debug.lib;pcl_segmentation_debug.lib;pcl_surface_debug.lib;pcl_tracking_debug.lib;pcl_visualization_debug.lib;coin2d.lib;sowin1d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(DEV_HOME)/pcl/lib;$(DEV_HOME)/pcl/3rdParty/Boost/lib;$(DEV_HOME)/pcl/3rdParty/FLANN/lib;$(DEV_HOME)/pcl/3rdParty/VTK/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pcl_common_debug.lib;pcl_features_debug.lib;pcl_filters_debug.lib;pcl_io_ply_debug.lib;pcl_io_debug.lib;pcl_kdtree_debug.lib;pcl_keypoints_debug.lib;pcl_octree_debug.lib;pcl_outofcore_debug.lib;pcl_people_debug.lib;pcl_recognition_debug.lib;pcl_registration_debug.lib;pcl_sample_consensus_debug.lib;pcl_search_debug.lib;pcl_segmentation_debug.lib;pcl_surface_debug.lib;pcl_tracking_debug.lib;pcl_visualization_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,7 +119,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(DEV_HOME)/Coin3D/include;$(DEV_HOME)/pcl/include/pcl-1.7;$(DEV_HOME)/pcl/3rdParty/Boost/include/boost-1_57;$(DEV_HOME)/pcl/3rdParty/VTK/include/vtk-6.2;$(DEV_HOME)/pcl/3rdParty/FLANN/include;$(DEV_HOME)/pcl/3rdParty/Eigen/eigen3;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/pcl/include/pcl-1.7;$(DEV_HOME)/pcl/3rdParty/Boost/include/boost-1_57;$(DEV_HOME)/pcl/3rdParty/VTK/include/vtk-6.2;$(DEV_HOME)/pcl/3rdParty/FLANN/include;$(DEV_HOME)/pcl/3rdParty/Eigen/eigen3;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TACore/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_ALL_DYN_LINK;_CRT_SECURE_NO_WARNINGS;COIN_DLL;SOWIN_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -127,8 +127,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(DEV_HOME)/Coin3D/lib/x64;$(DEV_HOME)/pcl/lib;$(DEV_HOME)/pcl/lib/$(Configuration);$(DEV_HOME)/pcl\3rdParty\Boost\lib;$(DEV_HOME)/pcl\3rdParty\FLANN\lib;$(DEV_HOME)/pcl\3rdParty\VTK\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>pcl_common_release.lib;pcl_features_release.lib;pcl_filters_release.lib;pcl_io_ply_release.lib;pcl_io_release.lib;pcl_kdtree_release.lib;pcl_keypoints_release.lib;pcl_octree_release.lib;pcl_outofcore_release.lib;pcl_people_release.lib;pcl_recognition_release.lib;pcl_registration_release.lib;pcl_sample_consensus_release.lib;pcl_search_release.lib;pcl_segmentation_release.lib;pcl_surface_release.lib;pcl_tracking_release.lib;pcl_visualization_release.lib;coin2.lib;sowin1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(DEV_HOME)/pcl/lib;$(DEV_HOME)/pcl/lib/$(Configuration);$(DEV_HOME)/pcl\3rdParty\Boost\lib;$(DEV_HOME)/pcl\3rdParty\FLANN\lib;$(DEV_HOME)/pcl\3rdParty\VTK\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pcl_common_release.lib;pcl_features_release.lib;pcl_filters_release.lib;pcl_io_ply_release.lib;pcl_io_release.lib;pcl_kdtree_release.lib;pcl_keypoints_release.lib;pcl_octree_release.lib;pcl_outofcore_release.lib;pcl_people_release.lib;pcl_recognition_release.lib;pcl_registration_release.lib;pcl_sample_consensus_release.lib;pcl_search_release.lib;pcl_segmentation_release.lib;pcl_surface_release.lib;pcl_tracking_release.lib;pcl_visualization_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

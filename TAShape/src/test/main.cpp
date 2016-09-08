@@ -1,4 +1,4 @@
-//#include <pcl/ThreeDimPCLShape.h>
+#include <pcl/ThreeDimPCLShape.h>
 #include <oi/ThreeDimOIShape.h>
 #include <iostream>
 #include <core/CommandLineParser.h>
@@ -32,18 +32,23 @@ int main(int argc, char* argv[])
 	std::string inputFile = parser.get("input");
 	std::string outputFile = parser.get("output");
 
-	//ThreeDimPCLShape pclShape1;
-	//pclShape1.load(inputFile);
-	//pclShape1.save(outputFile);
-	//pclShape1.show();
+	ThreeDimPCLShape pclShape1;
+	pclShape1.load(inputFile);
+	pclShape1.save(outputFile);
+	pclShape1.show();
 
-	//ThreeDimPCLShape pclShape2;
-	//pclShape2.load(outputFile);
-	//pclShape2.show();
+	std::cout << "How many polygons1: " << pclShape1.getPolygons().size() << std::endl;
+	std::cout << "101th Polygon vertex indices1: " << pclShape1.getPolygons()[100] << std::endl;
 
-	ThreeDimOIShape oiShape;
-	oiShape.load(inputFile);
-	oiShape.show();
+	std::cout << "Width1: " << pclShape1.getCloud().width << " Height1: " << pclShape1.getCloud().height << std::endl;
+		 
+	ThreeDimPCLShape pclShape2;
+	pclShape2.load(outputFile);
+	pclShape2.show();
+
+	std::cout << "How many polygons2: " << pclShape1.getPolygons().size() << std::endl;
+	std::cout << "101th Polygon vertex indices2: " << pclShape1.getPolygons()[100] << std::endl;
+	std::cout << "Width2: " << pclShape1.getCloud().width << " Height2: " << pclShape1.getCloud().height << std::endl;
 
 	return mainRet(1, "Main Test Successfully Ended");
 }
