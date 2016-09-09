@@ -1,18 +1,18 @@
-#include <core/PolygonMesh.h>
+#include <core/TriangularMesh.h>
 
 namespace TAShape
 {
-	PolygonMesh::PolygonMesh()
+	TriangularMesh::TriangularMesh()
 	{
 
 	}
 
-	PolygonMesh::~PolygonMesh()
+	TriangularMesh::~TriangularMesh()
 	{
 		clear();
 	}
 
-	TACore::Result PolygonMesh::clear()
+	TACore::Result TriangularMesh::clear()
 	{
 		for (size_t i = 0; i < verts.size(); i++)
 		{
@@ -32,7 +32,7 @@ namespace TAShape
 		return TACore::TACORE_OK;
 	}
 
-	TACore::Result PolygonMesh::loadObj(const char* meshFile)
+	TACore::Result TriangularMesh::loadObj(const char* meshFile)
 	{
 		FILE* fPtr;
 		if (!(fPtr = fopen(meshFile, "r")))
@@ -81,7 +81,7 @@ namespace TAShape
 		return TACore::TACORE_OK;
 	}
 
-	TACore::Result PolygonMesh::loadOff(const char* fName)
+	TACore::Result TriangularMesh::loadOff(const char* fName)
 	{
 		FILE* fPtr;
 		if (!(fPtr = fopen(fName, "r")))
@@ -134,7 +134,7 @@ namespace TAShape
 	}
 
 
-	TACore::Result PolygonMesh::createCube(float sideLength)
+	TACore::Result TriangularMesh::createCube(float sideLength)
 	{
 		float** coords = new float*[8], flbc[3] = { 10, 7, 5 }, delta[3] = { 0, 0, 0 };
 		for (int v = 0; v < 8; v++)
@@ -184,14 +184,14 @@ namespace TAShape
 		return TACore::TACORE_OK;
 	}
 
-	TACore::Result PolygonMesh::addVertex(float* coords)
+	TACore::Result TriangularMesh::addVertex(float* coords)
 	{
 		int idx = verts.size();
 		verts.push_back(new Vertex(idx, coords));
 		return TACore::TACORE_OK;
 	}
 
-	TACore::Result PolygonMesh::addTriangle(int v1i, int v2i, int v3i)
+	TACore::Result TriangularMesh::addTriangle(int v1i, int v2i, int v3i)
 	{
 		int idx = tris.size();
 		tris.push_back(new Triangle(idx, v1i, v2i, v3i));
@@ -212,7 +212,7 @@ namespace TAShape
 		return TACore::TACORE_OK;
 	}
 
-	bool PolygonMesh::makeVertsNeighbors(int v, int w)
+	bool TriangularMesh::makeVertsNeighbors(int v, int w)
 	{
 		//try to make v and w neighbor; return true if they already are
 
@@ -230,7 +230,7 @@ namespace TAShape
 		return (float)sqrt((a[0] - b[0])*(a[0] - b[0]) + (a[1] - b[1])*(a[1] - b[1]) + (a[2] - b[2])*(a[2] - b[2]));
 	}
 
-	TACore::Result PolygonMesh::addEdge(int a, int b)
+	TACore::Result TriangularMesh::addEdge(int a, int b)
 	{
 		int idx = edges.size();
 		edges.push_back(new Edge(idx, a, b));
@@ -241,7 +241,7 @@ namespace TAShape
 		return TACore::TACORE_OK;
 	}
 
-	TACore::Result PolygonMesh::assignNormalsToTriangles()
+	TACore::Result TriangularMesh::assignNormalsToTriangles()
 	{
 		for (int i = 0; i < this->tris.size(); i++)
 		{

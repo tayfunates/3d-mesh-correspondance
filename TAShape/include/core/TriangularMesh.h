@@ -1,5 +1,5 @@
-#ifndef TA_POLYGON_MESH_H
-#define TA_POLYGON_MESH_H
+#ifndef TA_TRIANGULAR_MESH_H
+#define TA_TRIANGULAR_MESH_H
 
 #include <vector>
 #include <core/Defs.h>
@@ -43,15 +43,15 @@ namespace TAShape
 		Edge(int i, int a, int b) : idx(i), v1i(a), v2i(b) {};
 	};
 
-	//Simple PolygonMesh Class
-	//Open Inventor shape provider uses this class as PolygonMesh
+	//Simple TriangularMesh Class
+	//Open Inventor shape provider uses this class as TriangularMesh
 	// [Currently] Loading off and obj files are supported.
 	// [TO DO: ] Write save method for off and obj files
-	class PolygonMesh
+	class TriangularMesh
 	{
 	public:
-		PolygonMesh();
-		virtual ~PolygonMesh();
+		TriangularMesh();
+		virtual ~TriangularMesh();
 	public:
 		std::vector< Triangle* > tris;			//< Pointers to triangles
 		std::vector< Vertex* > verts;			//< Pointers to vertices
@@ -66,7 +66,7 @@ namespace TAShape
 		TACore::Result clear();
 
 		/**
-		* @brief			Loads the PolygonMesh by reading .off file.
+		* @brief			Loads the TriangularMesh by reading .off file.
 		* @param			[in] fName Path to .off file.
 		* @return			TACORE_OK successfully loaded.
 		* @return			TACORE_FILE_ERROR if the file cannot be opened
@@ -75,7 +75,7 @@ namespace TAShape
 		TACore::Result loadOff(const char* fName);
 
 		/**
-		* @brief			Loads the PolygonMesh by reading .obj file.
+		* @brief			Loads the TriangularMesh by reading .obj file.
 		* @param			[in] fName Path to .obj file.
 		* @return			TACORE_OK successfully loaded.
 		* @return			TACORE_FILE_ERROR if the file cannot be opened
@@ -84,7 +84,7 @@ namespace TAShape
 		TACore::Result loadObj(const char* fName);
 
 		/**
-		* @brief			Creates a simple cumbe PolygonMesh
+		* @brief			Creates a simple cumbe TriangularMesh
 		* @param			[in] sl Size of cube edges
 		* @return			TACORE_OK successfully created.
 		*/
