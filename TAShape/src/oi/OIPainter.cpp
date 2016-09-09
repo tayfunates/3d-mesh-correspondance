@@ -7,7 +7,7 @@
 
 namespace TAShape
 {
-	SoSeparator* OIPainter::getShapeSep(PolygonMesh* mesh)
+	SoSeparator* OIPainter::getShapeSep(TriangularMesh* mesh)
 	{
 		SoSeparator* sep = new SoSeparator();
 

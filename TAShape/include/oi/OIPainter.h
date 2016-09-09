@@ -6,7 +6,7 @@
 #include <Inventor/nodes/SoCoordinate3.h>
 #include <Inventor/nodes/SoIndexedFaceSet.h>
 #include <Inventor/nodes/SoShapeHints.h>
-#include <core/PolygonMesh.h>
+#include <core/TriangularMesh.h>
 
 namespace TAShape
 {
@@ -15,10 +15,10 @@ namespace TAShape
 		OIPainter();
 		OIPainter(const OIPainter&);
 	public:
-		static SoSeparator* getShapeSep(PolygonMesh* mesh);
-		/*static SoSeparator* getColorSep(PolygonMesh* mesh, unsigned int nColors, bool distColor);*/
+		static SoSeparator* getShapeSep(TriangularMesh* mesh);
+		/*static SoSeparator* getColorSep(TriangularMesh* mesh, unsigned int nColors, bool distColor);*/
 		/*static SoSeparator* getVertexSphereSep(Vertex *ver, float radius, SoMaterial* mat);*/
-		/*static SoSeparator* getLineBetweenTwoSep(PolygonMesh *mesh, Vertex *ver1, Vertex *ver2);*/
+		/*static SoSeparator* getLineBetweenTwoSep(TriangularMesh *mesh, Vertex *ver1, Vertex *ver2);*/
 	};
 }
 

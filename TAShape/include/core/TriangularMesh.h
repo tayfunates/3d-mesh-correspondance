@@ -66,6 +66,16 @@ namespace TAShape
 		TACore::Result clear();
 
 		/**
+		* @brief			Loads the TriangularMesh..
+		* @param			[in] fName Path to file.
+		* @return			TACORE_OK successfully loaded.
+		* @return			TACORE_INVALID_OPERATION if the extension is not supported
+		* @return			TACORE_FILE_ERROR if the file cannot be opened
+		* @return			TACORE_ERROR if there is an isolated vertex in the file
+		*/
+		TACore::Result load(const char* fName);
+
+		/**
 		* @brief			Loads the TriangularMesh by reading .off file.
 		* @param			[in] fName Path to .off file.
 		* @return			TACORE_OK successfully loaded.

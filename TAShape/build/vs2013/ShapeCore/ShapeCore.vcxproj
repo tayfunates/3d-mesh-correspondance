@@ -182,12 +182,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\core\CoreDefs.h" />
-    <ClInclude Include="..\..\..\include\core\PolygonMesh.h" />
+    <ClInclude Include="..\..\..\include\core\TriangularMesh.h" />
     <ClInclude Include="..\..\..\include\core\TAVector.h" />
     <ClInclude Include="..\..\..\include\core\ThreeDimShape.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\core\PolygonMesh.cpp" />
+    <ClCompile Include="..\..\..\src\core\TriangularMesh.cpp" />
     <ClCompile Include="..\..\..\src\core\TAVector.cpp" />
     <ClCompile Include="..\..\..\src\core\ThreeDimShape.cpp" />
   </ItemGroup>

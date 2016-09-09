@@ -4,6 +4,7 @@
 #include <pcl/PolygonMesh.h>
 #include <core/CoreDefs.h>
 #include <core/ThreeDimShape.h>
+#include <core/TriangularMesh.h>
 
 namespace TAShape
 {
@@ -44,6 +45,13 @@ namespace TAShape
 		virtual TACore::Result clear() OVERRIDE;
 
 		/**
+		* @brief			Checks whether the shape is empty or not.
+		* @return			true if the shape is empty.
+		* @return			false otherwise
+		*/
+		virtual bool empty() const OVERRIDE;
+
+		/**
 		* @brief			Shows the shape in the visualisation tool provided by pcl
 		*					This method is intended to be used in run time.
 		*					Specific user interrupts may be required to continue the execution
@@ -53,10 +61,25 @@ namespace TAShape
 		*/
 		virtual TACore::Result show() OVERRIDE;
 
+		/**
+		* @brief			Static method which converts ThreeDimensionalPCLShape to TriangularMesh in ShapeCore
+		*					PCL shape must be a triangular mesh.
+		* @param			[in] pclShape shape background to be converted.
+		* @return			NULL if pclShape is empty.
+		* @return			NULL if pclShape has no polygons.
+		* @return			NULL if pclShape is not a triangular mesh.
+		* @return			Pointer to TriangularMesh object which must be deleted by the programmer.
+		*/
+		static TAShape::TriangularMesh *toTriangularMesh(const ThreeDimPCLShape& pclShape);
 
-		virtual PCL_POLYGON_LIST& getPolygons();
-		virtual PCL_POINT_CLOUD& getCloud();
-
+		/**
+		* @brief			Static method which converts TriangularMesh to ThreeDimensionalPCLShape in PCLShapeProvider
+		* @param			[in] taShape triangular shape to be converted.
+		* @return			NULL if taShape is empty.
+		* @return			NULL if taShape has no polygons.
+		* @return			Pointer to ThreeDimPCLShapes object which must be deleted by the programmer.
+		*/
+		static ThreeDimPCLShape* fromTriangularMesh(const TAShape::TriangularMesh& taShape);
 
 	private:
 		pcl::PolygonMesh m_3DShape;

@@ -1,4 +1,5 @@
 #include <core/TriangularMesh.h>
+#include <core/PathUtil.h>
 
 namespace TAShape
 {
@@ -30,6 +31,20 @@ namespace TAShape
 		tris.clear();
 		edges.clear();
 		return TACore::TACORE_OK;
+	}
+
+	TACore::Result TriangularMesh::load(const char* fName)
+	{
+		const std::string ext = TACore::PathUtil::getExtension(std::string(fName));
+		if (ext == "obj")
+		{
+			return loadObj(fName);
+		}
+		else if (ext == "off")
+		{
+			return loadOff(fName);
+		}
+		return TACore::TACORE_INVALID_OPERATION;
 	}
 
 	TACore::Result TriangularMesh::loadObj(const char* meshFile)

@@ -21,10 +21,10 @@
     <ClInclude Include="..\..\..\include\core\CoreDefs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\core\PolygonMesh.h">
+    <ClInclude Include="..\..\..\include\core\TAVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\core\TAVector.h">
+    <ClInclude Include="..\..\..\include\core\TriangularMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClCompile Include="..\..\..\src\core\TAVector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\core\PolygonMesh.cpp">
+    <ClCompile Include="..\..\..\src\core\TriangularMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

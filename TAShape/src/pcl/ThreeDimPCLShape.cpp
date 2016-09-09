@@ -35,6 +35,12 @@ namespace TAShape
 		return TACore::TACORE_OK;
 	}
 
+	bool ThreeDimPCLShape::empty() const
+	{
+		//The shape is empty if the width or the height of the point cloud is empty
+		return this->m_3DShape.cloud.width == 0 || this->m_3DShape.cloud.height == 0;
+	}
+
 	TACore::Result ThreeDimPCLShape::show()
 	{
 		boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
@@ -56,13 +62,84 @@ namespace TAShape
 		return TACore::TACORE_OK;
 	}
 
-	PCL_POLYGON_LIST& ThreeDimPCLShape::getPolygons()
+	TAShape::TriangularMesh* ThreeDimPCLShape::toTriangularMesh(const ThreeDimPCLShape& pclShape)
 	{
-		return this->m_3DShape.polygons;
+		if (pclShape.empty())
+		{
+			return NULL;
+		}
+		if (pclShape.m_3DShape.polygons.size() == 0)
+		{
+			//No polygon exists
+			return NULL;
+		}
+		if (pclShape.m_3DShape.polygons[0].vertices.size() != 3)
+		{
+			//No triangular mesh
+			return NULL;
+		}
+
+		pcl::PointCloud< pcl::PointXYZ > pclPointCloud1; //PCL has two types of point clouds
+		pcl::fromPCLPointCloud2(pclShape.m_3DShape.cloud, pclPointCloud1);
+
+		TriangularMesh *res = new TAShape::TriangularMesh;
+		
+		for (size_t i = 0; i < pclPointCloud1.points.size(); i++)
+		{
+			float *coords = new float[3];
+			coords[0] = pclPointCloud1.points[i].x;
+			coords[1] = pclPointCloud1.points[i].y;
+			coords[2] = pclPointCloud1.points[i].z;
+
+			res->addVertex(coords); //No duplicate check
+		}
+
+
+		for (size_t i = 0; i < pclShape.m_3DShape.polygons.size(); i++)
+		{
+			const PCL_POLYGON& polygon = pclShape.m_3DShape.polygons[i];
+			res->addTriangle(polygon.vertices[0], polygon.vertices[1], polygon.vertices[2]);
+		}
+
+		return res;
 	}
 
-	PCL_POINT_CLOUD& ThreeDimPCLShape::getCloud()
+	ThreeDimPCLShape* ThreeDimPCLShape::fromTriangularMesh(const TAShape::TriangularMesh& taShape)
 	{
-		return this->m_3DShape.cloud;
+		if (taShape.verts.empty())
+		{
+			return NULL;
+		}
+		if (taShape.tris.empty())
+		{
+			//No polygon exists
+			return NULL;
+		}
+
+		pcl::PointCloud< pcl::PointXYZ > pclPointCloud1; //PCL has two types of point clouds
+		for (size_t i = 0; i < taShape.verts.size(); i++)
+		{
+			pcl::PointXYZ pclPoint;
+			pclPoint.x = taShape.verts[i]->coords[0];
+			pclPoint.y = taShape.verts[i]->coords[1];
+			pclPoint.z = taShape.verts[i]->coords[2];
+
+			pclPointCloud1.points.push_back(pclPoint);
+		}
+
+		ThreeDimPCLShape *res = new ThreeDimPCLShape;
+		pcl::toPCLPointCloud2(pclPointCloud1, res->m_3DShape.cloud);
+
+		for (size_t i = 0; i < taShape.tris.size(); i++)
+		{
+			PCL_POLYGON polygon;
+			polygon.vertices.push_back(taShape.tris[i]->v1i);
+			polygon.vertices.push_back(taShape.tris[i]->v2i);
+			polygon.vertices.push_back(taShape.tris[i]->v3i);
+
+			res->m_3DShape.polygons.push_back(polygon);
+		}
+		
+		return res;
 	}
 }

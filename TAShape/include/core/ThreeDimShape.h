@@ -41,6 +41,13 @@ namespace TAShape
 		virtual TACore::Result clear() = 0;
 
 		/**
+		* @brief			Abstract method which checks whether the shape is empty or not.
+		* @return			true if the shape is empty.
+		* @return			false otherwise
+		*/
+		virtual bool empty() const = 0;
+
+		/**
 		* @brief			Abstract method which shows the shape in the visualisation tool provided by a specific lib
 		*					This method is intended to be used in run time.
 		*					Specific user interrupts may be required to continue the execution
