@@ -35,6 +35,11 @@ namespace TAShape
 		return TACore::TACORE_OK;
 	}
 
+	bool ThreeDimOIShape::empty() const
+	{
+		return this->m_3DShape.verts.size() == 0;
+	}
+
 	TACore::Result ThreeDimOIShape::clear()
 	{
 		return TACore::TACORE_OK;

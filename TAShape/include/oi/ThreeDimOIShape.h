@@ -13,6 +13,7 @@ namespace TAShape
 		virtual TACore::Result load(const std::string& pPath) OVERRIDE;
 		virtual TACore::Result save(const std::string& pPath) OVERRIDE;
 		virtual TACore::Result clear() OVERRIDE;
+		virtual bool empty() const OVERRIDE;
 		virtual TACore::Result show() OVERRIDE;
 
 	private:
