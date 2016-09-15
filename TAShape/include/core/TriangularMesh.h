@@ -4,6 +4,7 @@
 #include <vector>
 #include <core/Defs.h>
 #include <core/TAVector.h>
+#include <core/PolygonMesh.h>
 
 namespace TAShape
 {
@@ -47,7 +48,7 @@ namespace TAShape
 	//Open Inventor shape provider uses this class as TriangularMesh
 	// [Currently] Loading off and obj files are supported.
 	// [TO DO: ] Write save method for off and obj files
-	class TriangularMesh
+	class TriangularMesh : public PolygonMesh
 	{
 	public:
 		TriangularMesh();
@@ -58,6 +59,12 @@ namespace TAShape
 		std::vector< Edge* > edges;				//< Pointers to edges
 
 	public:
+
+		/**
+		* @brief			Gets the polygon type of the mesh
+		* @return			PolygonType is TA_TRIANGULAR.
+		*/
+		virtual PolygonType getPolygonType() const { return TA_TRIANGULAR; };
 
 		/**
 		* @brief			Clears the allocated buffers for tris, verts and edges
