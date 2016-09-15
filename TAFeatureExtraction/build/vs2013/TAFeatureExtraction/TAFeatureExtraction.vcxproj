@@ -117,6 +117,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\OnEdgeAvgGeoDistExtraction.h" />
     <ClInclude Include="..\..\..\include\TAFeatureExtraction.h" />
   </ItemGroup>
   <ItemGroup>
@@ -131,6 +132,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\OnEdgeAvgGeoDistExtraction.cpp" />
     <ClCompile Include="..\..\..\src\TAFeatureExtraction.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

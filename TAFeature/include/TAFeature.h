@@ -68,7 +68,7 @@ namespace TAFea
 		PerVertexFeature(const int& vertexid) { m_ID = vertexid; }
 		PerVertexFeature(const PerVertexFeature& other) { m_ID = other.m_ID;  }
 
-		virtual LocalFeaSource getLocalFeaSource() { return LOCAL_FEA_SOURCE_VERTEX; }
+		virtual LocalFeaSource getLocalFeaSource() const { return LOCAL_FEA_SOURCE_VERTEX; }
 	private:
 	};
 
@@ -82,7 +82,7 @@ namespace TAFea
 		PerFaceFeature(const int& faceid) { m_ID = faceid; }
 		PerFaceFeature(const PerFaceFeature& other) { m_ID = other.m_ID; }
 
-		virtual LocalFeaSource getLocalFeaSource() { return LOCAL_FEA_SOURCE_FACE; }
+		virtual LocalFeaSource getLocalFeaSource() const { return LOCAL_FEA_SOURCE_FACE; }
 	private:
 	};
 }

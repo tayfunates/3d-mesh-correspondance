@@ -18,9 +18,15 @@
     <ClInclude Include="..\..\..\include\TAFeatureExtraction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\OnEdgeAvgGeoDistExtraction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\TAFeatureExtraction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OnEdgeAvgGeoDistExtraction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

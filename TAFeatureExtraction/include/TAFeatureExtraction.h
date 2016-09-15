@@ -64,7 +64,7 @@ namespace TAFeaExt
 		LocalFeatureExtraction() {}
 		LocalFeatureExtraction(const LocalFeatureExtraction& other) {}
 
-		virtual FeatureExtractionType getFeatureExractionType() const { return FEA_EXT_TYPE_LOCAL; }
+		virtual FeatureExtractionType getFeatureExtractionType() const { return FEA_EXT_TYPE_LOCAL; }
 		virtual LocalFeaExtSourceType getLocalFeatureExtractionSourceType() const = 0;
 		virtual Result extract(PolygonMesh *mesh, std::vector<LocalFeature*>& outFeatures) = 0;
 		virtual Result extract(PolygonMesh *mesh, const int& id, LocalFeature **outFeature) = 0;
