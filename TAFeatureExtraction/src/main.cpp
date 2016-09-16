@@ -1,6 +1,7 @@
 #include <iostream>
 #include <core/TriangularMesh.h>
 #include <core/CommandLineParser.h>
+#include <core/Timer.h>
 #include "AvgGeodesicDistance.h"
 #include "OnEdgeAvgGeoDistExtraction.h"
 
@@ -41,13 +42,17 @@ int main(int argc, char* argv[])
 
 	TAFeaExt::OnEdgeAvgGeoDistExtraction avgGeoExtractor;
 	
+	TACore::Timer timer;
+	std::cout << "Geodesic Distances for all vertices are being calculated" << std::endl;
 
 	for (size_t v = 0; v < triMesh->verts.size(); v++)
 	{
 		LocalFeaturePtr localFeaturePtr;
 		avgGeoExtractor.extract(triMesh, v, localFeaturePtr);
-		std::cout << "Average geodesic distance of vertex: " << v << " is " << ((AvgGeodesicDistance*)(localFeaturePtr.get()))->m_distance << std::endl;
+		//std::cout << "Average geodesic distance of vertex: " << v << " is " << ((AvgGeodesicDistance*)(localFeaturePtr.get()))->m_distance << std::endl;
 	}
+	std::cout << "Total time taken: " << timer.seconds() << std::endl;
+
 	TACORE_SAFE_DELETE(triMesh);
 
 	return mainRet(1, "Main Test Successfully Ended");

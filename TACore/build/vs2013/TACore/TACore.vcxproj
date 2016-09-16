@@ -183,10 +183,12 @@
     <ClInclude Include="..\..\..\include\core\FibHeap.h" />
     <ClInclude Include="..\..\..\include\core\PathUtil.h" />
     <ClInclude Include="..\..\..\include\core\StringUtil.h" />
+    <ClInclude Include="..\..\..\include\core\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\core\PathUtil.cpp" />
     <ClCompile Include="..\..\..\src\core\StringUtil.cpp" />
+    <ClCompile Include="..\..\..\src\core\Timer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

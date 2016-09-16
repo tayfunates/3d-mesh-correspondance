@@ -7,7 +7,7 @@ namespace TAFeaExt
 {
 	OnEdgeAvgGeoDistExtraction::~OnEdgeAvgGeoDistExtraction()
 	{
-		
+
 	}
 
 	OnEdgeAvgGeoDistExtraction::OnEdgeAvgGeoDistExtraction()
@@ -71,7 +71,7 @@ namespace TAFeaExt
 			float minD = minNode->key;
 
 			//We do not need the current minNode anymore.
-			TACORE_SAFE_DELETE(minNode); 
+			TACORE_SAFE_DELETE(minNode);
 
 			//relax each edge, including shortcuts, incident to minDidx
 			const int vertexEdgeCount = static_cast<int>(triMesh->verts[minDidx]->edgeList.size());
