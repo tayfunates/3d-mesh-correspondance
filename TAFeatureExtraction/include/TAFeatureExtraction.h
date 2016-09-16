@@ -48,7 +48,7 @@ namespace TAFeaExt
 		GlobalFeatureExtraction(const GlobalFeatureExtraction& other) {}
 
 		virtual FeatureExtractionType getFeatureExtractionType() const { return FEA_EXT_TYPE_GLOBAL; }
-		virtual Result extract(PolygonMesh *mesh, GlobalFeature **outFeature) = 0;
+		virtual Result extract(PolygonMesh *mesh, GlobalFeaturePtr& outFeaturePtr) = 0;
 
 	protected:
 	private:
@@ -66,8 +66,8 @@ namespace TAFeaExt
 
 		virtual FeatureExtractionType getFeatureExtractionType() const { return FEA_EXT_TYPE_LOCAL; }
 		virtual LocalFeaExtSourceType getLocalFeatureExtractionSourceType() const = 0;
-		virtual Result extract(PolygonMesh *mesh, std::vector<LocalFeature*>& outFeatures) = 0;
-		virtual Result extract(PolygonMesh *mesh, const int& id, LocalFeature **outFeature) = 0;
+		virtual Result extract(PolygonMesh *mesh, std::vector<LocalFeaturePtr>& outFeatures) = 0;
+		virtual Result extract(PolygonMesh *mesh, const int& id, LocalFeaturePtr& outFeaturePtr) = 0;
 
 	protected:
 	private:

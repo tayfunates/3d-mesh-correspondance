@@ -44,10 +44,9 @@ int main(int argc, char* argv[])
 
 	for (size_t v = 0; v < triMesh->verts.size(); v++)
 	{
-		TAFea::LocalFeature *distFea = NULL;
-		avgGeoExtractor.extract(triMesh, v, &distFea);
-		std::cout << "Average geodesic distance of vertex: " << v << " is " << ((AvgGeodesicDistance*)(distFea))->m_distance << std::endl;
-		TACORE_SAFE_DELETE(distFea);
+		LocalFeaturePtr localFeaturePtr;
+		avgGeoExtractor.extract(triMesh, v, localFeaturePtr);
+		std::cout << "Average geodesic distance of vertex: " << v << " is " << ((AvgGeodesicDistance*)(localFeaturePtr.get()))->m_distance << std::endl;
 	}
 	TACORE_SAFE_DELETE(triMesh);
 

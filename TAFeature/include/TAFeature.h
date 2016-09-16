@@ -1,6 +1,8 @@
 #ifndef TA_FEATURE_H
 #define TA_FEATURE_H
 
+#include <memory>
+
 namespace TAFea
 {
 	enum FeatureType
@@ -85,6 +87,15 @@ namespace TAFea
 		virtual LocalFeaSource getLocalFeaSource() const { return LOCAL_FEA_SOURCE_FACE; }
 	private:
 	};
+
+	// Type definitions
+	//-------------------------------------------------------------------
+	typedef std::shared_ptr<GeometricFeature>	GeometricFeaturePtr;
+	typedef	std::shared_ptr<LocalFeature>		LocalFeaturePtr;
+	typedef std::shared_ptr<GlobalFeature>		GlobalFeaturePtr;
+	typedef std::shared_ptr<PerVertexFeature>	PerVertexFeaturePtr;
+	typedef std::shared_ptr<PerFaceFeature>		PerFaceFeaturePtr;
+
 }
 
 #endif //TA_FEATURE_H

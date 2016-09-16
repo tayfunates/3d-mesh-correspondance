@@ -16,8 +16,8 @@ namespace TAFeaExt
 		OnEdgeAvgGeoDistExtraction();
 		OnEdgeAvgGeoDistExtraction(const OnEdgeAvgGeoDistExtraction& other);
 
-		virtual Result extract(PolygonMesh *mesh, std::vector<LocalFeature*>& outFeatures);
-		virtual Result extract(PolygonMesh *mesh, const int& id, LocalFeature **outFeature);
+		virtual Result extract(PolygonMesh *mesh, std::vector<LocalFeaturePtr>& outFeatures);
+		virtual Result extract(PolygonMesh *mesh, const int& id, LocalFeaturePtr& outFeaturePtr);
 	};
 }
 
