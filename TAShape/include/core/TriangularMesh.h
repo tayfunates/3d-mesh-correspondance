@@ -15,7 +15,7 @@ namespace TAShape
 		int v1i, v2i, v3i;						//< Indices of the vertices of the triangle verts[v1i]-verts[v2i]-verts[v3i]					
 		int e1, e2, e3;							//< Indices of the edges of the triangle
 		TAVector tNormal;						//< Normal vector of the triangle
-		Triangle(int i, int a, int b, int c) : idx(i), v1i(a), v2i(b), v3i(c) { e1 = -1; e2 = -1; e3 = -1; };
+		Triangle(const int& i, const int& a, const int& b, const int& c) : idx(i), v1i(a), v2i(b), v3i(c) { e1 = -1; e2 = -1; e3 = -1; };
 	};
 
 	class Vertex
@@ -32,16 +32,17 @@ namespace TAShape
 
 		bool interior;
 
-		Vertex(int i, float* c) : idx(i), coords(c) {};
+		Vertex(const int& i, float* c) : idx(i), coords(c) {};
 	};
 
 	struct Edge
 	{
 	public:
 		int idx;								//< Index of the edge: simply edges[idx]
-		int v1i, v2i;							//< Indices of the vertices of the edgess						
+		int v1i, v2i;							//< Indices of the vertices of the edgess		
+		float length;							//< Length of the edge
 
-		Edge(int i, int a, int b) : idx(i), v1i(a), v2i(b) {};
+		Edge(const int& i, const int& a, const int& b,const float& len) : idx(i), v1i(a), v2i(b), length(len) {};
 	};
 
 	//Simple TriangularMesh Class

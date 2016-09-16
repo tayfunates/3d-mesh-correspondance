@@ -248,7 +248,7 @@ namespace TAShape
 	TACore::Result TriangularMesh::addEdge(int a, int b)
 	{
 		int idx = edges.size();
-		edges.push_back(new Edge(idx, a, b));
+		edges.push_back(new Edge(idx, a, b, distanceBetween(verts[a]->coords, verts[b]->coords)));
 
 		verts[a]->edgeList.push_back(idx);
 		verts[b]->edgeList.push_back(idx);
