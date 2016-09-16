@@ -34,13 +34,22 @@ int main(int argc, char* argv[])
 	std::string outputFile = parser.get("output");
 
 	TriangularMesh *triMesh = new TriangularMesh;
-	triMesh->load(inputFile.c_str());
+	if (triMesh->load(inputFile.c_str()) != TACORE_OK)
+	{
+		return mainRet(1, "Mesh cannot be loaded correctly");
+	}
 
 	TAFeaExt::OnEdgeAvgGeoDistExtraction avgGeoExtractor;
-	TAFea::LocalFeature *distFea = NULL;
-	avgGeoExtractor.extract(triMesh, 10, &distFea);
+	
 
-	std::cout << ((AvgGeodesicDistance*)(distFea))->m_distance << std::endl;
+	for (size_t v = 0; v < triMesh->verts.size(); v++)
+	{
+		TAFea::LocalFeature *distFea = NULL;
+		avgGeoExtractor.extract(triMesh, v, &distFea);
+		std::cout << "Average geodesic distance of vertex: " << v << " is " << ((AvgGeodesicDistance*)(distFea))->m_distance << std::endl;
+		TACORE_SAFE_DELETE(distFea);
+	}
+	TACORE_SAFE_DELETE(triMesh);
 
 	return mainRet(1, "Main Test Successfully Ended");
 }
