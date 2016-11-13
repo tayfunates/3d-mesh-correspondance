@@ -21,4 +21,4 @@ namespace TAFeaExt
 	};
 }
 
-#endif //ON_EDGE_AVG_GEO_DIST_EXTRACTION
+#endif //ON_EDGE_AVG_GEO_DIST_EXTRACTION_H
