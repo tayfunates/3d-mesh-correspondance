@@ -118,10 +118,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\AvgGeodesicDistance.h" />
+    <ClInclude Include="..\..\..\include\IntrinsicWaveDesc.h" />
     <ClInclude Include="..\..\..\include\TAFeature.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\AvgGeodesicDistance.cpp" />
+    <ClCompile Include="..\..\..\src\IntrinsicWaveDesc.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
