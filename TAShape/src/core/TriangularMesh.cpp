@@ -215,29 +215,27 @@ namespace TAShape
 		verts[v2i]->triList.push_back(idx);
 		verts[v3i]->triList.push_back(idx);
 
-		if (!makeVertsNeighbors(v1i, v2i))
-			addEdge(v1i, v2i);
-
-		if (!makeVertsNeighbors(v1i, v3i))
-			addEdge(v1i, v3i);
-
-		if (!makeVertsNeighbors(v2i, v3i))
-			addEdge(v2i, v3i);
+		tris[idx]->e1 = makeVertsNeighbors(v1i, v2i);
+		tris[idx]->e2 = makeVertsNeighbors(v1i, v3i);
+		tris[idx]->e3 = makeVertsNeighbors(v2i, v3i);
 
 		return TACore::TACORE_OK;
 	}
 
-	bool TriangularMesh::makeVertsNeighbors(int v, int w)
+	int TriangularMesh::makeVertsNeighbors(int v, int w)
 	{
-		//try to make v and w neighbor; return true if they already are
-
-		for (int check = 0; check < (int)verts[v]->vertList.size(); check++)
-			if (verts[v]->vertList[check] == w)
-				return true;
+		//try to make v and w neighbor; return the edge id if they already are
+		for (int e = 0; e < verts[v]->edgeList.size(); e++)
+		{
+			if (edges[verts[v]->edgeList[e]]->v1i == w || edges[verts[v]->edgeList[e]]->v2i == w)
+			{
+				return verts[v]->edgeList[e];
+			}
+		}
 
 		verts[v]->vertList.push_back(w);
 		verts[w]->vertList.push_back(v);
-		return false;
+		return addEdge(v, w);
 	}
 
 	inline float distanceBetween(float* a, float* b)
@@ -245,7 +243,7 @@ namespace TAShape
 		return (float)sqrt((a[0] - b[0])*(a[0] - b[0]) + (a[1] - b[1])*(a[1] - b[1]) + (a[2] - b[2])*(a[2] - b[2]));
 	}
 
-	TACore::Result TriangularMesh::addEdge(int a, int b)
+	int TriangularMesh::addEdge(int a, int b)
 	{
 		int idx = edges.size();
 		edges.push_back(new Edge(idx, a, b, distanceBetween(verts[a]->coords, verts[b]->coords)));
@@ -253,7 +251,7 @@ namespace TAShape
 		verts[a]->edgeList.push_back(idx);
 		verts[b]->edgeList.push_back(idx);
 
-		return TACore::TACORE_OK;
+		return idx;
 	}
 
 	TACore::Result TriangularMesh::assignNormalsToTriangles()

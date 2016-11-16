@@ -128,16 +128,17 @@ namespace TAShape
 		* @brief			Adds a new edge from the already added vertices
 		*					New edge is added to the edge list of all vertices
 		* @param			[in] v1i, v2i Indices of the vertices
-		* @return			TACORE_OK successfully added.
+		* @return			The index of the edge created
 		*/
-		TACore::Result addEdge(int v1i, int v2i);
+		int addEdge(int v1i, int v2i);
 
 		/**
 		* @brief			Tries to connect two vertices with their indexes
+		*					If there is not an edge between two of the vertices, a new edge is created and added
 		* @param			[in] v, w Indices of the vertices
-		* @return			true if they are already connected, false otherwise
+		* @return			The index of the edge between v and w
 		*/
-		bool makeVertsNeighbors(int v, int w);
+		int makeVertsNeighbors(int v, int w);
 
 		/**
 		* @brief			Calculates and assigns the normals for each triangle
