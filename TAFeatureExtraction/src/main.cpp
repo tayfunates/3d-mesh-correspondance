@@ -2,8 +2,15 @@
 #include <core/TriangularMesh.h>
 #include <core/CommandLineParser.h>
 #include <core/Timer.h>
+#include <pcl/ThreeDimPCLShape.h>
+
+//Descriptors
 #include "AvgGeodesicDistance.h"
+#include "IntrinsicWaveDesc.h"
+
+//Extractors
 #include "OnEdgeAvgGeoDistExtraction.h"
+#include "IntrinsicWaveDescExtraction.h"
 
 
 using namespace TACore;
@@ -33,25 +40,30 @@ int main(int argc, char* argv[])
 
 	std::string inputFile = parser.get("input");
 	std::string outputFile = parser.get("output");
-
+	 
 	TriangularMesh *triMesh = new TriangularMesh;
 	if (triMesh->load(inputFile.c_str()) != TACORE_OK)
 	{
 		return mainRet(1, "Mesh cannot be loaded correctly");
 	}
+	//ThreeDimPCLShape *pclShape = ThreeDimPCLShape::fromTriangularMesh(*triMesh);
+	//pclShape->show();
 
-	TAFeaExt::OnEdgeAvgGeoDistExtraction avgGeoExtractor;
-	
-	TACore::Timer timer;
-	std::cout << "Geodesic Distances for all vertices are being calculated" << std::endl;
+	TAFeaExt::IntrinsicWaveDescExtraction waveDescExtractor;
+	waveDescExtractor.setMaxGeodesicRadius(1200.0f);
+
+	//TACore::Timer timer;
+	//std::cout << "Geodesic Distances for all vertices are being calculated" << std::endl;
 
 	for (size_t v = 0; v < triMesh->verts.size(); v++)
 	{
 		LocalFeaturePtr localFeaturePtr;
-		avgGeoExtractor.extract(triMesh, v, localFeaturePtr);
+		waveDescExtractor.extract(triMesh, v, localFeaturePtr);
 		//std::cout << "Average geodesic distance of vertex: " << v << " is " << ((AvgGeodesicDistance*)(localFeaturePtr.get()))->m_distance << std::endl;
+
+		break;
 	}
-	std::cout << "Total time taken: " << timer.seconds() << std::endl;
+	/*std::cout << "Total time taken: " << timer.seconds() << std::endl;*/
 
 	TACORE_SAFE_DELETE(triMesh);
 

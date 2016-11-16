@@ -81,10 +81,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/pcl/include/pcl-1.7;$(DEV_HOME)/pcl/3rdParty/Boost/include/boost-1_57;$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_ALL_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(DEV_HOME)/pcl/lib;$(DEV_HOME)/pcl/lib/$(Configuration);$(DEV_HOME)/pcl\3rdParty\Boost\lib;$(DEV_HOME)/pcl\3rdParty\FLANN\lib;$(DEV_HOME)/pcl\3rdParty\VTK\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pcl_common_debug.lib;pcl_features_debug.lib;pcl_filters_debug.lib;pcl_io_ply_debug.lib;pcl_io_debug.lib;pcl_kdtree_debug.lib;pcl_keypoints_debug.lib;pcl_octree_debug.lib;pcl_outofcore_debug.lib;pcl_people_debug.lib;pcl_recognition_debug.lib;pcl_registration_debug.lib;pcl_sample_consensus_debug.lib;pcl_search_debug.lib;pcl_segmentation_debug.lib;pcl_surface_debug.lib;pcl_tracking_debug.lib;pcl_visualization_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -108,12 +111,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/pcl/include/pcl-1.7;$(DEV_HOME)/pcl/3rdParty/Boost/include/boost-1_57;$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BOOST_ALL_DYN_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(DEV_HOME)/pcl/lib;$(DEV_HOME)/pcl/lib/$(Configuration);$(DEV_HOME)/pcl\3rdParty\Boost\lib;$(DEV_HOME)/pcl\3rdParty\FLANN\lib;$(DEV_HOME)/pcl\3rdParty\VTK\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pcl_common_release.lib;pcl_features_release.lib;pcl_filters_release.lib;pcl_io_ply_release.lib;pcl_io_release.lib;pcl_kdtree_release.lib;pcl_keypoints_release.lib;pcl_octree_release.lib;pcl_outofcore_release.lib;pcl_people_release.lib;pcl_recognition_release.lib;pcl_registration_release.lib;pcl_sample_consensus_release.lib;pcl_search_release.lib;pcl_segmentation_release.lib;pcl_surface_release.lib;pcl_tracking_release.lib;pcl_visualization_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -122,6 +128,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\TAFeature\build\vs2013\TAFeature\TAFeature.vcxproj">
       <Project>{e2218e40-ae76-44e3-8c0e-9f7c8c5ec30f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\TAShape\build\vs2013\PCLShapeProvider\PCLShapeProvider.vcxproj">
+      <Project>{c1610c4c-ca44-4dcd-9037-2278f4a5ce53}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\TAShape\build\vs2013\ShapeCore\ShapeCore.vcxproj">
       <Project>{8ea86bef-1610-4d6f-a8c4-4b19bb6cae95}</Project>
