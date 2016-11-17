@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TAFeatureExtractionTest", "
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PCLShapeProvider", "..\..\..\TAShape\build\vs2013\PCLShapeProvider\PCLShapeProvider.vcxproj", "{C1610C4C-CA44-4DCD-9037-2278F4A5CE53}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OIShapeProvider", "..\..\..\TAShape\build\vs2013\OIShapeProvider\OIShapeProvider.vcxproj", "{3B175427-BBFD-40B4-92F0-4B7752F3797F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -91,6 +93,16 @@ Global
 		{C1610C4C-CA44-4DCD-9037-2278F4A5CE53}.Release|Win32.Build.0 = Release|Win32
 		{C1610C4C-CA44-4DCD-9037-2278F4A5CE53}.Release|x64.ActiveCfg = Release|x64
 		{C1610C4C-CA44-4DCD-9037-2278F4A5CE53}.Release|x64.Build.0 = Release|x64
+		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Debug|ARM.ActiveCfg = Debug|Win32
+		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Debug|Win32.Build.0 = Debug|Win32
+		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Debug|x64.ActiveCfg = Debug|x64
+		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Debug|x64.Build.0 = Debug|x64
+		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Release|ARM.ActiveCfg = Release|Win32
+		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Release|Win32.ActiveCfg = Release|Win32
+		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Release|Win32.Build.0 = Release|Win32
+		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Release|x64.ActiveCfg = Release|x64
+		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

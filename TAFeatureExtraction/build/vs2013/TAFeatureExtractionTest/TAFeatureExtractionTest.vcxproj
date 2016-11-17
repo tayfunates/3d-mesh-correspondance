@@ -71,10 +71,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/Coin3D/include;$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(DEV_HOME)/Coin3D/lib/x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>coin2d.lib;sowin1d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -98,12 +100,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/Coin3D/include;$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(DEV_HOME)/Coin3D/lib/x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>coin2.lib;sowin1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -130,6 +134,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\TAFeature\build\vs2013\TAFeature\TAFeature.vcxproj">
       <Project>{e2218e40-ae76-44e3-8c0e-9f7c8c5ec30f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\TAShape\build\vs2013\OIShapeProvider\OIShapeProvider.vcxproj">
+      <Project>{3b175427-bbfd-40b4-92f0-4b7752f3797f}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\TAShape\build\vs2013\PCLShapeProvider\PCLShapeProvider.vcxproj">
       <Project>{c1610c4c-ca44-4dcd-9037-2278f4a5ce53}</Project>
