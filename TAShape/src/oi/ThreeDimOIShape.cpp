@@ -8,25 +8,36 @@
 
 namespace TAShape
 {
+	ThreeDimOIShape::~ThreeDimOIShape()
+	{
+		clear();
+	}
+
 	TACore::Result ThreeDimOIShape::load(const std::string& pPath)
 	{
 		TACORE_CHECK_ARGS(pPath != "");
 
 		//Clear the all shape
 		clear();
+		this->m_p3DShape = new TriangularMesh();
 
 		std::string fileExt = TACore::PathUtil::getExtension(pPath);
 		if (fileExt == "off")
 		{
-			return this->m_3DShape.loadOff(pPath.c_str());
+			return this->m_p3DShape->loadOff(pPath.c_str());
 		}
 		else if (fileExt == "obj")
 		{
-			return this->m_3DShape.loadObj(pPath.c_str());
+			return this->m_p3DShape->loadObj(pPath.c_str());
+		}
+		else
+		{
+			std::cerr << "unsupported extension type" << std::endl;
+			clear();
+			return TACore::TACORE_ERROR;
 		}
 
-		std::cerr << "unsupported extension type" << std::endl;
-		return TACore::TACORE_ERROR;
+		return TACore::TACORE_OK;
 	}
 
 	TACore::Result ThreeDimOIShape::save(const std::string& pPath)
@@ -37,11 +48,12 @@ namespace TAShape
 
 	bool ThreeDimOIShape::empty() const
 	{
-		return this->m_3DShape.verts.size() == 0;
+		return this->m_p3DShape == NULL || this->m_p3DShape->verts.size() == 0;
 	}
 
 	TACore::Result ThreeDimOIShape::clear()
 	{
+		TACORE_SAFE_DELETE(this->m_p3DShape);
 		return TACore::TACORE_OK;
 	}
 
@@ -52,7 +64,7 @@ namespace TAShape
 		SoWinExaminerViewer * viewer = new SoWinExaminerViewer(window);
 		SoSeparator * root = new SoSeparator();
 		root->ref();
-		SoSeparator* generalShape = OIPainter::getShapeSep(&this->m_3DShape);
+		SoSeparator* generalShape = OIPainter::getShapeSep(this->m_p3DShape);
 
 		root->addChild(generalShape);
 

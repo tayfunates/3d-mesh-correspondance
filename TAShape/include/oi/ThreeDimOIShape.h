@@ -10,6 +10,8 @@ namespace TAShape
 	class ThreeDimOIShape : public ThreeDimShape
 	{
 	public:
+		virtual ~ThreeDimOIShape();
+
 		virtual TACore::Result load(const std::string& pPath) OVERRIDE;
 		virtual TACore::Result save(const std::string& pPath) OVERRIDE;
 		virtual TACore::Result clear() OVERRIDE;
@@ -17,7 +19,7 @@ namespace TAShape
 		virtual TACore::Result show() OVERRIDE;
 
 	private:
-		TAShape::TriangularMesh m_3DShape;
+		TAShape::TriangularMesh *m_p3DShape;
 	};
 }
 
