@@ -66,7 +66,7 @@ namespace TAShape
 		root->ref();
 		SoSeparator* generalShape = OIPainter::getShapeSep(this->m_p3DShape);
 
-		root->addChild(generalShape);
+		if(generalShape) root->addChild(generalShape);
 
 		viewer->setSceneGraph(root);
 		viewer->show();
@@ -82,17 +82,27 @@ namespace TAShape
 
 	TACore::Result ThreeDimOIShape::showClosedEdges(const std::vector<int>& pEdgeIds)
 	{
+		std::vector< std::vector<int> > multipleClosedWaves;
+		multipleClosedWaves.push_back(pEdgeIds);
+		return showClosedEdges(multipleClosedWaves);
+	}
+
+	TACore::Result ThreeDimOIShape::showClosedEdges(const std::vector< std::vector<int> >& pClosedWaves)
+	{
 		srand(time(NULL));
 		HWND window = SoWin::init("TAShapeTest.exe");
 		SoWinExaminerViewer * viewer = new SoWinExaminerViewer(window);
 		SoSeparator * root = new SoSeparator();
 		root->ref();
-		SoSeparator* closedEdges = OIPainter::getShapeSepWithClosedEdges(this->m_p3DShape, pEdgeIds);
+		for (size_t i = 0; i < pClosedWaves.size(); i++)
+		{
+			SoSeparator* closedEdges = OIPainter::getShapeSepWithClosedEdges(this->m_p3DShape, pClosedWaves[i]);
+			if (closedEdges) root->addChild(closedEdges);
+		}
+		
 		SoSeparator* generalShape = OIPainter::getShapeSep(this->m_p3DShape);
-
-		root->addChild(generalShape);
-		root->addChild(closedEdges);
-
+		if (generalShape) root->addChild(generalShape);
+		
 		viewer->setSceneGraph(root);
 		viewer->show();
 

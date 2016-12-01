@@ -23,6 +23,7 @@ namespace TAFeaExt
 	public:
 		//To be deleted
 		std::vector<int> waveEdges;
+		std::vector<std::vector<int> > waves;
 
 		virtual ~IntrinsicWaveDescExtraction();
 		IntrinsicWaveDescExtraction();

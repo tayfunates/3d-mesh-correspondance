@@ -52,7 +52,8 @@ int main(int argc, char* argv[])
 	TriangularMesh* triMesh = (TriangularMesh*) (mesh.getShape());
 
 	TAFeaExt::IntrinsicWaveDescExtraction waveDescExtractor;
-	waveDescExtractor.setMaxGeodesicRadius(100.0f);
+	waveDescExtractor.setMaxGeodesicRadius(1000.0f);
+	waveDescExtractor.setNumberOfWavesSampled(10);
 
 	//TACore::Timer timer;
 	//std::cout << "Geodesic Distances for all vertices are being calculated" << std::endl;
@@ -66,7 +67,7 @@ int main(int argc, char* argv[])
 		break;
 	}
 
-	mesh.showClosedEdges(waveDescExtractor.waveEdges);
+	mesh.showClosedEdges(waveDescExtractor.waves);
 
 	return mainRet(1, "Main Test Successfully Ended");
 }

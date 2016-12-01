@@ -34,6 +34,10 @@ namespace TAFeaExt
 		{
 			return TACORE_BAD_ARGS;
 		}
+		if (this->m_nNumberOfWavesSampled == 0)
+		{
+			return TACORE_INVALID_OPERATION;
+		}
 
 		//We, now, know that the mesh is a triangular mesh
 		TriangularMesh *triMesh = (TriangularMesh*)mesh;
@@ -61,6 +65,15 @@ namespace TAFeaExt
 		//Marking of the triangles
 		std::vector<bool> triangleMarkings(triMesh->tris.size(), false);
 
+		//Create wave radius vector
+		std::vector<float> geodesicRadii;
+		const float radiusIncrement = this->m_fMaxGeodesicRadius / (float) this->m_nNumberOfWavesSampled;
+		for (unsigned int i = 1; i <= this->m_nNumberOfWavesSampled; i++)
+		{
+			geodesicRadii.push_back((float)i * radiusIncrement);
+		}
+
+		size_t currentRadiusIndex = 0;
 		//Main loop of djsktra
 		while (1)
 		{
@@ -76,11 +89,45 @@ namespace TAFeaExt
 			//We do not need the current minNode anymore.
 			TACORE_SAFE_DELETE(minNode);
 
-			if (minD > this->m_fMaxGeodesicRadius)
+			if (minD > geodesicRadii[currentRadiusIndex])
 			{
 				//If the current minimum is far away from the current radius
-				//Break since no other node will be inside the wave
-				break;
+				//Save the current wave and
+				//move to the next wave since no other node will be inside this wave
+				std::vector<int> edgesTriInteractionCounts(triMesh->edges.size(), 0);
+				for (size_t t = 0; t < triangleMarkings.size(); t++)
+				{
+					if (triangleMarkings[t] == true)
+					{
+						//Increment the count of edges interacting with this triangle
+						edgesTriInteractionCounts[triMesh->tris[t]->e1] += 1;
+						edgesTriInteractionCounts[triMesh->tris[t]->e2] += 1;
+						edgesTriInteractionCounts[triMesh->tris[t]->e3] += 1;
+					}
+				}
+
+				waveEdges.clear();
+				//Compute the approximation of the perimeter of the wave
+				float perimeter = 0.0f;
+				for (size_t e = 0; e < edgesTriInteractionCounts.size(); e++)
+				{
+					if (edgesTriInteractionCounts[e] == 1)
+					{
+						waveEdges.push_back(e);
+						perimeter += triMesh->edges[e]->length;
+					}
+				}
+
+				waves.push_back(waveEdges);
+
+				std::cout << perimeter << std::endl;
+
+				currentRadiusIndex++;
+				if (currentRadiusIndex >= geodesicRadii.size())
+				{
+					//If we handle all of the radii, then it is time to break
+					break;
+				}
 			}
 
 			//Mark the triangles around the current vertex
@@ -119,29 +166,6 @@ namespace TAFeaExt
 			}
 		}
 
-		std::vector<int> edgesTriInteractionCounts(triMesh->edges.size(), 0);
-		for (size_t t = 0; t < triangleMarkings.size(); t++)
-		{
-			if (triangleMarkings[t] == true)
-			{
-				//Increment the count of edges interacting with this triangle
-				edgesTriInteractionCounts[triMesh->tris[t]->e1] += 1;
-				edgesTriInteractionCounts[triMesh->tris[t]->e2] += 1;
-				edgesTriInteractionCounts[triMesh->tris[t]->e3] += 1;
-			}
-		}
-
-		waveEdges.clear();
-		//Compute the approximation of the perimeter of the wave
-		float perimeter = 0.0f;
-		for (size_t e = 0; e < edgesTriInteractionCounts.size(); e++)
-		{
-			if (edgesTriInteractionCounts[e] == 1)
-			{
-				waveEdges.push_back(e);
-				perimeter += triMesh->edges[e]->length;
-			}
-		}
 
 		////Output the average
 		//float outAvgGeodesicDist = 0.0f;
