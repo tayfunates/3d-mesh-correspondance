@@ -18,6 +18,10 @@ namespace TAShape
 		virtual bool empty() const OVERRIDE;
 		virtual TACore::Result show() OVERRIDE;
 
+		virtual TACore::Result showClosedEdges(const std::vector<int>& pEdgeIds);
+
+		TAShape::PolygonMesh* getShape() const;
+
 	private:
 		TAShape::TriangularMesh *m_p3DShape;
 	};

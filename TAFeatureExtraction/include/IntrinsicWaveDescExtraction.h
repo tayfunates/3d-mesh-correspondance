@@ -21,6 +21,9 @@ namespace TAFeaExt
 		unsigned int	m_nNumberOfWavesSampled;		//< Number of waves extracted around a single vertex, i.e dimension of the feature vector
 		
 	public:
+		//To be deleted
+		std::vector<int> waveEdges;
+
 		virtual ~IntrinsicWaveDescExtraction();
 		IntrinsicWaveDescExtraction();
 		IntrinsicWaveDescExtraction(const IntrinsicWaveDescExtraction& other);

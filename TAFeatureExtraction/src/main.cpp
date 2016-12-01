@@ -44,32 +44,29 @@ int main(int argc, char* argv[])
 	std::string outputFile = parser.get("output");
 	 
 	ThreeDimOIShape mesh;
-
 	if (mesh.load(inputFile.c_str()) != TACORE_OK)
 	{
 		return mainRet(1, "Mesh cannot be loaded correctly");
 	}
-	mesh.show();
-	//ThreeDimPCLShape *pclShape = ThreeDimPCLShape::fromTriangularMesh(*triMesh);
-	//pclShape->show();
 
-	//TAFeaExt::IntrinsicWaveDescExtraction waveDescExtractor;
-	//waveDescExtractor.setMaxGeodesicRadius(100.0f);
+	TriangularMesh* triMesh = (TriangularMesh*) (mesh.getShape());
 
-	////TACore::Timer timer;
-	////std::cout << "Geodesic Distances for all vertices are being calculated" << std::endl;
+	TAFeaExt::IntrinsicWaveDescExtraction waveDescExtractor;
+	waveDescExtractor.setMaxGeodesicRadius(100.0f);
 
-	//for (size_t v = 0; v < triMesh->verts.size(); v++)
-	//{
-	//	LocalFeaturePtr localFeaturePtr;
-	//	waveDescExtractor.extract(triMesh, v, localFeaturePtr);
-	//	//std::cout << "Average geodesic distance of vertex: " << v << " is " << ((AvgGeodesicDistance*)(localFeaturePtr.get()))->m_distance << std::endl;
+	//TACore::Timer timer;
+	//std::cout << "Geodesic Distances for all vertices are being calculated" << std::endl;
 
-	//	break;
-	//}
-	///*std::cout << "Total time taken: " << timer.seconds() << std::endl;*/
+	for (size_t v = 0; v < triMesh->verts.size(); v++)
+	{
+		LocalFeaturePtr localFeaturePtr;
+		waveDescExtractor.extract(triMesh, v, localFeaturePtr);
+		//std::cout << "Average geodesic distance of vertex: " << v << " is " << ((AvgGeodesicDistance*)(localFeaturePtr.get()))->m_distance << std::endl;
 
-	//TACORE_SAFE_DELETE(triMesh);
+		break;
+	}
+
+	mesh.showClosedEdges(waveDescExtractor.waveEdges);
 
 	return mainRet(1, "Main Test Successfully Ended");
 }

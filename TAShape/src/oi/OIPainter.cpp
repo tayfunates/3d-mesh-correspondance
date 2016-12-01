@@ -37,6 +37,74 @@ namespace TAShape
 		return sep;
 	}
 
+	SoSeparator* OIPainter::getShapeSepWithClosedEdges(TriangularMesh* mesh, const std::vector<int>& edgeIds)
+	{
+		std::vector<std::pair <int, int> > verticesOfClosedPath;
+		for (size_t i = 0; i < edgeIds.size(); i++)
+		{
+			const int ev1 = mesh->edges[edgeIds[i]]->v1i;
+			const int ev2 = mesh->edges[edgeIds[i]]->v2i;
+			verticesOfClosedPath.push_back(std::make_pair(ev1, ev2));
+		}
+
+		SoDrawStyle *dstyle = new SoDrawStyle;
+		dstyle->lineWidth = 5;
+
+		size_t numOfVertices = verticesOfClosedPath.size();
+		if (numOfVertices <= 1) return NULL;
+		SbVec3f *crds = new SbVec3f[numOfVertices];
+
+		int searchedVertex = verticesOfClosedPath[0].first;
+		for (size_t i = 0; i < numOfVertices; i++) {
+			int otherVertex = -1;
+			int foundVertexEdgeIndex = -1;
+			for (size_t j = 0; j < verticesOfClosedPath.size(); j++)
+			{
+				if (verticesOfClosedPath[j].first == searchedVertex)
+				{
+					otherVertex = verticesOfClosedPath[j].second;
+					foundVertexEdgeIndex = j;
+					break;
+				}
+				if (verticesOfClosedPath[j].second == searchedVertex)
+				{
+					otherVertex = verticesOfClosedPath[j].first;
+					foundVertexEdgeIndex = j;
+					break;
+				}
+			}
+
+			crds[i][0] = mesh->verts[searchedVertex]->coords[0];
+			crds[i][1] = mesh->verts[searchedVertex]->coords[1];
+			crds[i][2] = mesh->verts[searchedVertex]->coords[2];
+
+			if (otherVertex == -1 || foundVertexEdgeIndex == -1)
+			{
+				return NULL;
+			}
+
+			verticesOfClosedPath.erase(verticesOfClosedPath.begin() + foundVertexEdgeIndex);
+			searchedVertex = otherVertex;
+		}
+
+		SoVertexProperty *vprop = new SoVertexProperty();
+		vprop->vertex.setValues(0, numOfVertices, crds);
+		vprop->orderedRGBA.setValue(0xFF0000FF);
+
+		static int numPoints[1];
+		numPoints[0] = numOfVertices;
+
+		SoLineSet *lines = new SoLineSet;
+		lines->numVertices.setValues(0, 1, numPoints);
+
+		lines->vertexProperty.setValue(vprop);
+		SoSeparator* sep = new SoSeparator();
+		sep->addChild(dstyle);
+		sep->addChild(lines);
+
+		return sep;
+	}
+
 
 	//SoSeparator* OIPainter::getColorSep(PolygonMesh* mesh, unsigned int nColors, bool distColor)
 	//{

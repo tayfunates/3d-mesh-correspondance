@@ -79,4 +79,34 @@ namespace TAShape
 
 		return TACore::TACORE_OK;
 	}
+
+	TACore::Result ThreeDimOIShape::showClosedEdges(const std::vector<int>& pEdgeIds)
+	{
+		srand(time(NULL));
+		HWND window = SoWin::init("TAShapeTest.exe");
+		SoWinExaminerViewer * viewer = new SoWinExaminerViewer(window);
+		SoSeparator * root = new SoSeparator();
+		root->ref();
+		SoSeparator* closedEdges = OIPainter::getShapeSepWithClosedEdges(this->m_p3DShape, pEdgeIds);
+		SoSeparator* generalShape = OIPainter::getShapeSep(this->m_p3DShape);
+
+		root->addChild(generalShape);
+		root->addChild(closedEdges);
+
+		viewer->setSceneGraph(root);
+		viewer->show();
+
+		SoWin::show(window);
+		SoWin::mainLoop();
+
+		root->unref();
+		TACORE_SAFE_DELETE(viewer);
+
+		return TACore::TACORE_OK;
+	}
+
+	TAShape::PolygonMesh* ThreeDimOIShape::getShape() const
+	{
+		return this->m_p3DShape;
+	}
 }

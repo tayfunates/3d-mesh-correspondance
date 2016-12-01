@@ -29,7 +29,7 @@ namespace TAFeaExt
 	}
 
 	Result IntrinsicWaveDescExtraction::extract(PolygonMesh *mesh, const int& id, LocalFeaturePtr& outFeaturePtr)
-	{
+	{	 
 		if (!mesh || mesh->getPolygonType() != TA_TRIANGULAR)
 		{
 			return TACORE_BAD_ARGS;
@@ -131,17 +131,17 @@ namespace TAFeaExt
 			}
 		}
 
+		waveEdges.clear();
 		//Compute the approximation of the perimeter of the wave
 		float perimeter = 0.0f;
 		for (size_t e = 0; e < edgesTriInteractionCounts.size(); e++)
 		{
 			if (edgesTriInteractionCounts[e] == 1)
 			{
+				waveEdges.push_back(e);
 				perimeter += triMesh->edges[e]->length;
 			}
 		}
-
-		std::cout << "Perimeter: " << perimeter << std::endl;
 
 		////Output the average
 		//float outAvgGeodesicDist = 0.0f;
