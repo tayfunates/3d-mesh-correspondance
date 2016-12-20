@@ -2,7 +2,6 @@
 #define INTRINSIC_WAVE_DESC_EXTRACTION_H
 
 #include "TAFeatureExtraction.h"
-#include <core/TriangularMesh.h>
 
 using namespace TACore;
 using namespace TAShape;
