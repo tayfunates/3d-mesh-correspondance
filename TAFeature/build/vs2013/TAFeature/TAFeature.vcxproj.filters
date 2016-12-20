@@ -24,12 +24,18 @@
     <ClInclude Include="..\..\..\include\IntrinsicWaveDesc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\HeatKernelSignatureDesc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\AvgGeodesicDistance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\IntrinsicWaveDesc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\HeatKernelSignatureDesc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
