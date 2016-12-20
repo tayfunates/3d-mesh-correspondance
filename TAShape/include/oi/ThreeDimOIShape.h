@@ -21,6 +21,8 @@ namespace TAShape
 		virtual TACore::Result showClosedEdges(const std::vector<int>& pEdgeIds);
 		virtual TACore::Result showClosedEdges(const std::vector< std::vector<int> >& pClosedWaves);
 
+		virtual TACore::Result showVertexColors(const std::vector<float>& pVertMagnitudes);
+
 		TAShape::PolygonMesh* getShape() const;
 
 	private:

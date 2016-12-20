@@ -178,6 +178,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\core\ColorPalette.h" />
     <ClInclude Include="..\..\..\include\core\CommandLineParser.h" />
     <ClInclude Include="..\..\..\include\core\Defs.h" />
     <ClInclude Include="..\..\..\include\core\FibHeap.h" />
@@ -186,6 +187,7 @@
     <ClInclude Include="..\..\..\include\core\Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\core\ColorPalette.cpp" />
     <ClCompile Include="..\..\..\src\core\PathUtil.cpp" />
     <ClCompile Include="..\..\..\src\core\StringUtil.cpp" />
     <ClCompile Include="..\..\..\src\core\Timer.cpp" />

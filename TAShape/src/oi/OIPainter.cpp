@@ -105,6 +105,55 @@ namespace TAShape
 		return sep;
 	}
 
+	SoSeparator* OIPainter::getShapeSepWithVertexColors(TriangularMesh* mesh, const std::vector<std::vector< unsigned char > >& pColors)
+	{
+		if (pColors.size() != 3)
+		{
+			std::cerr << "RGB Colors must be provided!" << std::endl;
+			return NULL;
+		}
+		if (pColors[0].size() != mesh->verts.size())
+		{
+			std::cerr << "Number of colors and vertex must be equal!" << std::endl;
+			return NULL;
+		}
+
+		SoSeparator* sep = new SoSeparator();
+
+		//shape
+		SoCoordinate3* coords = new SoCoordinate3();
+
+		for (int v = 0; v < (int)mesh->verts.size(); v++)
+			coords->point.set1Value(v, mesh->verts[v]->coords[0], mesh->verts[v]->coords[1], mesh->verts[v]->coords[2]);
+		sep->addChild(coords);
+
+		SoVertexProperty* vProp = new SoVertexProperty();
+		vProp->materialBinding.setValue(SoVertexProperty::PER_VERTEX_INDEXED);
+		for (int v = 0; v < (int)mesh->verts.size(); v++) 
+		{
+			const uint32_t r = pColors[0][v] << 24;
+			const uint32_t g = pColors[1][v] << 16;
+			const uint32_t b = pColors[2][v] << 8;
+		
+			const uint32_t colValue = ((r | g) | b) | 0xFF;
+			vProp->orderedRGBA.set1Value(v, colValue);
+		}
+		sep->addChild(vProp);
+
+		SoIndexedFaceSet* faceSet = new SoIndexedFaceSet();
+		int nt = 0;
+		for (int t = 0; t < (int)mesh->tris.size(); t++)
+		{
+			faceSet->coordIndex.set1Value(0 + 4 * nt, mesh->tris[t]->v1i);
+			faceSet->coordIndex.set1Value(1 + 4 * nt, mesh->tris[t]->v2i);
+			faceSet->coordIndex.set1Value(2 + 4 * nt, mesh->tris[t]->v3i);
+			faceSet->coordIndex.set1Value(3 + 4 * nt++, -1);
+		}
+		sep->addChild(faceSet);
+
+		return sep;
+	}
+
 
 	//SoSeparator* OIPainter::getColorSep(PolygonMesh* mesh, unsigned int nColors, bool distColor)
 	//{

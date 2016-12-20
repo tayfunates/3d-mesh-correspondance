@@ -1,6 +1,7 @@
 #include <oi/ThreeDimOIShape.h>
 #include <oi/OIPainter.h>
 #include <core/PathUtil.h>
+#include <core/ColorPalette.h>
 #include <Inventor/Win/SoWin.h>
 #include <Inventor/Win/viewers/SoWinExaminerViewer.h>
 #include <Inventor/nodes/SoSeparator.h>
@@ -103,6 +104,50 @@ namespace TAShape
 		SoSeparator* generalShape = OIPainter::getShapeSep(this->m_p3DShape);
 		if (generalShape) root->addChild(generalShape);
 		
+		viewer->setSceneGraph(root);
+		viewer->show();
+
+		SoWin::show(window);
+		SoWin::mainLoop();
+
+		root->unref();
+		TACORE_SAFE_DELETE(viewer);
+
+		return TACore::TACORE_OK;
+	}
+
+	TACore::Result ThreeDimOIShape::showVertexColors(const std::vector<float>& pVertMagnitudes)
+	{
+		//If magnitude vector size is not equal to the vertex size
+		if (pVertMagnitudes.size() != this->m_p3DShape->verts.size())
+		{
+			return TACore::TACORE_BAD_ARGS;
+		}
+		TACore::ColorPalette colorPalette;
+
+
+		std::vector< std::vector< unsigned char > > colorsFromMagnitudes(3);
+		colorsFromMagnitudes[0] = std::vector<unsigned char>(pVertMagnitudes.size());
+		colorsFromMagnitudes[1] = std::vector<unsigned char>(pVertMagnitudes.size());
+		colorsFromMagnitudes[2] = std::vector<unsigned char>(pVertMagnitudes.size());
+		for (size_t i = 0; i < pVertMagnitudes.size(); i++)
+		{
+			unsigned char r, g, b;
+			colorPalette.getColor(pVertMagnitudes[i], r, g, b);
+			colorsFromMagnitudes[0][i] = r;
+			colorsFromMagnitudes[1][i] = g;
+			colorsFromMagnitudes[2][i] = b;
+		}
+
+		srand(time(NULL));
+		HWND window = SoWin::init("TAShapeTest.exe");
+		SoWinExaminerViewer * viewer = new SoWinExaminerViewer(window);
+		SoSeparator * root = new SoSeparator();
+		root->ref();
+
+		SoSeparator* generalShape = OIPainter::getShapeSepWithVertexColors(this->m_p3DShape, colorsFromMagnitudes);
+		if (generalShape) root->addChild(generalShape);
+
 		viewer->setSceneGraph(root);
 		viewer->show();
 

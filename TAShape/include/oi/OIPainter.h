@@ -17,6 +17,7 @@ namespace TAShape
 	public:
 		static SoSeparator* getShapeSep(TriangularMesh* mesh);
 		static SoSeparator* getShapeSepWithClosedEdges(TriangularMesh* mesh, const std::vector<int>& edgeIds);
+		static SoSeparator* getShapeSepWithVertexColors(TriangularMesh* mesh, const std::vector<std::vector< unsigned char > >& pColors);
 		/*static SoSeparator* getColorSep(TriangularMesh* mesh, unsigned int nColors, bool distColor);*/
 		/*static SoSeparator* getVertexSphereSep(Vertex *ver, float radius, SoMaterial* mat);*/
 		/*static SoSeparator* getLineBetweenTwoSep(TriangularMesh *mesh, Vertex *ver1, Vertex *ver2);*/
