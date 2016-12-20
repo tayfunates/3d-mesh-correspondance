@@ -4,6 +4,7 @@
 #include <Inventor/nodes/SoLineSet.h>
 #include <Inventor/nodes/SoDrawStyle.h>
 #include <Inventor/nodes/SoVertexProperty.h>
+#include <Inventor/nodes/SoMaterial.h>
 
 namespace TAShape
 {
@@ -16,23 +17,8 @@ namespace TAShape
 		mat->diffuseColor.setValue(1, 1, 0);
 		sep->addChild(mat);
 
-		//shape
-		SoCoordinate3* coords = new SoCoordinate3();
-
-		for (int v = 0; v < (int)mesh->verts.size(); v++)
-			coords->point.set1Value(v, mesh->verts[v]->coords[0], mesh->verts[v]->coords[1], mesh->verts[v]->coords[2]);
-		sep->addChild(coords);
-
-		SoIndexedFaceSet* faceSet = new SoIndexedFaceSet();
-		int nt = 0;
-		for (int t = 0; t < (int)mesh->tris.size(); t++)
-		{
-			faceSet->coordIndex.set1Value(0 + 4 * nt, mesh->tris[t]->v1i);
-			faceSet->coordIndex.set1Value(1 + 4 * nt, mesh->tris[t]->v2i);
-			faceSet->coordIndex.set1Value(2 + 4 * nt, mesh->tris[t]->v3i);
-			faceSet->coordIndex.set1Value(3 + 4 * nt++, -1);
-		}
-		sep->addChild(faceSet);
+		sep->addChild(getShapeCoordinates(mesh));
+		sep->addChild(getShapeIndexedFaceSet(mesh));
 
 		return sep;
 	}
@@ -120,12 +106,7 @@ namespace TAShape
 
 		SoSeparator* sep = new SoSeparator();
 
-		//shape
-		SoCoordinate3* coords = new SoCoordinate3();
-
-		for (int v = 0; v < (int)mesh->verts.size(); v++)
-			coords->point.set1Value(v, mesh->verts[v]->coords[0], mesh->verts[v]->coords[1], mesh->verts[v]->coords[2]);
-		sep->addChild(coords);
+		sep->addChild(getShapeCoordinates(mesh));
 
 		SoVertexProperty* vProp = new SoVertexProperty();
 		vProp->materialBinding.setValue(SoVertexProperty::PER_VERTEX_INDEXED);
@@ -140,6 +121,21 @@ namespace TAShape
 		}
 		sep->addChild(vProp);
 
+		sep->addChild(getShapeIndexedFaceSet(mesh));
+		return sep;
+	}
+
+	SoCoordinate3* OIPainter::getShapeCoordinates(TriangularMesh* mesh)
+	{
+		SoCoordinate3* coords = new SoCoordinate3();
+
+		for (int v = 0; v < (int)mesh->verts.size(); v++)
+			coords->point.set1Value(v, mesh->verts[v]->coords[0], mesh->verts[v]->coords[1], mesh->verts[v]->coords[2]);
+		return coords;
+	}
+
+	SoIndexedFaceSet* OIPainter::getShapeIndexedFaceSet(TriangularMesh* mesh)
+	{
 		SoIndexedFaceSet* faceSet = new SoIndexedFaceSet();
 		int nt = 0;
 		for (int t = 0; t < (int)mesh->tris.size(); t++)
@@ -149,9 +145,7 @@ namespace TAShape
 			faceSet->coordIndex.set1Value(2 + 4 * nt, mesh->tris[t]->v3i);
 			faceSet->coordIndex.set1Value(3 + 4 * nt++, -1);
 		}
-		sep->addChild(faceSet);
-
-		return sep;
+		return faceSet;
 	}
 
 
