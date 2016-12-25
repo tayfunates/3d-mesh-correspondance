@@ -71,12 +71,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(DEV_HOME)/Coin3D/include;$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/armadillo/include;$(DEV_HOME)/Coin3D/include;$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DEV_HOME)/Coin3D/lib/x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>coin2d.lib;sowin1d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(DEV_HOME)/armadillo/lib/win32;$(DEV_HOME)/Coin3D/lib/x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>coin2d.lib;sowin1d.lib;lapack_win32_MTd.lib;blas_win32_MTd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -100,14 +100,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(DEV_HOME)/Coin3D/include;$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEV_HOME)/armadillo/include;$(DEV_HOME)/Coin3D/include;$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(DEV_HOME)/Coin3D/lib/x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>coin2.lib;sowin1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(DEV_HOME)/armadillo/lib/win32;$(DEV_HOME)/Coin3D/lib/x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>coin2.lib;sowin1.lib;lapack_win32_MT.lib;blas_win32_MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
