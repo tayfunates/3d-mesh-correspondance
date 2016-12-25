@@ -2,6 +2,7 @@
 #define HEAT_KERNEL_SIGNATURE_DESC_H
 
 #include "TAFeature.h"
+#include <vector>
 
 namespace TAFea
 {
@@ -15,8 +16,10 @@ namespace TAFea
 		HeatKernelSignatureDesc();
 		HeatKernelSignatureDesc(const int& vertexid);
 
-	private:
+		static double L2Distance(const HeatKernelSignatureDesc& hks1, const HeatKernelSignatureDesc& hks2);
 
+	public:
+		std::vector<double> m_vDescriptor;
 	};
 }
 
