@@ -53,8 +53,8 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 
 	TAFeaExt::HKSDescExtraction hksExtractor;
 	hksExtractor.setNumberOfEigenVals(50);
-	hksExtractor.setMinTimeVal(5.0f);
-	hksExtractor.setMaxTimeVal(15.0f);
+	hksExtractor.setMinTimeVal(1.0f);
+	hksExtractor.setMaxTimeVal(25.0f);
 
 	std::vector<double> distances1;
 	std::vector<LocalFeaturePtr> feas1;
@@ -65,7 +65,7 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 	{
 		HeatKernelSignatureDesc* hksVV = (HeatKernelSignatureDesc*)(feas1[v].get());
 		const double l2Distance = HeatKernelSignatureDesc::L2Distance(*hksVV, *hksV0);
-		distances1.push_back(log(1.0+l2Distance));
+		distances1.push_back(l2Distance);
 	}
 
 	const double maxDistance1 = *std::max_element(distances1.begin(), distances1.end());

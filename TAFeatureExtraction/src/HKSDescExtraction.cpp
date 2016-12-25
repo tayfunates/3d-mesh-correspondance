@@ -91,11 +91,18 @@ namespace TAFeaExt
 			for (size_t t = 0; t < this->m_nNumberOfTimeSamples; t++)
 			{
 				const double logScaleCurrT = pow(2.0, currT);
+				double heatTrace = 0.0;
+				std::vector<double> expInvEigVals(this->m_nNoEigenVal);
+				for (size_t eig = 0; eig < this->m_nNoEigenVal; eig++)
+				{
+					expInvEigVals[eig] = exp(eigval(eig).real() * logScaleCurrT * (-1.0));
+					heatTrace += expInvEigVals[eig];
+				}
 				double descVal = 0.0;
 				for (size_t eig = 0; eig < this->m_nNoEigenVal; eig++)
 				{
 					const double sqEigFunc = eigvec(v, eig).real() * eigvec(v, eig).real();
-					descVal += exp(eigval(eig).real() * logScaleCurrT * (-1.0)) * sqEigFunc;
+					descVal += (expInvEigVals[eig] * sqEigFunc) / heatTrace;
 				}
 				pDesc->m_vDescriptor[t] = descVal;
 				currT += tIncrement;
