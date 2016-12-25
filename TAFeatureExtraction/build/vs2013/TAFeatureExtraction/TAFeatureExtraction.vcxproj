@@ -71,7 +71,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;$(DEV_HOME)/eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;$(DEV_HOME)/armadillo/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -82,7 +82,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;$(DEV_HOME)/eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;$(DEV_HOME)/armadillo/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -96,7 +96,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;$(DEV_HOME)/eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;$(DEV_HOME)/armadillo/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -111,7 +111,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;$(DEV_HOME)/eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(TAMSC_HOME)/TACore/include;$(TAMSC_HOME)/TAShape/include;$(TAMSC_HOME)/TAFeature/include;$(TAMSC_HOME)/TAFeatureExtraction/include;$(DEV_HOME)/armadillo/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
