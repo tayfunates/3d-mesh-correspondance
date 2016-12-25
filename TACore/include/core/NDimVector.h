@@ -153,34 +153,13 @@ namespace TACore
 		}
 
 		//Normalizes the vector if its norm is greater than 0
-		bool normalize()
+		void normalize()
 		{
 			const double nrm = norm();
-			if (nrm <= 0.0) return false;
-
 			for (int i = 0; i<m_NoDims; i++)
 			{
-				m_Vec[i] = m_Vec[i] / nrm;
+				m_Vec[i] = (double) m_Vec[i] / nrm;
 			}
-			return true;
-		}
-
-		//Returns the normalized version of this vector
-		NDimVector<T, N> normalize(bool& res) const
-		{
-			NDimVector ret;
-			const double nrm = norm();
-			if (nrm <= 0.0)
-			{
-				res = false;
-				return ret;
-			}
-			res = true;
-			for (int i = 0; i<m_NoDims; i++)
-			{
-				ret.m_Vec[i] = m_Vec[i] / nrm;
-			}
-			return ret;
 		}
 
 		//Takes the dot product between two vectors
