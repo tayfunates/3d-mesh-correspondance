@@ -116,7 +116,7 @@ namespace TAShape
 		return TACore::TACORE_OK;
 	}
 
-	TACore::Result ThreeDimOIShape::showVertexColors(const std::vector<float>& pVertMagnitudes)
+	TACore::Result ThreeDimOIShape::showVertexColors(const std::vector<double>& pVertMagnitudes)
 	{
 		//If magnitude vector size is not equal to the vertex size
 		if (pVertMagnitudes.size() != this->m_p3DShape->verts.size())
