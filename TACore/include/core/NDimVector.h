@@ -250,6 +250,18 @@ namespace TACore
 			return other * (((*this) % other) / sqNrm);
 		}
 	};
+
+	typedef NDimVector<int, 1> Vector1I;
+	typedef NDimVector<int, 2> Vector2I;
+	typedef NDimVector<int, 3> Vector3I;
+
+	typedef NDimVector<float, 1> Vector1F;
+	typedef NDimVector<float, 2> Vector2F;
+	typedef NDimVector<float, 3> Vector3F;
+
+	typedef NDimVector<double, 1> Vector1D;
+	typedef NDimVector<double, 2> Vector2D;
+	typedef NDimVector<double, 3> Vector3D;
 }
 
 #endif
