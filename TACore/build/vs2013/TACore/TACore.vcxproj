@@ -182,6 +182,7 @@
     <ClInclude Include="..\..\..\include\core\CommandLineParser.h" />
     <ClInclude Include="..\..\..\include\core\Defs.h" />
     <ClInclude Include="..\..\..\include\core\FibHeap.h" />
+    <ClInclude Include="..\..\..\include\core\NDimVector.h" />
     <ClInclude Include="..\..\..\include\core\PathUtil.h" />
     <ClInclude Include="..\..\..\include\core\StringUtil.h" />
     <ClInclude Include="..\..\..\include\core\Timer.h" />
