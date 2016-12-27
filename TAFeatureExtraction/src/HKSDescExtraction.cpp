@@ -14,8 +14,8 @@ namespace TAFeaExt
 	{
 		this->m_LaplacianUsed = STAR_LAPLACIAN;
 		this->m_nNoEigenVal = 125;
-		this->m_fTMin = -1.0; //If not set from the user, this will be calculated by the extractor
-		this->m_fTMax = -1.0; //If not set from the user, this will be calculated by the extractor
+		this->m_fTMin = 1.0;
+		this->m_fTMax = 1000000;
 		this->m_nNumberOfTimeSamples = 100;
 		this->m_mLaplacian = NULL;
 	}
@@ -34,8 +34,8 @@ namespace TAFeaExt
 	{
 		this->m_LaplacianUsed = STAR_LAPLACIAN;
 		this->m_nNoEigenVal = 125;
-		this->m_fTMin = -1.0; //If not set from the user, this will be calculated by the extractor
-		this->m_fTMax = -1.0; //If not set from the user, this will be calculated by the extractor
+		this->m_fTMin = 1.0;
+		this->m_fTMax = 1000000.0;
 		this->m_nNumberOfTimeSamples = 100;
 		if (this->m_mLaplacian != NULL)
 		{
@@ -69,14 +69,11 @@ namespace TAFeaExt
 		{
 			return res;
 		}
-		
-		if (this->m_fTMin < 0 && this->m_fTMax < 0)
-		{
-			this->m_fTMin = (4.0 * log(10 / eigval(eigval.size() - 1).real()));
-			this->m_fTMax = (4.0 * log(10 / eigval(1).real()));
-		}
 
-		const double tIncrement = (this->m_fTMax - this->m_fTMin) / (this->m_nNumberOfTimeSamples - 1);
+		const double logTMin = log(this->m_fTMin);
+		const double logTMax = log(this->m_fTMax);
+
+		const double tIncrement = (logTMax - logTMin) / (this->m_nNumberOfTimeSamples - 1);
 
 		const size_t verSize = triMesh->verts.size();
 		outFeatures = std::vector<LocalFeaturePtr>(verSize);
@@ -87,24 +84,20 @@ namespace TAFeaExt
 			HeatKernelSignatureDesc *pDesc = new HeatKernelSignatureDesc(v);
 			pDesc->m_vDescriptor = std::vector<double>(this->m_nNumberOfTimeSamples);
 
-			double currT = this->m_fTMin;
+			double currT = logTMin;
 			for (size_t t = 0; t < this->m_nNumberOfTimeSamples; t++)
 			{
-				const double logScaleCurrT = pow(2.0, currT);
+				const double logScaleCurrT = exp(currT);
 				double heatTrace = 0.0;
-				std::vector<double> expInvEigVals(this->m_nNoEigenVal);
-				for (size_t eig = 0; eig < this->m_nNoEigenVal; eig++)
-				{
-					expInvEigVals[eig] = exp(eigval(eig).real() * logScaleCurrT * (-1.0));
-					heatTrace += expInvEigVals[eig];
-				}
 				double descVal = 0.0;
 				for (size_t eig = 0; eig < this->m_nNoEigenVal; eig++)
 				{
+					const double expInvEigVal = exp(eigval(eig).real() * logScaleCurrT * (-1.0));
 					const double sqEigFunc = eigvec(v, eig).real() * eigvec(v, eig).real();
-					descVal += (expInvEigVals[eig] * sqEigFunc) / heatTrace;
+					descVal += (expInvEigVal * sqEigFunc);
+					heatTrace += expInvEigVal;
 				}
-				pDesc->m_vDescriptor[t] = descVal;
+				pDesc->m_vDescriptor[t] = descVal / heatTrace;
 				currT += tIncrement;
 			}
 			outFeatures[v] = LocalFeaturePtr(pDesc);

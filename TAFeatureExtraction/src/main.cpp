@@ -52,9 +52,10 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 	TriangularMesh* triMesh = (TriangularMesh*)(mesh.getShape());
 
 	TAFeaExt::HKSDescExtraction hksExtractor;
-	hksExtractor.setNumberOfEigenVals(50);
-	hksExtractor.setMinTimeVal(1.0f);
-	hksExtractor.setMaxTimeVal(25.0f);
+	hksExtractor.setNumberOfEigenVals(100);
+	hksExtractor.setNumberOfTimeSamples(300);
+	hksExtractor.setMinTimeVal(1);
+	hksExtractor.setMaxTimeVal(100000);
 
 	std::vector<double> distances1;
 	std::vector<LocalFeaturePtr> feas1;
@@ -76,7 +77,7 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 		distances1[i] = distances1[i] / maxDistance1;
 	}
 
-	mesh.showVertexColors(distances1);
+	mesh.showVertexColors(distances1, 0);
 	return mainRet(1, "Main Test Successfully Ended");
 }
 
