@@ -116,7 +116,7 @@ namespace TAShape
 		return TACore::TACORE_OK;
 	}
 
-	TACore::Result ThreeDimOIShape::showVertexColors(const std::vector<double>& pVertMagnitudes)
+	TACore::Result ThreeDimOIShape::showVertexColors(const std::vector<double>& pVertMagnitudes, const int& pSpecialVertexId)
 	{
 		//If magnitude vector size is not equal to the vertex size
 		if (pVertMagnitudes.size() != this->m_p3DShape->verts.size())
@@ -147,6 +147,27 @@ namespace TAShape
 
 		SoSeparator* generalShape = OIPainter::getShapeSepWithVertexColors(this->m_p3DShape, colorsFromMagnitudes);
 		if (generalShape) root->addChild(generalShape);
+		
+		//Get the vertex seperator if provided 
+		if (pSpecialVertexId != -1)
+		{
+			//Estimate the radius
+			const size_t minSizeCheck = MIN(this->m_p3DShape->edges.size(), 20);
+			float avgEdgeLength = 0.0f;
+			for (size_t i = 0; i < minSizeCheck; i++)
+			{
+				avgEdgeLength += this->m_p3DShape->edges[i]->length;
+			}
+			avgEdgeLength /= minSizeCheck;
+
+			float specialVertexRadius = avgEdgeLength * 1.5f;
+
+			SoSeparator *specialVertexSeparator = OIPainter::getVertexSphereSep(this->m_p3DShape->verts[pSpecialVertexId],
+																				specialVertexRadius,
+																				NULL);
+
+			if(specialVertexSeparator) root->addChild(specialVertexSeparator);
+		}
 
 		viewer->setSceneGraph(root);
 		viewer->show();

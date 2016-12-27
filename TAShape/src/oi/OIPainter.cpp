@@ -5,6 +5,9 @@
 #include <Inventor/nodes/SoDrawStyle.h>
 #include <Inventor/nodes/SoVertexProperty.h>
 #include <Inventor/nodes/SoMaterial.h>
+#include <Inventor/nodes/SoIndexedFaceSet.h>
+#include <Inventor/nodes/SoSeparator.h>
+#include <Inventor/nodes/SoCoordinate3.h>
 
 namespace TAShape
 {
@@ -148,6 +151,32 @@ namespace TAShape
 		return faceSet;
 	}
 
+	SoSeparator* OIPainter::getVertexSphereSep(Vertex *ver, float radius, SoMaterial* mat)
+	{
+		SoMaterial* localMat = NULL;
+		//material
+		if (mat == NULL)
+		{
+			localMat = new SoMaterial();
+			localMat->diffuseColor.setValue(1, 1, 0);
+		}
+		else
+		{
+			localMat = mat;
+		}
+
+		SoSeparator* sep = new SoSeparator();
+		SoSphere *sphere = new SoSphere();
+		SoTransform *tr = new SoTransform();
+		sphere->radius = radius;
+		tr->translation = SbVec3f(ver->coords[0], ver->coords[1], ver->coords[2]);
+		sep->addChild(localMat);
+		sep->addChild(tr);
+		sep->addChild(sphere);
+	
+		return sep;
+	}
+
 
 	//SoSeparator* OIPainter::getColorSep(PolygonMesh* mesh, unsigned int nColors, bool distColor)
 	//{
@@ -189,21 +218,6 @@ namespace TAShape
 	//		faceSet->coordIndex.set1Value(3 + 4 * nt++, -1);
 	//	}
 	//	sep->addChild(faceSet);
-
-	//	return sep;
-	//}
-
-
-	//SoSeparator* OIPainter::getVertexSphereSep(Vertex *ver, float radius, SoMaterial* mat)
-	//{
-	//	SoSeparator* sep = new SoSeparator();
-	//	SoSphere *sphere = new SoSphere();
-	//	SoTransform *tr = new SoTransform();
-	//	sphere->radius = radius;
-	//	tr->translation = SbVec3f(ver->coords[0], ver->coords[1], ver->coords[2]);
-	//	sep->addChild(mat);
-	//	sep->addChild(tr);
-	//	sep->addChild(sphere);
 
 	//	return sep;
 	//}
