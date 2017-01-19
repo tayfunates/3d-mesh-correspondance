@@ -224,6 +224,15 @@ namespace TAFeaExt
 		std::vector<double> vValues;
 		for (size_t i = 0; i < numberOfVertices; i++)
 		{
+			if (i < numberOfVertices-1)
+			{
+				std::cout << "%" << (100 * i) / numberOfVertices << " completed for creating laplacian" << "\r";
+			}
+			else
+			{
+				std::cout << "%" << 100 << " completed for creating laplacian" << "\n";
+			}
+			
 			double sum_w = 0.0;
 			for (int j = 0; j < (int) triMesh->verts[i]->vertList.size(); j++) 
 			{
