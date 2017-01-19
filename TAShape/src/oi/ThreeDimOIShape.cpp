@@ -123,7 +123,7 @@ namespace TAShape
 		{
 			return TACore::TACORE_BAD_ARGS;
 		}
-		TACore::ColorPalette colorPalette(0.00001f);
+		TACore::ColorPalette colorPalette(1.0f / this->m_p3DShape->verts.size());
 
 
 		std::vector< std::vector< unsigned char > > colorsFromMagnitudes(3);
