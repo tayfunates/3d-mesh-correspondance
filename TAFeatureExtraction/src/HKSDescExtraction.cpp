@@ -2,6 +2,8 @@
 #include "HeatKernelSignatureDesc.h"
 #include <core/NDimVector.h>
 #include <core/TriangularMesh.h>
+#include <set>
+#include <numeric>
 
 namespace TAFeaExt
 {
@@ -185,6 +187,10 @@ namespace TAFeaExt
 		{
 			res = createStarLaplacianMatrix(mesh);
 		}
+		if (typeLap == HKSDescExtraction::DISCRETE_LAPLACIAN)
+		{
+			res = createDiscreteLaplacianMatrix(mesh);
+		}
 		return res;
 	}
 
@@ -227,7 +233,6 @@ namespace TAFeaExt
 
 		const size_t numberOfVertices = triMesh->verts.size();
 
-
 		std::vector<unsigned int> vRowIndices;
 		std::vector<unsigned int> vColIndices;
 		std::vector<double> vValues;
@@ -264,6 +269,92 @@ namespace TAFeaExt
 			vValues.push_back(1.0);
 		}
 
+		arma::umat locations(2, vRowIndices.size());
+		arma::vec values(vValues);
+		for (size_t i = 0; i < vRowIndices.size(); i++)
+		{
+			locations(0, i) = vRowIndices[i];
+			locations(1, i) = vColIndices[i];
+		}
+		this->m_mLaplacian = new arma::SpMat<double>(locations, values, true);
+
+		return TACore::TACORE_OK;
+	}
+
+	Result HKSDescExtraction::createDiscreteLaplacianMatrix(PolygonMesh *mesh)
+	{
+		if (!mesh || mesh->getPolygonType() != TA_TRIANGULAR)
+		{
+			return TACORE_BAD_ARGS;
+		}
+
+		//We, now, know that the mesh is a triangular mesh
+		TriangularMesh *triMesh = (TriangularMesh*)mesh;
+
+		if (this->m_mLaplacian != NULL)
+		{
+			delete this->m_mLaplacian;
+		}
+
+		const size_t numberOfVertices = triMesh->verts.size();
+		const double FOUR_PI = 4.0 * 3.14159265358979323846;
+
+		std::vector<unsigned int> vRowIndices;
+		std::vector<unsigned int> vColIndices;
+		std::vector<double> vValues;
+
+		const double epsilon = 1e-5;
+		std::vector<double> ringAreas;
+		triMesh->calcRingAreasOfVertices(ringAreas);
+
+		for (size_t i = 0; i < numberOfVertices; i++)
+		{
+			if (i < numberOfVertices - 1)
+			{
+				std::cout << "%" << (100 * i) / numberOfVertices << " completed for creating laplacian" << "\r";
+			}
+			else
+			{
+				std::cout << "%" << 100 << " completed for creating laplacian" << "\n";
+			}
+
+			Vertex *vi = triMesh->verts[i];
+
+			const std::vector<int>& vertexTriList = vi->triList;
+			std::set<int> neighborEdgeIndicesList;
+			for (size_t t = 0; t < vertexTriList.size(); t++)
+			{
+				neighborEdgeIndicesList.insert(triMesh->tris[vertexTriList[t]]->e1);
+			}
+			double neighborEdgeLengthSum = 0.0;
+			for (std::set<int>::iterator it = neighborEdgeIndicesList.begin(); it != neighborEdgeIndicesList.end(); ++it) {
+				neighborEdgeLengthSum += triMesh->edges[*it]->length;
+			}
+			const double h = neighborEdgeLengthSum / neighborEdgeIndicesList.size(); //Adaptive h according to the edge lengths around the vertex
+			const double oneOverForPiHSquare = 1.0 / (FOUR_PI * h * h);
+
+			double diagonalEntry = 0.0;
+			for (size_t j = 0; j < numberOfVertices; j++)
+			{
+				Vertex *vj = triMesh->verts[j];
+				const float eucDistanceBetweenTwo = triMesh->eucDistanceBetween(vi, vj);
+				const double entry = oneOverForPiHSquare * (ringAreas[j] / 3.0) * exp(-1.0 * ((eucDistanceBetweenTwo * eucDistanceBetweenTwo) / (4.0 * h)));
+				if (i != j)
+				{
+					if (abs(entry) > epsilon)
+					{
+						vRowIndices.push_back(i);
+						vColIndices.push_back(j);
+						vValues.push_back(entry);
+					}
+				}
+				diagonalEntry += (-1.0) * entry;
+			}
+
+			vRowIndices.push_back(i);
+			vColIndices.push_back(i);
+			vValues.push_back(diagonalEntry);
+		}
 
 		arma::umat locations(2, vRowIndices.size());
 		arma::vec values(vValues);
@@ -273,6 +364,9 @@ namespace TAFeaExt
 			locations(1, i) = vColIndices[i];
 		}
 		this->m_mLaplacian = new arma::SpMat<double>(locations, values, true);
+
+		double sumRingAreas = std::accumulate(ringAreas.begin(), ringAreas.end(), 0.0);
+		*(this->m_mLaplacian) = *(this->m_mLaplacian) / sumRingAreas;
 
 		return TACore::TACORE_OK;
 	}

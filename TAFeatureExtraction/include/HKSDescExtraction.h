@@ -22,7 +22,8 @@ namespace TAFeaExt
 
 		enum TypeOfLaplacian
 		{
-			STAR_LAPLACIAN = 1 //< http://www.cs.princeton.edu/courses/archive/fall10/cos526/papers/sorkine05.pdf
+			STAR_LAPLACIAN = 1,			//< http://www.cs.princeton.edu/courses/archive/fall10/cos526/papers/sorkine05.pdf
+			DISCRETE_LAPLACIAN = 2		//< http://web.cse.ohio-state.edu/~yusu/papers/finalscg_laplace.pdf, practical impl --> https://etd.ohiolink.edu/rws_etd/document/get/osu1236615194/inline 
 		};
 
 		virtual ~HKSDescExtraction();
@@ -90,6 +91,14 @@ namespace TAFeaExt
 		* @return	TACORE_OK if everything goes fine.
 		*/
 		Result createStarLaplacianMatrix(PolygonMesh *mesh);
+
+		/**
+		* @brief	Create the Discrete laplacian matrix from the polygon mesh saves it into the object
+		*			[Currently] Only Triangular mesh is supported
+		* @param	mesh Polygonial mesh from which the laplacian matrix will be created
+		* @return	TACORE_OK if everything goes fine.
+		*/
+		Result createDiscreteLaplacianMatrix(PolygonMesh *mesh);
 
 		/**
 		* @brief	Computes the cotangent weigh for w_ij for STAR Laplacian Matrixss
