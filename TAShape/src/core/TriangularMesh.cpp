@@ -297,5 +297,25 @@ namespace TAShape
 
 		return 0.5 * AB.norm() * AC.norm() * sin(angle);
 	}
+
+	void TriangularMesh::calcRingAreasOfVertices(std::vector<double>& ringAreas) const
+	{
+		ringAreas = std::vector<double>(verts.size());
+		std::vector<double> triangleAreas(tris.size());
+		for (int t = 0; t < (int)tris.size(); t++)
+		{
+			triangleAreas[t] = calcAreaOfTriangle(t);
+		}
+
+		for (int v = 0; v < (int)verts.size(); v++)
+		{
+			double sumAreas = 0.0;
+			for (int tv = 0; tv < (int)verts[v]->triList.size(); tv++)
+			{
+				sumAreas += triangleAreas[verts[v]->triList[tv]];
+			}
+			ringAreas[v] = sumAreas;
+		}
+	}
 	
 }

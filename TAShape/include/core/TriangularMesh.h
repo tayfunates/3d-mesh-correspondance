@@ -152,6 +152,14 @@ namespace TAShape
 		* @return			Area of the triangle
 		*/
 		double calcAreaOfTriangle(int t) const;
+
+		/**
+		* @brief			Calculates the ring areas of all vertices inside the mesh
+		*					Ring area of a vertex is the sum of areas of triangles that fan around it
+		* @param			[out] ringAreas, Ring areas of all vertices inside the mesh
+		* @return			void
+		*/
+		void calcRingAreasOfVertices(std::vector<double>& ringAreas) const;
 	};
 
 }
