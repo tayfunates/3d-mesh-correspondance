@@ -80,6 +80,15 @@ namespace TAFeaExt
 
 		for (size_t v = 0; v < verSize; v++)
 		{
+			if (v < verSize - 1)
+			{
+				std::cout << "%" << (100 * v) / verSize << " completed for calculating hks descriptor" << "\r";
+			}
+			else
+			{
+				std::cout << 100 << " completed for calculating hks descriptor" << "\n";
+			}
+
 			//Initialize descriptor of the vertex
 			HeatKernelSignatureDesc *pDesc = new HeatKernelSignatureDesc(v);
 			pDesc->m_vDescriptor = std::vector<double>(this->m_nNumberOfTimeSamples);
