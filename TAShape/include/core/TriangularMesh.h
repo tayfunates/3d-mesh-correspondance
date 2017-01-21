@@ -145,6 +145,13 @@ namespace TAShape
 		* @return			TACORE_OK successfully assigned.
 		*/
 		TACore::Result assignNormalsToTriangles();
+
+		/**
+		* @brief			Calculates the area of a triangle
+		* @param			[in] t, index of the triangle whose area is being calculated
+		* @return			Area of the triangle
+		*/
+		double calcAreaOfTriangle(int t) const;
 	};
 
 }

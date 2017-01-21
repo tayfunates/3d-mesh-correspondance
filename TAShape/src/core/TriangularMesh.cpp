@@ -1,5 +1,6 @@
 #include <core/TriangularMesh.h>
 #include <core/PathUtil.h>
+#include <core/NDimVector.h>
 
 namespace TAShape
 {
@@ -280,6 +281,21 @@ namespace TAShape
 
 		}
 		return TACore::TACORE_OK;
+	}
+
+	double TriangularMesh::calcAreaOfTriangle(int t) const
+	{
+		Triangle *tp = tris[t];
+		TACore::Vector3D A(verts[tp->v1i]->coords[0], verts[tp->v1i]->coords[1], verts[tp->v1i]->coords[2]);
+		TACore::Vector3D B(verts[tp->v2i]->coords[0], verts[tp->v2i]->coords[1], verts[tp->v2i]->coords[2]);
+		TACore::Vector3D C(verts[tp->v3i]->coords[0], verts[tp->v3i]->coords[1], verts[tp->v3i]->coords[2]);
+
+		TACore::Vector3D AB(A, B);
+		TACore::Vector3D AC(A, C);
+
+		double angle = TACore::Vector3D::getAngleBetweenTwo(AB, AC);
+
+		return 0.5 * AB.norm() * AC.norm() * sin(angle);
 	}
 	
 }
