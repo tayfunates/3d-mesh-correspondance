@@ -239,15 +239,18 @@ namespace TAShape
 		return addEdge(v, w);
 	}
 
-	inline float distanceBetween(float* a, float* b)
+	float TriangularMesh::eucDistanceBetween(Vertex *v1, Vertex *v2)
 	{
-		return (float)sqrt((a[0] - b[0])*(a[0] - b[0]) + (a[1] - b[1])*(a[1] - b[1]) + (a[2] - b[2])*(a[2] - b[2]));
+		float diffZero = v1->coords[0] - v2->coords[0];
+		float diffOne = v1->coords[1] - v2->coords[1];
+		float diffTwo = v1->coords[2] - v2->coords[2];
+		return (float)sqrt(diffZero*diffZero + diffOne*diffOne + diffTwo*diffTwo);
 	}
 
 	int TriangularMesh::addEdge(int a, int b)
 	{
 		int idx = edges.size();
-		edges.push_back(new Edge(idx, a, b, distanceBetween(verts[a]->coords, verts[b]->coords)));
+		edges.push_back(new Edge(idx, a, b, eucDistanceBetween(verts[a], verts[b])));
 
 		verts[a]->edgeList.push_back(idx);
 		verts[b]->edgeList.push_back(idx);

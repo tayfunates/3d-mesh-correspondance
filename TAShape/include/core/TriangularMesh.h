@@ -141,6 +141,14 @@ namespace TAShape
 		int makeVertsNeighbors(int v, int w);
 
 		/**
+		* @brief			Calculates euc distance between to vertices
+		* @param			[in] v1, Pointer to a vertex
+		* @param			[i] v2, Pointer to other vertexs
+		* @return			Euc distance between two
+		*/
+		float eucDistanceBetween(Vertex *v1, Vertex *v2);
+
+		/**
 		* @brief			Calculates and assigns the normals for each triangle
 		* @return			TACORE_OK successfully assigned.
 		*/
