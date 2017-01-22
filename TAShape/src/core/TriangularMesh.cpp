@@ -226,7 +226,7 @@ namespace TAShape
 	int TriangularMesh::makeVertsNeighbors(int v, int w)
 	{
 		//try to make v and w neighbor; return the edge id if they already are
-		for (int e = 0; e < verts[v]->edgeList.size(); e++)
+		for (int e = 0; e < (int) verts[v]->edgeList.size(); e++)
 		{
 			if (edges[verts[v]->edgeList[e]]->v1i == w || edges[verts[v]->edgeList[e]]->v2i == w)
 			{
@@ -260,7 +260,7 @@ namespace TAShape
 
 	TACore::Result TriangularMesh::assignNormalsToTriangles()
 	{
-		for (int i = 0; i < this->tris.size(); i++)
+		for (int i = 0; i < (int) this->tris.size(); i++)
 		{
 			TAVector pva; pva.x = this->verts[this->tris[i]->v1i]->coords[0]; pva.y = this->verts[this->tris[i]->v1i]->coords[1]; pva.z = this->verts[this->tris[i]->v1i]->coords[2];
 			TAVector pvb; pvb.x = this->verts[this->tris[i]->v2i]->coords[0]; pvb.y = this->verts[this->tris[i]->v2i]->coords[1]; pvb.z = this->verts[this->tris[i]->v2i]->coords[2];
