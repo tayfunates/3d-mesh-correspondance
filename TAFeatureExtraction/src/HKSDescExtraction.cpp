@@ -5,6 +5,10 @@
 #include <set>
 #include <numeric>
 
+#ifdef ENABLE_TIMING_REPORTS
+#include <core/Timer.h>
+#endif
+
 namespace TAFeaExt
 {
 	HKSDescExtraction::~HKSDescExtraction()
@@ -71,7 +75,9 @@ namespace TAFeaExt
 		{
 			return res;
 		}
-
+#ifdef ENABLE_TIMING_REPORTS
+		TACore::Timer timer;
+#endif
 		const double logTMin = log(this->m_fTMin);
 		const double logTMax = log(this->m_fTMax);
 
@@ -113,6 +119,9 @@ namespace TAFeaExt
 			}
 			outFeatures[v] = LocalFeaturePtr(pDesc);
 		}
+#ifdef ENABLE_TIMING_REPORTS
+		std::cout << "Time Passed to Calculate HKS from Eigenvalues and Eigenvectors: " << timer.seconds() << " secs." << std::endl;
+#endif
 
 		return TACORE_OK;
 	}
@@ -182,6 +191,9 @@ namespace TAFeaExt
 
 	Result HKSDescExtraction::createLaplacianMatrix(PolygonMesh *mesh, const TypeOfLaplacian& typeLap)
 	{
+#ifdef ENABLE_TIMING_REPORTS
+		TACore::Timer timer;
+#endif
 		Result res = TACore::TACORE_OK;
 		if (typeLap == HKSDescExtraction::STAR_LAPLACIAN)
 		{
@@ -191,11 +203,17 @@ namespace TAFeaExt
 		{
 			res = createDiscreteLaplacianMatrix(mesh);
 		}
+#ifdef ENABLE_TIMING_REPORTS
+		std::cout << "Time Passed to Create Laplacian: " << timer.seconds() << " secs." << std::endl;
+#endif
 		return res;
 	}
 
 	Result HKSDescExtraction::calcEigenDecomposition(const unsigned int& noEigenVals, arma::cx_vec *pEigVals, arma::cx_mat *pEigVecs)
 	{
+#ifdef ENABLE_TIMING_REPORTS
+		TACore::Timer timer;
+#endif
 		if (noEigenVals < 2)
 		{
 			std::cerr << "Number of eigen values and vectors must be greater than or equal to 2!" << std::endl;
@@ -212,7 +230,9 @@ namespace TAFeaExt
 			std::cout << "eigs_gen is failed to converge to find the eigen values of the Laplacian matrix" << std::endl;
 			return TACore::TACORE_ERROR;
 		}
-
+#ifdef ENABLE_TIMING_REPORTS
+		std::cout << "Time Passed to Calculate the Eigenvalues of the Laplacian: " << timer.seconds() << " secs." << std::endl;
+#endif
 		return TACore::TACORE_OK;
 	}
 
