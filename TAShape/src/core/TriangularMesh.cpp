@@ -320,5 +320,15 @@ namespace TAShape
 			ringAreas[v] = sumAreas;
 		}
 	}
+
+	float TriangularMesh::calcAverageEdgeLength() const
+	{
+		float sum = 0.0f;
+		for (size_t e = 0; e < edges.size(); e++)
+		{
+			sum += edges[e]->length;
+		}
+		return sum / edges.size();
+	}
 	
 }

@@ -168,6 +168,12 @@ namespace TAShape
 		* @return			void
 		*/
 		void calcRingAreasOfVertices(std::vector<double>& ringAreas) const;
+
+		/**
+		* @brief			Calculates the average edge length of the mesh
+		* @return			Average edge length
+		*/
+		float calcAverageEdgeLength() const;
 	};
 
 }
