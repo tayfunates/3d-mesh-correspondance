@@ -38,9 +38,10 @@ namespace TAFeaExt
 		*			[Currently] Only STAR Laplacian is supported
 		* @param	mesh Polygonial mesh from which the laplacian matrix will be created
 		* @param	typeLap Type of the laplacian matrix to be extracted
+		* @param	vertexRingAreas Area sums around a vertex
 		* @return	TACORE_OK if everything goes fine.
 		*/
-		Result createLaplacianMatrix(PolygonMesh *mesh, const TypeOfLaplacian& typeLap);
+		Result createLaplacianMatrix(PolygonMesh *mesh, const TypeOfLaplacian& typeLap, const std::vector<double>& vertexRingAreas);
 
 		/**
 		* @brief	Calculates the eigen values and vectors of the laplacian saved in the object.
@@ -66,6 +67,7 @@ namespace TAFeaExt
 		void setMinTimeVal(const double& minTime);
 		void setMaxTimeVal(const double& maxTime);
 		void setNumberOfTimeSamples(const unsigned int& noTimeSamples);
+		void setUseEigenValuesForTimeBoundaries(const bool& calcTimeFromEigenVals);
 
 		//Getters
 		TypeOfLaplacian getTypeOfLaplacian() const;
@@ -73,6 +75,7 @@ namespace TAFeaExt
 		double getMinTimeVal() const;
 		double getMaxTimeVal() const;
 		unsigned int getNumberOfTimeSamples() const;
+		bool getUseEigenValuesForTimeBoundaries() const;
 
 	private:
 
@@ -81,6 +84,7 @@ namespace TAFeaExt
 		double m_fTMin;							//< Minimum value of the time interval
 		double m_fTMax;							//< Maximum value of the time interval
 		unsigned int m_nNumberOfTimeSamples;	//< Number of time values in the interval
+		bool m_bCalcTimeValsFromEigenVals;		//< Check whether to use time boundaries from eigen values or user input
 
 		arma::SpMat<double> *m_mLaplacian;		//< Laplacian matrix, it is a class member because multiple executions for different time intervals should be enabled without re-construction.
 
@@ -88,17 +92,19 @@ namespace TAFeaExt
 		* @brief	Create the STAR laplacian matrix from the polygon mesh saves it into the object
 		*			[Currently] Only Triangular mesh is supported
 		* @param	mesh Polygonial mesh from which the laplacian matrix will be created
+		* @param	vertexRingAreas Area sums around a vertex
 		* @return	TACORE_OK if everything goes fine.
 		*/
-		Result createStarLaplacianMatrix(PolygonMesh *mesh);
+		Result createStarLaplacianMatrix(PolygonMesh *mesh, const std::vector<double>& vertexRingAreas);
 
 		/**
 		* @brief	Create the Discrete laplacian matrix from the polygon mesh saves it into the object
 		*			[Currently] Only Triangular mesh is supported
 		* @param	mesh Polygonial mesh from which the laplacian matrix will be created
+		* @param	vertexRingAreas Area sums around a vertex
 		* @return	TACORE_OK if everything goes fine.
 		*/
-		Result createDiscreteLaplacianMatrix(PolygonMesh *mesh);
+		Result createDiscreteLaplacianMatrix(PolygonMesh *mesh, const std::vector<double>& vertexRingAreas);
 
 		/**
 		* @brief	Computes the cotangent weigh for w_ij for STAR Laplacian Matrixss

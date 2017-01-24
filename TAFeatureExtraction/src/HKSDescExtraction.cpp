@@ -23,6 +23,7 @@ namespace TAFeaExt
 		this->m_fTMin = 1.0;
 		this->m_fTMax = 1000000;
 		this->m_nNumberOfTimeSamples = 100;
+		this->m_bCalcTimeValsFromEigenVals = true;
 		this->m_mLaplacian = NULL;
 	}
 
@@ -33,6 +34,7 @@ namespace TAFeaExt
 		this->m_fTMin = other.m_fTMin;
 		this->m_fTMax = other.m_fTMax;
 		this->m_nNumberOfTimeSamples = other.m_nNumberOfTimeSamples;
+		this->m_bCalcTimeValsFromEigenVals = other.m_bCalcTimeValsFromEigenVals;
 		this->m_mLaplacian = other.m_mLaplacian; //Shallow copy
 	}
 
@@ -43,6 +45,7 @@ namespace TAFeaExt
 		this->m_fTMin = 1.0;
 		this->m_fTMax = 1000000.0;
 		this->m_nNumberOfTimeSamples = 100;
+		this->m_bCalcTimeValsFromEigenVals = true;
 		if (this->m_mLaplacian != NULL)
 		{
 			delete this->m_mLaplacian;
@@ -60,8 +63,11 @@ namespace TAFeaExt
 		//We, now, know that the mesh is a triangular mesh
 		TriangularMesh *triMesh = (TriangularMesh*)mesh;
 
+		std::vector<double> ringAreas;
+		triMesh->calcRingAreasOfVertices(ringAreas);
+
 		Result res;
-		res = createLaplacianMatrix(mesh, this->m_LaplacianUsed);
+		res = createLaplacianMatrix(mesh, this->m_LaplacianUsed, ringAreas);
 		if (res != TACore::TACORE_OK)
 		{
 			return res;
@@ -78,10 +84,21 @@ namespace TAFeaExt
 #ifdef ENABLE_TIMING_REPORTS
 		TACore::Timer timer;
 #endif
-		const double logTMin = log(this->m_fTMin);
-		const double logTMax = log(this->m_fTMax);
+		double minT = this->m_fTMin;
+		double maxT = this->m_fTMax;
+		if (this->m_bCalcTimeValsFromEigenVals)
+		{
+			minT = (abs(4 * log(10) / eigval(eigval.size() - 1).real()));
+			maxT = (abs(4 * log(10) / eigval(1).real()));
+		}
+
+		const double logTMin = log(minT);
+		const double logTMax = log(maxT);
 
 		const double tIncrement = (logTMax - logTMin) / (this->m_nNumberOfTimeSamples - 1);
+
+		double sumRingAreas = std::accumulate(ringAreas.begin(), ringAreas.end(), 0.0);
+		double sqrtSumRingAreas = sqrt(sumRingAreas);
 
 		const size_t verSize = triMesh->verts.size();
 		outFeatures = std::vector<LocalFeaturePtr>(verSize);
@@ -94,7 +111,7 @@ namespace TAFeaExt
 			}
 			else
 			{
-				std::cout << 100 << " completed for calculating hks descriptor" << "\n";
+				std::cout << "%" <<100 << " completed for calculating hks descriptor" << "\n";
 			}
 
 			//Initialize descriptor of the vertex
@@ -109,9 +126,10 @@ namespace TAFeaExt
 				double descVal = 0.0;
 				for (size_t eig = 0; eig < this->m_nNoEigenVal; eig++)
 				{
-					const double expInvEigVal = exp(eigval(eig).real() * logScaleCurrT * (-1.0));
-					const double sqEigFunc = eigvec(v, eig).real() * eigvec(v, eig).real();
-					descVal += (expInvEigVal * sqEigFunc);
+					const double expInvEigVal = exp(sumRingAreas * abs(eigval(eig).real()) * logScaleCurrT * (-1.0));
+					const double EigFuncVal = sqrtSumRingAreas * eigvec(v, eig).real();
+					const double sqEigFuncVal = EigFuncVal * EigFuncVal;
+					descVal += (expInvEigVal * sqEigFuncVal);
 					heatTrace += expInvEigVal;
 				}
 				pDesc->m_vDescriptor[t] = descVal / heatTrace;
@@ -189,7 +207,17 @@ namespace TAFeaExt
 		return this->m_nNumberOfTimeSamples;
 	}
 
-	Result HKSDescExtraction::createLaplacianMatrix(PolygonMesh *mesh, const TypeOfLaplacian& typeLap)
+	void HKSDescExtraction::setUseEigenValuesForTimeBoundaries(const bool& calcTimeFromEigenVals)
+	{
+		this->m_bCalcTimeValsFromEigenVals = calcTimeFromEigenVals;
+	}
+
+	bool HKSDescExtraction::getUseEigenValuesForTimeBoundaries() const
+	{
+		return this->m_bCalcTimeValsFromEigenVals;
+	}
+
+	Result HKSDescExtraction::createLaplacianMatrix(PolygonMesh *mesh, const TypeOfLaplacian& typeLap, const std::vector<double>& vertexRingAreas)
 	{
 #ifdef ENABLE_TIMING_REPORTS
 		TACore::Timer timer;
@@ -197,11 +225,11 @@ namespace TAFeaExt
 		Result res = TACore::TACORE_OK;
 		if (typeLap == HKSDescExtraction::STAR_LAPLACIAN)
 		{
-			res = createStarLaplacianMatrix(mesh);
+			res = createStarLaplacianMatrix(mesh, vertexRingAreas);
 		}
 		if (typeLap == HKSDescExtraction::DISCRETE_LAPLACIAN)
 		{
-			res = createDiscreteLaplacianMatrix(mesh);
+			res = createDiscreteLaplacianMatrix(mesh, vertexRingAreas);
 		}
 #ifdef ENABLE_TIMING_REPORTS
 		std::cout << "Time Passed to Create Laplacian: " << timer.seconds() << " secs." << std::endl;
@@ -236,7 +264,7 @@ namespace TAFeaExt
 		return TACore::TACORE_OK;
 	}
 
-	Result HKSDescExtraction::createStarLaplacianMatrix(PolygonMesh *mesh)
+	Result HKSDescExtraction::createStarLaplacianMatrix(PolygonMesh *mesh, const std::vector<double>& vertexRingAreas)
 	{
 		if (!mesh || mesh->getPolygonType() != TA_TRIANGULAR)
 		{
@@ -278,7 +306,7 @@ namespace TAFeaExt
 				double w_ij = cotangentWeight(triMesh, i, triMesh->verts[i]->vertList[j]);
 
 				if (i != triMesh->verts[i]->vertList[j]) {
-					double entry = double((-1.0)*w_ij / sum_w);
+					double entry = (double((-1.0)*w_ij / sum_w));
 					vRowIndices.push_back(i);
 					vColIndices.push_back(triMesh->verts[i]->vertList[j]);
 					vValues.push_back(entry);
@@ -298,10 +326,14 @@ namespace TAFeaExt
 		}
 		this->m_mLaplacian = new arma::SpMat<double>(locations, values, true);
 
+		//Normalize the laplacian
+		double sumRingAreas = std::accumulate(vertexRingAreas.begin(), vertexRingAreas.end(), 0.0);
+		*(this->m_mLaplacian) = *(this->m_mLaplacian) / sumRingAreas;
+
 		return TACore::TACORE_OK;
 	}
 
-	Result HKSDescExtraction::createDiscreteLaplacianMatrix(PolygonMesh *mesh)
+	Result HKSDescExtraction::createDiscreteLaplacianMatrix(PolygonMesh *mesh, const std::vector<double>& vertexRingAreas)
 	{
 		if (!mesh || mesh->getPolygonType() != TA_TRIANGULAR)
 		{
@@ -324,8 +356,6 @@ namespace TAFeaExt
 		std::vector<double> vValues;
 
 		const double epsilon = 1e-5;
-		std::vector<double> ringAreas;
-		triMesh->calcRingAreasOfVertices(ringAreas);
 
 		for (size_t i = 0; i < numberOfVertices; i++)
 		{
@@ -358,7 +388,7 @@ namespace TAFeaExt
 			{
 				Vertex *vj = triMesh->verts[j];
 				const float eucDistanceBetweenTwo = triMesh->eucDistanceBetween(vi, vj);
-				const double entry = oneOverForPiHSquare * (ringAreas[j] / 3.0) * exp(-1.0 * ((eucDistanceBetweenTwo * eucDistanceBetweenTwo) / (4.0 * h)));
+				const double entry = oneOverForPiHSquare * (vertexRingAreas[j] / 3.0) * exp(-1.0 * ((eucDistanceBetweenTwo * eucDistanceBetweenTwo) / (4.0 * h)));
 				if (i != j)
 				{
 					if (abs(entry) > epsilon)
@@ -385,7 +415,8 @@ namespace TAFeaExt
 		}
 		this->m_mLaplacian = new arma::SpMat<double>(locations, values, true);
 
-		double sumRingAreas = std::accumulate(ringAreas.begin(), ringAreas.end(), 0.0);
+		//Normalize the laplacian
+		double sumRingAreas = std::accumulate(vertexRingAreas.begin(), vertexRingAreas.end(), 0.0);
 		*(this->m_mLaplacian) = *(this->m_mLaplacian) / sumRingAreas;
 
 		return TACore::TACORE_OK;

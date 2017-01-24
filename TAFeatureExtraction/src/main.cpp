@@ -50,34 +50,36 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 	}
 
 	TriangularMesh* triMesh = (TriangularMesh*)(mesh.getShape());
+	
+	std::cout << "Total Surface Area Of the Mesh: " << triMesh->calcTotalSurfaceArea() << std::endl;
 
 	TAFeaExt::HKSDescExtraction hksExtractor;
 	hksExtractor.setNumberOfEigenVals(100);
 	hksExtractor.setNumberOfTimeSamples(300);
-	hksExtractor.setMinTimeVal(1);
-	hksExtractor.setMaxTimeVal(100000);
+	hksExtractor.setUseEigenValuesForTimeBoundaries(true);
+	hksExtractor.setTypeOfLaplacian(TAFeaExt::HKSDescExtraction::STAR_LAPLACIAN);
 
-	std::vector<double> distances1;
-	std::vector<LocalFeaturePtr> feas1;
-	hksExtractor.extract(triMesh, feas1);
+	std::vector<double> distances;
+	std::vector<LocalFeaturePtr> feas;
+	hksExtractor.extract(triMesh, feas);
 
-	HeatKernelSignatureDesc* hksV0 = (HeatKernelSignatureDesc*)(feas1[0].get());
-	for (size_t v = 0; v < feas1.size(); v++)
+	HeatKernelSignatureDesc* hksV0 = (HeatKernelSignatureDesc*)(feas[126].get());
+	for (size_t v = 0; v < feas.size(); v++)
 	{
-		HeatKernelSignatureDesc* hksVV = (HeatKernelSignatureDesc*)(feas1[v].get());
+		HeatKernelSignatureDesc* hksVV = (HeatKernelSignatureDesc*)(feas[v].get());
 		const double l2Distance = HeatKernelSignatureDesc::L2Distance(*hksVV, *hksV0);
-		distances1.push_back(l2Distance);
+		distances.push_back(l2Distance);
 	}
 
-	const double maxDistance1 = *std::max_element(distances1.begin(), distances1.end());
-	const double minDistance1 = *std::min_element(distances1.begin(), distances1.end());
-	std::cout << minDistance1 << " " <<  maxDistance1 << std::endl;
-	for (size_t i = 0; i < distances1.size(); i++)
+	const double maxDistance = *std::max_element(distances.begin(), distances.end());
+	const double minDistance = *std::min_element(distances.begin(), distances.end());
+
+	for (size_t i = 0; i < distances.size(); i++)
 	{
-		distances1[i] = distances1[i] / maxDistance1;
+		distances[i] = (distances[i] - minDistance) / (maxDistance - minDistance);
 	}
 
-	mesh.showVertexColors(distances1, 0);
+	mesh.showVertexColors(distances, 126);
 	return mainRet(1, "Main Test Successfully Ended");
 }
 
