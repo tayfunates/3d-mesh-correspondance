@@ -174,6 +174,12 @@ namespace TAShape
 		* @return			Average edge length
 		*/
 		float calcAverageEdgeLength() const;
+
+		/**
+		* @brief			Calculates the total surface area
+		* @return			Total surface area
+		*/
+		float calcTotalSurfaceArea() const;
 	};
 
 }

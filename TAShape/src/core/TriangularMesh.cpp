@@ -330,5 +330,15 @@ namespace TAShape
 		}
 		return sum / edges.size();
 	}
+
+	float TriangularMesh::calcTotalSurfaceArea() const
+	{
+		float sum = 0.0f;
+		for (size_t t = 0; t < tris.size(); t++)
+		{
+			sum += calcAreaOfTriangle(t);
+		}
+		return sum;
+	}
 	
 }
