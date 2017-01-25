@@ -381,24 +381,24 @@ namespace TAFeaExt
 				neighborEdgeLengthSum += triMesh->edges[*it]->length;
 			}
 			const double h = neighborEdgeLengthSum / neighborEdgeIndicesList.size(); //Adaptive h according to the edge lengths around the vertex
-			const double oneOverForPiHSquare = 1.0 / (FOUR_PI * h * h);
+			const double hh = h * h;
+			const double pi = 3.1415926535897;
+			const double fourOverPIhhhh = 4.0 / (pi * hh * hh);
 
 			double diagonalEntry = 0.0;
 			for (size_t j = 0; j < numberOfVertices; j++)
 			{
-				Vertex *vj = triMesh->verts[j];
-				const float eucDistanceBetweenTwo = triMesh->eucDistanceBetween(vi, vj);
-				const double entry = oneOverForPiHSquare * (vertexRingAreas[j] / 3.0) * exp(-1.0 * ((eucDistanceBetweenTwo * eucDistanceBetweenTwo) / (4.0 * h)));
 				if (i != j)
 				{
-					if (abs(entry) > epsilon)
-					{
-						vRowIndices.push_back(i);
-						vColIndices.push_back(j);
-						vValues.push_back(entry);
-					}
+					Vertex *vj = triMesh->verts[j];
+					const float eucDistanceBetweenTwo = triMesh->eucDistanceBetween(vi, vj);
+					const double entry = (vertexRingAreas[j] / 3.0) * exp((-1.0 * eucDistanceBetweenTwo * eucDistanceBetweenTwo) / hh) * fourOverPIhhhh;
+					vRowIndices.push_back(i);
+					vColIndices.push_back(j);
+					vValues.push_back(entry);
+					diagonalEntry += (-1.0) * entry;
 				}
-				diagonalEntry += (-1.0) * entry;
+				
 			}
 
 			vRowIndices.push_back(i);
@@ -414,10 +414,6 @@ namespace TAFeaExt
 			locations(1, i) = vColIndices[i];
 		}
 		this->m_mLaplacian = new arma::SpMat<double>(locations, values, true);
-
-		//Normalize the laplacian
-		double sumRingAreas = std::accumulate(vertexRingAreas.begin(), vertexRingAreas.end(), 0.0);
-		*(this->m_mLaplacian) = *(this->m_mLaplacian) / sumRingAreas;
 
 		return TACore::TACORE_OK;
 	}

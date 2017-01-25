@@ -57,7 +57,7 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 	hksExtractor.setNumberOfEigenVals(100);
 	hksExtractor.setNumberOfTimeSamples(300);
 	hksExtractor.setUseEigenValuesForTimeBoundaries(true);
-	hksExtractor.setTypeOfLaplacian(TAFeaExt::HKSDescExtraction::STAR_LAPLACIAN);
+	hksExtractor.setTypeOfLaplacian(TAFeaExt::HKSDescExtraction::DISCRETE_LAPLACIAN);
 
 	std::vector<double> distances;
 	std::vector<LocalFeaturePtr> feas;
