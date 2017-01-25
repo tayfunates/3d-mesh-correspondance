@@ -385,6 +385,8 @@ namespace TAFeaExt
 			const double pi = 3.1415926535897;
 			const double fourOverPIhhhh = 4.0 / (pi * hh * hh);
 
+			const double epsilon = 1e-10;
+
 			double diagonalEntry = 0.0;
 			for (size_t j = 0; j < numberOfVertices; j++)
 			{
@@ -393,10 +395,14 @@ namespace TAFeaExt
 					Vertex *vj = triMesh->verts[j];
 					const float eucDistanceBetweenTwo = triMesh->eucDistanceBetween(vi, vj);
 					const double entry = (vertexRingAreas[j] / 3.0) * exp((-1.0 * eucDistanceBetweenTwo * eucDistanceBetweenTwo) / hh) * fourOverPIhhhh;
-					vRowIndices.push_back(i);
-					vColIndices.push_back(j);
-					vValues.push_back(entry);
-					diagonalEntry += (-1.0) * entry;
+
+					if (entry > epsilon)
+					{
+						vRowIndices.push_back(i);
+						vColIndices.push_back(j);
+						vValues.push_back(entry);
+						diagonalEntry += (-1.0) * entry;
+					}
 				}
 				
 			}
