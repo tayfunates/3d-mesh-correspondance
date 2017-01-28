@@ -128,6 +128,40 @@ namespace TAShape
 		return sep;
 	}
 
+	SoSeparator* OIPainter::getShapeSepWithFaceColors(TriangularMesh* mesh, const std::vector<std::vector< unsigned char > >& pColors)
+	{
+		if (pColors.size() != 3)
+		{
+			std::cerr << "RGB Colors must be provided!" << std::endl;
+			return NULL;
+		}
+		if (pColors[0].size() != mesh->tris.size())
+		{
+			std::cerr << "Number of colors and triangles must be equal!" << std::endl;
+			return NULL;
+		}
+
+		SoSeparator* sep = new SoSeparator();
+
+		sep->addChild(getShapeCoordinates(mesh));
+
+		SoVertexProperty* vProp = new SoVertexProperty();
+		vProp->materialBinding.setValue(SoVertexProperty::PER_FACE);
+		for (int t = 0; t < (int)mesh->tris.size(); t++)
+		{
+			const uint32_t r = pColors[0][t] << 24;
+			const uint32_t g = pColors[1][t] << 16;
+			const uint32_t b = pColors[2][t] << 8;
+
+			const uint32_t colValue = ((r | g) | b) | 0xFF;
+			vProp->orderedRGBA.set1Value(t, colValue);
+		}
+		sep->addChild(vProp);
+
+		sep->addChild(getShapeIndexedFaceSet(mesh));
+		return sep;
+	}
+
 	SoCoordinate3* OIPainter::getShapeCoordinates(TriangularMesh* mesh)
 	{
 		SoCoordinate3* coords = new SoCoordinate3();

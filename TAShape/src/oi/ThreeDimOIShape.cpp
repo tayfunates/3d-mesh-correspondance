@@ -185,4 +185,44 @@ namespace TAShape
 	{
 		return this->m_p3DShape;
 	}
+
+	TACore::Result ThreeDimOIShape::showSpecialFaces(const std::vector<int>& faceIds)
+	{
+		std::vector< std::vector< unsigned char > > colorsFromMagnitudes(3);
+		colorsFromMagnitudes[0] = std::vector<unsigned char>(this->m_p3DShape->tris.size());
+		colorsFromMagnitudes[1] = std::vector<unsigned char>(this->m_p3DShape->tris.size());
+		colorsFromMagnitudes[2] = std::vector<unsigned char>(this->m_p3DShape->tris.size());
+		for (size_t i = 0; i < this->m_p3DShape->tris.size(); i++)
+		{
+			colorsFromMagnitudes[0][i] = 255;
+			colorsFromMagnitudes[1][i] = 255;
+			colorsFromMagnitudes[2][i] = 0;
+		}
+		for (size_t i = 0; i < faceIds.size(); i++)
+		{
+			colorsFromMagnitudes[0][i] = 0;
+			colorsFromMagnitudes[1][i] = 255;
+			colorsFromMagnitudes[2][i] = 255;
+		}
+
+		srand(time(NULL));
+		HWND window = SoWin::init("TAShapeTest.exe");
+		SoWinExaminerViewer * viewer = new SoWinExaminerViewer(window);
+		SoSeparator * root = new SoSeparator();
+		root->ref();
+
+		SoSeparator* generalShape = OIPainter::getShapeSepWithFaceColors(this->m_p3DShape, colorsFromMagnitudes);
+		if (generalShape) root->addChild(generalShape);
+
+		viewer->setSceneGraph(root);
+		viewer->show();
+
+		SoWin::show(window);
+		SoWin::mainLoop();
+
+		root->unref();
+		TACORE_SAFE_DELETE(viewer);
+
+		return TACore::TACORE_OK;
+	}
 }

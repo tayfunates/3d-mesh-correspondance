@@ -28,6 +28,42 @@ int mainRet(int ret, std::string message)
 	return ret;
 }
 
+int GlobalDescForLocalPatchesTestApp(int argc, char* argv[])
+{
+	// Parse args
+	TACore::ArgParser parser("TAShapeTest", "Loads, Saves, Shows different types of shapes");
+	parser.addArg("input", "", true, 1, "", "Input shape file to be loaded");
+	parser.addArg("output", "", true, 1, "", "Output shape file to be saved");
+
+	if (!parser.parseCommandLine(argc, argv))
+	{
+		mainRet(-1, "Command line parameters cannot be parsed correctly");
+	}
+
+	std::string inputFile = parser.get("input");
+	std::string outputFile = parser.get("output");
+
+	ThreeDimOIShape mesh;
+	if (mesh.load(inputFile.c_str()) != TACORE_OK)
+	{
+		return mainRet(1, "Mesh cannot be loaded correctly");
+	}
+
+	TriangularMesh* triMesh = (TriangularMesh*)(mesh.getShape());
+
+	std::vector<int> faceIds;
+	faceIds.push_back(0);
+	faceIds.push_back(1);
+	faceIds.push_back(2);
+	faceIds.push_back(3);
+	faceIds.push_back(4);
+	faceIds.push_back(5);
+
+	mesh.showSpecialFaces(faceIds);
+
+	return mainRet(1, "Main Test Successfully Ended");
+}
+
 int HKSExtractionTestAPP(int argc, char* argv[])
 {
 	// Parse args
@@ -127,5 +163,6 @@ int IntrinsicWaveExtractionTestAPP(int argc, char* argv[])
 int main(int argc, char* argv[])
 {
 	/*return IntrinsicWaveExtractionTestAPP(argc, argv);*/
-	return HKSExtractionTestAPP(argc, argv);
+	/*return HKSExtractionTestAPP(argc, argv);*/
+	return GlobalDescForLocalPatchesTestApp(argc, argv);
 }
