@@ -1,4 +1,5 @@
 #include <iostream>
+#include <core/TAMatrix.h>
 #include <core/TriangularMesh.h>
 #include <core/CommandLineParser.h>
 #include <core/Timer.h>
@@ -51,16 +52,16 @@ int GlobalDescForLocalPatchesTestApp(int argc, char* argv[])
 
 	TriangularMesh* triMesh = (TriangularMesh*)(mesh.getShape());
 
-	std::vector<int> faceIds;
-	faceIds.push_back(0);
-	faceIds.push_back(1);
-	faceIds.push_back(2);
-	faceIds.push_back(3);
-	faceIds.push_back(4);
-	faceIds.push_back(5);
+	float row1[] = { 3.2f, 4.5f, 6.7f, 8.9f };
+	float row2[] = { 1.1f, 2.2f, 3.3f, 4.4f };
+	TACore::TAMatrix<float> matrix(2, 4);
+	matrix.setRow(row1, 0);
+	matrix.setRow(row2, 1);
 
-	mesh.showSpecialFaces(faceIds);
+	matrix.setVal(0, 1, 3.9f);
 
+	matrix.print(std::cout);
+	std::cout << matrix.getVal(0, 1) << std::endl;
 	return mainRet(1, "Main Test Successfully Ended");
 }
 

@@ -185,12 +185,14 @@
     <ClInclude Include="..\..\..\include\core\NDimVector.h" />
     <ClInclude Include="..\..\..\include\core\PathUtil.h" />
     <ClInclude Include="..\..\..\include\core\StringUtil.h" />
+    <ClInclude Include="..\..\..\include\core\TAMatrix.h" />
     <ClInclude Include="..\..\..\include\core\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\core\ColorPalette.cpp" />
     <ClCompile Include="..\..\..\src\core\PathUtil.cpp" />
     <ClCompile Include="..\..\..\src\core\StringUtil.cpp" />
+    <ClCompile Include="..\..\..\src\core\TAMatrix.cpp" />
     <ClCompile Include="..\..\..\src\core\Timer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
