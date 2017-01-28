@@ -159,7 +159,7 @@ namespace TAShape
 		* @param			[in] t, index of the triangle whose area is being calculated
 		* @return			Area of the triangle
 		*/
-		double calcAreaOfTriangle(int t) const;
+		float calcAreaOfTriangle(int t) const;
 
 		/**
 		* @brief			Calculates the ring areas of all vertices inside the mesh

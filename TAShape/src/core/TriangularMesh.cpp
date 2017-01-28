@@ -286,7 +286,7 @@ namespace TAShape
 		return TACore::TACORE_OK;
 	}
 
-	double TriangularMesh::calcAreaOfTriangle(int t) const
+	float TriangularMesh::calcAreaOfTriangle(int t) const
 	{
 		Triangle *tp = tris[t];
 		TACore::Vector3D A(verts[tp->v1i]->coords[0], verts[tp->v1i]->coords[1], verts[tp->v1i]->coords[2]);
@@ -298,7 +298,7 @@ namespace TAShape
 
 		double angle = TACore::Vector3D::getAngleBetweenTwo(AB, AC);
 
-		return 0.5 * AB.norm() * AC.norm() * sin(angle);
+		return float (.5 * AB.norm() * AC.norm() * sin(angle));
 	}
 
 	void TriangularMesh::calcRingAreasOfVertices(std::vector<double>& ringAreas) const
