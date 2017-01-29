@@ -14,6 +14,7 @@
 //Extractors
 #include "OnEdgeAvgGeoDistExtraction.h"
 #include "IntrinsicWaveDescExtraction.h"
+#include "GeodesicDistanceMatrixExtraction.h"
 #include "HKSDescExtraction.h"
 
 using namespace TACore;
@@ -52,16 +53,14 @@ int GlobalDescForLocalPatchesTestApp(int argc, char* argv[])
 
 	TriangularMesh* triMesh = (TriangularMesh*)(mesh.getShape());
 
-	float row1[] = { 3.2f, 4.5f, 6.7f, 8.9f };
-	float row2[] = { 1.1f, 2.2f, 3.3f, 4.4f };
-	TACore::TAMatrix<float> matrix(2, 4);
-	matrix.setRow(row1, 0);
-	matrix.setRow(row2, 1);
+	GlobalFeaturePtr globalFeaPtr;
+	TAFeaExt::GeodesicDistanceMatrixExtraction geoMatrixExtractor;
+	geoMatrixExtractor.extract(triMesh, globalFeaPtr);
 
-	matrix.setVal(0, 1, 3.9f);
+	GeodesicDistanceMatrix* geoMatrix = (GeodesicDistanceMatrix*)(globalFeaPtr.get());
+	std::ofstream out("Test.txt");
+	geoMatrix->m_GeoMatrix.print(out);
 
-	matrix.print(std::cout);
-	std::cout << matrix.getVal(0, 1) << std::endl;
 	return mainRet(1, "Main Test Successfully Ended");
 }
 

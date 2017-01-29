@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\GeodesicDistanceMatrixExtraction.h" />
     <ClInclude Include="..\..\..\include\HKSDescExtraction.h" />
     <ClInclude Include="..\..\..\include\IntrinsicWaveDescExtraction.h" />
     <ClInclude Include="..\..\..\include\OnEdgeAvgGeoDistExtraction.h" />
@@ -140,6 +141,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\GeodesicDistanceMatrixExtraction.cpp" />
     <ClCompile Include="..\..\..\src\HKSDescExtraction.cpp" />
     <ClCompile Include="..\..\..\src\IntrinsicWaveDescExtraction.cpp" />
     <ClCompile Include="..\..\..\src\OnEdgeAvgGeoDistExtraction.cpp" />
