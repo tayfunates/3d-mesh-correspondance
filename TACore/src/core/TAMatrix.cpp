@@ -10,6 +10,14 @@ namespace TACore
 	}
 
 	template <class T>
+	TAMatrix<T>::TAMatrix()
+	{
+		m_ppMatrix = NULL;
+		m_nCols = 0;
+		m_nRows = 0;
+	}
+
+	template <class T>
 	TAMatrix<T>::TAMatrix(int rows, int cols)
 	{
 		m_ppMatrix = new T*[rows];

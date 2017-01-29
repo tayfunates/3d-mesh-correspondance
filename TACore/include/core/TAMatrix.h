@@ -11,6 +11,7 @@ namespace TACore
 	public:
 
 		virtual ~TAMatrix();
+		TAMatrix();
 		TAMatrix(int rows, int cols);
 
 		void clear();
