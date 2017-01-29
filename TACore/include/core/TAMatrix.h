@@ -12,8 +12,8 @@ namespace TACore
 
 		virtual ~TAMatrix();
 		TAMatrix();
-		TAMatrix(int rows, int cols);
 
+		void init(int rows, int cols);
 		void clear();
 
 		T* getRow(int row) const;

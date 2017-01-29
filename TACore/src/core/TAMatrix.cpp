@@ -6,6 +6,7 @@ namespace TACore
 	template <class T>
 	TAMatrix<T>::~TAMatrix()
 	{
+		std::cout << "HEDE" << std::endl;
 		clear();
 	}
 
@@ -18,7 +19,7 @@ namespace TACore
 	}
 
 	template <class T>
-	TAMatrix<T>::TAMatrix(int rows, int cols)
+	void TAMatrix<T>::init(int rows, int cols)
 	{
 		m_ppMatrix = new T*[rows];
 		for (int r = 0; r < rows; r++)
