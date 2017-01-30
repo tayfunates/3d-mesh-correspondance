@@ -43,10 +43,15 @@ namespace TAFeaExt
 
 		if (result == TACore::TACORE_OK)
 		{
-
+			result = calcFeature(triMesh, patchesForAll, outFeatures);
 		}
 
 		return result;
+	}
+
+	Result PatchBasedPerVertexFeatureExtraction::extract(PolygonMesh *mesh, const int& id, LocalFeaturePtr& outFeaturePtr)
+	{
+		return TACore::TACORE_OK;
 	}
 
 	Result PatchBasedPerVertexFeatureExtraction::createPatches(TriangularMesh* triMesh, const TAMatrix<float>& distanceMatrix, const float& minRadius, const float& maxRadius, const int& noOfPatches, std::vector<PatchList>& listOfPatchLists)
@@ -95,11 +100,6 @@ namespace TAFeaExt
 			currentRadius += rIncrement;
 			scale++;
 		}
-		return TACore::TACORE_OK;
-	}
-
-	Result PatchBasedPerVertexFeatureExtraction::extract(PolygonMesh *mesh, const int& id, LocalFeaturePtr& outFeaturePtr)
-	{
 		return TACore::TACORE_OK;
 	}
 
