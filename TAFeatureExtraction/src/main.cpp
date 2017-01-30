@@ -64,6 +64,57 @@ int GlobalDescForLocalPatchesTestApp(int argc, char* argv[])
 	return mainRet(1, "Main Test Successfully Ended");
 }
 
+int OnEdgeAvgDistExtractionTestApp(int argc, char* argv[])
+{
+	// Parse args
+	TACore::ArgParser parser("TAShapeTest", "Loads, Saves, Shows different types of shapes");
+	parser.addArg("input", "", true, 1, "", "Input shape file to be loaded");
+	parser.addArg("output", "", true, 1, "", "Output shape file to be saved");
+
+	if (!parser.parseCommandLine(argc, argv))
+	{
+		mainRet(-1, "Command line parameters cannot be parsed correctly");
+	}
+
+	std::string inputFile = parser.get("input");
+	std::string outputFile = parser.get("output");
+
+	ThreeDimOIShape mesh;
+	if (mesh.load(inputFile.c_str()) != TACORE_OK)
+	{
+		return mainRet(1, "Mesh cannot be loaded correctly");
+	}
+
+	TriangularMesh* triMesh = (TriangularMesh*)(mesh.getShape());
+
+	TAFeaExt::OnEdgeAvgGeoDistExtraction avgGeoExtractor;
+	std::vector<LocalFeaturePtr> feas;
+	avgGeoExtractor.extract(triMesh, feas);
+
+	std::vector<double> distances(feas.size());
+
+	AvgGeodesicDistance* avgGeoDistFeaPtr = (AvgGeodesicDistance*)(feas[126].get());
+	const float referenceAvgGeoDistance = avgGeoDistFeaPtr->m_distance;
+	for (size_t v = 0; v < feas.size(); v++)
+	{
+		AvgGeodesicDistance* avgGeoDistFeaPtr = (AvgGeodesicDistance*)(feas[v].get());
+		const float queryAvgGeoDistance = avgGeoDistFeaPtr->m_distance;
+		const float diffQueryReference = referenceAvgGeoDistance - queryAvgGeoDistance;
+		distances[v] = sqrt(diffQueryReference * diffQueryReference);
+	}
+
+	const double maxDistance = *std::max_element(distances.begin(), distances.end());
+	const double minDistance = *std::min_element(distances.begin(), distances.end());
+
+	for (size_t i = 0; i < distances.size(); i++)
+	{
+		distances[i] = (distances[i] - minDistance) / (maxDistance - minDistance);
+	}
+
+	mesh.showVertexColors(distances, 126);
+	return mainRet(1, "Main Test Successfully Ended");
+}
+
 int HKSExtractionTestAPP(int argc, char* argv[])
 {
 	// Parse args
@@ -164,5 +215,6 @@ int main(int argc, char* argv[])
 {
 	/*return IntrinsicWaveExtractionTestAPP(argc, argv);*/
 	/*return HKSExtractionTestAPP(argc, argv);*/
-	return GlobalDescForLocalPatchesTestApp(argc, argv);
+	return OnEdgeAvgDistExtractionTestApp(argc, argv);
+	/*return GlobalDescForLocalPatchesTestApp(argc, argv);*/
 }

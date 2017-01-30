@@ -1,7 +1,8 @@
 #include "OnEdgeAvgGeoDistExtraction.h"
 #include "AvgGeodesicDistance.h"
+#include "GeodesicDistanceMatrixExtraction.h"
 #include <core/TriangularMesh.h>
-#include <core/FibHeap.h>
+#include <numeric>
 
 namespace TAFeaExt
 {
@@ -22,9 +23,41 @@ namespace TAFeaExt
 
 	Result OnEdgeAvgGeoDistExtraction::extract(PolygonMesh *mesh, std::vector<LocalFeaturePtr>& outFeatures)
 	{
-		//Test the input mesh type.
-		//Currently, it has to be a triangular mesh
-		return TACore::TACORE_OK;
+		if (!mesh || mesh->getPolygonType() != TA_TRIANGULAR)
+		{
+			return TACORE_BAD_ARGS;
+		}
+		
+		Result result = TACORE_OK;
+
+		GeodesicDistanceMatrixExtraction geoDistMatrixExtraction;
+		geoDistMatrixExtraction.setGeodesicDistanceType(GeodesicDistanceMatrix::ON_EDGE_GEODESIC);
+
+		GlobalFeaturePtr globalFeaPtr;
+		result = geoDistMatrixExtraction.extract(mesh, globalFeaPtr);
+
+		if (result == TACORE_OK)
+		{
+			GeodesicDistanceMatrix* geoMatrixDescPtr = (GeodesicDistanceMatrix*)(globalFeaPtr.get());
+			TriangularMesh *triMesh = (TriangularMesh*)mesh;
+			const size_t verSize = triMesh->verts.size();
+			outFeatures = std::vector<LocalFeaturePtr>(verSize);
+
+			for (size_t v = 0; v < verSize; v++)
+			{
+				float avgVal = 0.0f;
+				for (int w = 0; w < geoMatrixDescPtr->m_GeoMatrix.cols(); w++)
+				{
+					avgVal += geoMatrixDescPtr->m_GeoMatrix.getVal(v, w);
+				}
+				avgVal /= geoMatrixDescPtr->m_GeoMatrix.cols();
+
+				LocalFeature *avgGeoDistDescPtr = new AvgGeodesicDistance(v, avgVal);
+				outFeatures[v] = LocalFeaturePtr(avgGeoDistDescPtr);
+			}
+		}
+
+		return result;
 	}
 
 	Result OnEdgeAvgGeoDistExtraction::extract(PolygonMesh *mesh, const int& id, LocalFeaturePtr& outFeaturePtr)
@@ -34,73 +67,24 @@ namespace TAFeaExt
 			return TACORE_BAD_ARGS;
 		}
 
-		//We, now, know that the mesh is a triangular mesh
 		TriangularMesh *triMesh = (TriangularMesh*)mesh;
 
-		//Create the distance array which will be used during djsktra shortest path computation
-		const int vertexCount = static_cast<int>(triMesh->verts.size());
-		float *distanceArray = new float[vertexCount];
+		Result result = TACORE_OK;
 
-		//Create a heap node array. This array will hold the heap nodes created.
-		//During decrease key, this array will be used to reach the nodes easily.
-		FibHeapNode** heapNodeArray = new FibHeapNode*[vertexCount];
+		GeodesicDistanceMatrixExtraction geoDistMatrixExtraction;
+		geoDistMatrixExtraction.setGeodesicDistanceType(GeodesicDistanceMatrix::ON_EDGE_GEODESIC);
 
-		//Create the fibonacci heap for fast computation
-		FibHeap* fibHeap = new FibHeap();
+		std::vector<float> geoDistancesFromVertex;
+		result = geoDistMatrixExtraction.extract(triMesh, id, geoDistancesFromVertex);
 
-		//Initialization
-		for (int v = 0; v < vertexCount; v++)
+		if (result == TACORE_OK)
 		{
-			//if the vertex is the current vertex, the current distance is 0, INFINITY otherwise
-			distanceArray[v] = (v == id) ? 0.0f : INFINITY;
-			heapNodeArray[v] = new FibHeapNode(distanceArray[v], v);
-			fibHeap->Insert(heapNodeArray[v]);
+			float avgDistance = std::accumulate(geoDistancesFromVertex.begin(), geoDistancesFromVertex.end(), 0.0f) / ((float)triMesh->verts.size());
+			LocalFeature *avgGeoDistDescPtr = new AvgGeodesicDistance(id, avgDistance);
+
+			outFeaturePtr = LocalFeaturePtr(avgGeoDistDescPtr);
 		}
 
-		//Main loop of djsktra
-		while (1)
-		{
-			//extract the vertex with the min current distance value
-			FibHeapNode* minNode = fibHeap->ExtractMin(); //fast O(lgV) priority queue algo
-			if (minNode == NULL)
-			{
-				//No vertex remained
-				break;
-			}
-			int minDidx = minNode->element;
-			float minD = minNode->key;
-
-			//We do not need the current minNode anymore.
-			TACORE_SAFE_DELETE(minNode);
-
-			//relax each edge, including shortcuts, incident to minDidx
-			const int vertexEdgeCount = static_cast<int>(triMesh->verts[minDidx]->edgeList.size());
-			for (int ve = 0; ve < vertexEdgeCount; ve++)
-			{
-				int e = triMesh->verts[minDidx]->edgeList[ve];
-				int va = (triMesh->edges[e]->v1i == minDidx ? triMesh->edges[e]->v2i : triMesh->edges[e]->v1i);
-				if (distanceArray[minDidx] + triMesh->edges[e]->length < distanceArray[va])
-				{
-					distanceArray[va] = distanceArray[minDidx] + triMesh->edges[e]->length; //relaxation
-					fibHeap->DecreaseKey(heapNodeArray[va], distanceArray[va]); //worst O(lgV), amortized O(1)
-				}
-			}
-		}
-
-		//Output the average
-		float outAvgGeodesicDist = 0.0f;
-		for (int v = 0; v < vertexCount; v++)
-		{
-			outAvgGeodesicDist += distanceArray[v];
-		}
-		LocalFeature *resDist = new AvgGeodesicDistance(id, outAvgGeodesicDist / vertexCount);
-		outFeaturePtr = LocalFeaturePtr(resDist);
-
-		//Deallocate the space needed for computation	
-		TACORE_SAFE_DELETE(fibHeap);
-		TACORE_SAFE_DELETE_ARRAY(heapNodeArray);
-		TACORE_SAFE_DELETE_ARRAY(distanceArray);
-
-		return TACORE_OK;
+		return result;
 	}
 }
