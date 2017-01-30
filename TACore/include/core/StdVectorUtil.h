@@ -114,11 +114,15 @@ T StdVecSumElems(const std::vector<T>& v)
 }
 
 template <class T>
-T StdVecL2Norm(const std::vector<T>& v1, const std::vector<T>& v2)
+T StdVecL2Norm(const std::vector<T>& v)
 {
-	std::vector<T> diff = v1 - v2;
-	std::vector<T> diffSquare = diff * diff;
-	return sqrt(StdVecSumElems(diffSquare));
+	return sqrt(StdVecSumElems(v * v));
+}
+
+template <class T>
+T StdVecL2Distance(const std::vector<T>& v1, const std::vector<T>& v2)
+{
+	return StdVecL2Norm(v1 - v2);
 }
 
 #endif

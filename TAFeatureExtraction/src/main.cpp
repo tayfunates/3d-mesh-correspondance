@@ -174,7 +174,7 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 	for (size_t v = 0; v < feas.size(); v++)
 	{
 		HeatKernelSignatureDesc* hksVV = (HeatKernelSignatureDesc*)(feas[v].get());
-		const double l2Distance = StdVecL2Norm(hksVV->m_vDescriptor, hksV0->m_vDescriptor);
+		const double l2Distance = StdVecL2Distance(hksVV->m_vDescriptor, hksV0->m_vDescriptor);
 		distances.push_back(l2Distance);
 	}
 
