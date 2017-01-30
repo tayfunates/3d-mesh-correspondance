@@ -184,6 +184,7 @@
     <ClInclude Include="..\..\..\include\core\FibHeap.h" />
     <ClInclude Include="..\..\..\include\core\NDimVector.h" />
     <ClInclude Include="..\..\..\include\core\PathUtil.h" />
+    <ClInclude Include="..\..\..\include\core\StdVectorUtil.h" />
     <ClInclude Include="..\..\..\include\core\StringUtil.h" />
     <ClInclude Include="..\..\..\include\core\TAMatrix.h" />
     <ClInclude Include="..\..\..\include\core\Timer.h" />
