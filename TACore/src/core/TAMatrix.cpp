@@ -6,7 +6,6 @@ namespace TACore
 	template <class T>
 	TAMatrix<T>::~TAMatrix()
 	{
-		std::cout << "HEDE" << std::endl;
 		clear();
 	}
 
