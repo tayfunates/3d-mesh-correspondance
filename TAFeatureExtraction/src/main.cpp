@@ -15,6 +15,7 @@
 #include "OnEdgeAvgGeoDistExtraction.h"
 #include "IntrinsicWaveDescExtraction.h"
 #include "GeodesicDistanceMatrixExtraction.h"
+#include "PatchBasedPerVertexFeatureExtraction.h"
 #include "HKSDescExtraction.h"
 
 using namespace TACore;
@@ -53,14 +54,32 @@ int GlobalDescForLocalPatchesTestApp(int argc, char* argv[])
 
 	TriangularMesh* triMesh = (TriangularMesh*)(mesh.getShape());
 
-	GlobalFeaturePtr globalFeaPtr;
-	TAFeaExt::GeodesicDistanceMatrixExtraction geoMatrixExtractor;
-	geoMatrixExtractor.extract(triMesh, globalFeaPtr);
+	//TAFeaExt::PatchBasedPerVertexFeatureExtraction patchBasedExtractor;
+	//patchBasedExtractor.setMinGeodesicDistance(40.f);
+	//patchBasedExtractor.setMaxGeodesicDistance(100.0f);
+	//patchBasedExtractor.setNumberOfPatches(10);
 
-	GeodesicDistanceMatrix* geoMatrix = (GeodesicDistanceMatrix*)(globalFeaPtr.get());
-	std::ofstream out("Test.txt");
-	geoMatrix->m_GeoMatrix.print(out);
+	//std::vector<double> distances;
+	//std::vector<LocalFeaturePtr> feas;
+	//patchBasedExtractor.extract(triMesh, feas);
 
+	//HeatKernelSignatureDesc* hksV0 = (HeatKernelSignatureDesc*)(feas[126].get());
+	//for (size_t v = 0; v < feas.size(); v++)
+	//{
+	//	HeatKernelSignatureDesc* hksVV = (HeatKernelSignatureDesc*)(feas[v].get());
+	//	const double l2Distance = HeatKernelSignatureDesc::L2Distance(*hksVV, *hksV0);
+	//	distances.push_back(l2Distance);
+	//}
+
+	//const double maxDistance = *std::max_element(distances.begin(), distances.end());
+	//const double minDistance = *std::min_element(distances.begin(), distances.end());
+
+	//for (size_t i = 0; i < distances.size(); i++)
+	//{
+	//	distances[i] = (distances[i] - minDistance) / (maxDistance - minDistance);
+	//}
+
+	//mesh.showVertexColors(distances, 126);
 	return mainRet(1, "Main Test Successfully Ended");
 }
 
@@ -215,6 +234,6 @@ int main(int argc, char* argv[])
 {
 	/*return IntrinsicWaveExtractionTestAPP(argc, argv);*/
 	/*return HKSExtractionTestAPP(argc, argv);*/
-	return OnEdgeAvgDistExtractionTestApp(argc, argv);
-	/*return GlobalDescForLocalPatchesTestApp(argc, argv);*/
+	/*return OnEdgeAvgDistExtractionTestApp(argc, argv);*/
+	return GlobalDescForLocalPatchesTestApp(argc, argv);
 }

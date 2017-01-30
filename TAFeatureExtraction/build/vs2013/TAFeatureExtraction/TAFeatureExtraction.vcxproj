@@ -127,6 +127,7 @@
     <ClInclude Include="..\..\..\include\HKSDescExtraction.h" />
     <ClInclude Include="..\..\..\include\IntrinsicWaveDescExtraction.h" />
     <ClInclude Include="..\..\..\include\OnEdgeAvgGeoDistExtraction.h" />
+    <ClInclude Include="..\..\..\include\PatchBasedPerVertexFeatureExtraction.h" />
     <ClInclude Include="..\..\..\include\TAFeatureExtraction.h" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +146,7 @@
     <ClCompile Include="..\..\..\src\HKSDescExtraction.cpp" />
     <ClCompile Include="..\..\..\src\IntrinsicWaveDescExtraction.cpp" />
     <ClCompile Include="..\..\..\src\OnEdgeAvgGeoDistExtraction.cpp" />
+    <ClCompile Include="..\..\..\src\PatchBasedPerVertexFeatureExtraction.cpp" />
     <ClCompile Include="..\..\..\src\TAFeatureExtraction.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
