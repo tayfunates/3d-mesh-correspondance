@@ -16,8 +16,6 @@ namespace TAFea
 		HeatKernelSignatureDesc();
 		HeatKernelSignatureDesc(const int& vertexid);
 
-		static double L2Distance(const HeatKernelSignatureDesc& hks1, const HeatKernelSignatureDesc& hks2);
-
 	public:
 		std::vector<double> m_vDescriptor;
 	};

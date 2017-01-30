@@ -3,6 +3,7 @@
 #include <core/TriangularMesh.h>
 #include <core/CommandLineParser.h>
 #include <core/Timer.h>
+#include <core/StdVectorUtil.h>
 
 #include <oi/ThreeDimOIShape.h>
 
@@ -163,7 +164,7 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 	hksExtractor.setNumberOfEigenVals(100);
 	hksExtractor.setNumberOfTimeSamples(300);
 	hksExtractor.setUseEigenValuesForTimeBoundaries(true);
-	hksExtractor.setTypeOfLaplacian(TAFeaExt::HKSDescExtraction::DISCRETE_LAPLACIAN);
+	hksExtractor.setTypeOfLaplacian(TAFeaExt::HKSDescExtraction::STAR_LAPLACIAN);
 
 	std::vector<double> distances;
 	std::vector<LocalFeaturePtr> feas;
@@ -173,7 +174,7 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 	for (size_t v = 0; v < feas.size(); v++)
 	{
 		HeatKernelSignatureDesc* hksVV = (HeatKernelSignatureDesc*)(feas[v].get());
-		const double l2Distance = HeatKernelSignatureDesc::L2Distance(*hksVV, *hksV0);
+		const double l2Distance = StdVecL2Norm(hksVV->m_vDescriptor, hksV0->m_vDescriptor);
 		distances.push_back(l2Distance);
 	}
 
@@ -233,7 +234,7 @@ int IntrinsicWaveExtractionTestAPP(int argc, char* argv[])
 int main(int argc, char* argv[])
 {
 	/*return IntrinsicWaveExtractionTestAPP(argc, argv);*/
-	/*return HKSExtractionTestAPP(argc, argv);*/
+	return HKSExtractionTestAPP(argc, argv);
 	/*return OnEdgeAvgDistExtractionTestApp(argc, argv);*/
-	return GlobalDescForLocalPatchesTestApp(argc, argv);
+	/*return GlobalDescForLocalPatchesTestApp(argc, argv);*/
 }
