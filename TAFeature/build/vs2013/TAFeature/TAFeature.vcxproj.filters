@@ -30,6 +30,9 @@
     <ClInclude Include="..\..\..\include\GeodesicDistanceMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\PatchBasedSumOfCenterDistances.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\AvgGeodesicDistance.cpp">
@@ -42,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\GeodesicDistanceMatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\PatchBasedSumOfCenterDistances.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -123,6 +123,7 @@
     <ClInclude Include="..\..\..\include\GeodesicDistanceMatrix.h" />
     <ClInclude Include="..\..\..\include\HeatKernelSignatureDesc.h" />
     <ClInclude Include="..\..\..\include\IntrinsicWaveDesc.h" />
+    <ClInclude Include="..\..\..\include\PatchBasedSumOfCenterDistances.h" />
     <ClInclude Include="..\..\..\include\TAFeature.h" />
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +131,7 @@
     <ClCompile Include="..\..\..\src\GeodesicDistanceMatrix.cpp" />
     <ClCompile Include="..\..\..\src\HeatKernelSignatureDesc.cpp" />
     <ClCompile Include="..\..\..\src\IntrinsicWaveDesc.cpp" />
+    <ClCompile Include="..\..\..\src\PatchBasedSumOfCenterDistances.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
