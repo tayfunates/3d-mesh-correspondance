@@ -51,7 +51,31 @@ namespace TAFeaExt
 
 	Result PatchBasedPerVertexFeatureExtraction::extract(PolygonMesh *mesh, const int& id, LocalFeaturePtr& outFeaturePtr)
 	{
-		return TACore::TACORE_OK;
+		if (!mesh || mesh->getPolygonType() != TA_TRIANGULAR)
+		{
+			return TACORE_BAD_ARGS;
+		}
+
+		//We, now, know that the mesh is a triangular mesh
+		TriangularMesh *triMesh = (TriangularMesh*)mesh;
+
+		Result result = TACore::TACORE_OK;
+
+		GeodesicDistanceMatrixExtraction geoDistMatrixExtraction;
+		geoDistMatrixExtraction.setGeodesicDistanceType(GeodesicDistanceMatrix::ON_EDGE_GEODESIC);
+
+		std::vector<float> distances;
+		result = geoDistMatrixExtraction.extract(triMesh, id, distances);
+
+		PatchList patches;
+		result = createVertexPatches(triMesh, id, distances, this->m_fMinGeodesicRadius, this->m_fMaxGeodesicRadius, this->m_nNumberOfPatches, patches);
+
+		if (result == TACore::TACORE_OK)
+		{
+			result = calcFeature(triMesh, id, patches, outFeaturePtr);
+		}
+
+		return result;
 	}
 
 	Result PatchBasedPerVertexFeatureExtraction::createPatches(TriangularMesh* triMesh, const TAMatrix<float>& distanceMatrix, const float& minRadius, const float& maxRadius, const int& noOfPatches, std::vector<PatchList>& listOfPatchLists)
