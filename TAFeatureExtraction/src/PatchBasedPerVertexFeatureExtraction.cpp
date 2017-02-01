@@ -103,6 +103,32 @@ namespace TAFeaExt
 		return TACore::TACORE_OK;
 	}
 
+	Result PatchBasedPerVertexFeatureExtraction::createVertexPatches(TriangularMesh* triMesh, const int& vertexId, const std::vector<float>& distanceVector, const float& minRadius, const float& maxRadius, const int& noOfPatches, PatchList& patchesVertexIds)
+	{
+		TACORE_CHECK_ARGS(triMesh != NULL);
+		patchesVertexIds.clear();
+
+		const float rIncrement = (maxRadius - minRadius) / (noOfPatches - 1);
+		float currentRadius = minRadius;
+
+		patchesVertexIds = std::vector<std::vector<int> >(noOfPatches);
+		int scale = 0;
+		while (scale < noOfPatches)
+		{
+			for (int w = 0; w < (int) distanceVector.size(); w++)
+			{
+				if (distanceVector[w] <= currentRadius)
+				{
+					patchesVertexIds[scale].push_back(w);
+				}
+			}
+
+			currentRadius += rIncrement;
+			scale++;
+		}
+		return TACore::TACORE_OK;
+	}
+
 	void PatchBasedPerVertexFeatureExtraction::setMinGeodesicDistance(const float& minGeoDistance)
 	{
 		this->m_fMinGeodesicRadius = minGeoDistance;

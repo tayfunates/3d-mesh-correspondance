@@ -77,6 +77,24 @@ namespace TAFeaExt
 		virtual Result createVertexPatches(TriangularMesh* triMesh, const int& vertexId, const TAMatrix<float>& distanceMatrix, const float& minRadius, const float& maxRadius, const int& noOfPatches, PatchList& patchesVertexIds);
 
 		/**
+		* @brief	Creates patches around a vertex for the radii between minimum radius and maximum radius from a triangular mesh
+		*			Patches are considered as the list of vertex ids
+		*			A vertex is inside a patch when it is inside the region specified by the current radius
+		*
+		* @param	triMesh TriangularMesh
+		* @param	vertexId The id of the vertex around which the patches will be created
+		* @param	distanceVector Distance vector of the specific vertex from the which the vertex pair distances are obtained
+		* @param	minRadius Minimum radius bounding the smallest patch
+		* @param	maxRadius Maximum radius bounding the biggest patch
+		* @param	noOfPatches Number of patches created around a single vertex
+		* @param	[out] patchesVertexIds List of patches which contain the list of vertex ids
+		*
+		* @return	TACORE_OK if everything goes fine
+		* @return	TACORE_BAD_ARGS if triMesh is NULL
+		*/
+		virtual Result createVertexPatches(TriangularMesh* triMesh, const int& vertexId, const std::vector<float>& distanceVector, const float& minRadius, const float& maxRadius, const int& noOfPatches, PatchList& patchesVertexIds);
+
+		/**
 		* @brief	Creates patches around all vertices for the radii between minimum radius and maximum radius from a triangular mesh
 		*			Patches are considered as the list of vertex ids
 		*			A vertex is inside a patch when it is inside the region specified by the current radius
