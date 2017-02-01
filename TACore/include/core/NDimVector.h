@@ -181,6 +181,12 @@ namespace TACore
 			return acos(temp1 % temp2);
 		}
 
+		//Gets the l2-distance between two vector
+		static double L2Distance(const NDimVector<T, N>& v1, const NDimVector<T, N>& v2)
+		{
+			return (v1 - v2).norm();
+		}
+
 		//Takes cross product if the dimensions of both vectors are 3
 		NDimVector<T, N> operator*(const NDimVector<T, N>& other) const
 		{
