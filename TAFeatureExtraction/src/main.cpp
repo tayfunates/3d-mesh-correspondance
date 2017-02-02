@@ -58,19 +58,19 @@ int GlobalDescForLocalPatchesTestApp(int argc, char* argv[])
 	TriangularMesh* triMesh = (TriangularMesh*)(mesh.getShape());
 
 	TAFeaExt::PatchBasedSumOfCenterDistancesExtraction patchBasedExtractor;
-	patchBasedExtractor.setMinGeodesicDistance(40.f);
-	patchBasedExtractor.setMaxGeodesicDistance(100.0f);
-	patchBasedExtractor.setNumberOfPatches(10);
+	patchBasedExtractor.setMinGeodesicDistance(10.f);
+	patchBasedExtractor.setMaxGeodesicDistance(300.0f);
+	patchBasedExtractor.setNumberOfPatches(20);
 
 	std::vector<double> distances;
 	std::vector<LocalFeaturePtr> feas;
 	patchBasedExtractor.extract(triMesh, feas);
 
-	PatchBasedSumOfCenterDistances* hksV0 = (PatchBasedSumOfCenterDistances*)(feas[126].get());
+	PatchBasedSumOfCenterDistances* feaV0 = (PatchBasedSumOfCenterDistances*)(feas[126].get());
 	for (size_t v = 0; v < feas.size(); v++)
 	{
-		PatchBasedSumOfCenterDistances* hksVV = (PatchBasedSumOfCenterDistances*)(feas[v].get());
-		const double l2Distance = StdVecL2Distance(hksVV->m_vDescriptor, hksV0->m_vDescriptor);
+		PatchBasedSumOfCenterDistances* feaVV = (PatchBasedSumOfCenterDistances*)(feas[v].get());
+		const double l2Distance = StdVecL2Distance(feaVV->m_vDescriptor, feaV0->m_vDescriptor);
 		distances.push_back(l2Distance);
 	}
 

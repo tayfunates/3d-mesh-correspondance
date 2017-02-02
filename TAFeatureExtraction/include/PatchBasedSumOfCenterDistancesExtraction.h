@@ -34,6 +34,7 @@ namespace TAFeaExt
 		* @param	[out] outFeatures Output vector of features
 		* @return	TACORE_OK if everything goes fine
 		* @return	TACORE_BAD_ARGS if triMesh is NULL
+		* @return	TACORE_BAD_ARGS if listOfPatchLists is empty
 		*/
 		virtual Result calcFeature(TriangularMesh* triMesh, const std::vector<PatchList>& listOfPatchLists, std::vector<LocalFeaturePtr>& outFeatures);
 
