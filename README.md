@@ -9,7 +9,7 @@ __TAFeatureExtraction:__ Contains an inheritance hierarchy to extract global or 
 * Intrinsic Wave Descriptor (see http://www.staff.uni-mainz.de/wandm/papers/eg11_plansac.pdf )    
 	
 TAFeatureExtraction.h includes the basic classes which are on top of the hierarchy.  
-PatchBasedPerVertexFeatureExtraction.h includes an interface for multi-scale 3-dimensional per vertex features  
+PatchBasedPerVertexFeatureExtraction.h includes an interface for multi-scale 3-dimensional per vertex features.  
 
-__TAFeature:__ Contains feature types extracted by TAFeatureExtraction  
+__TAFeature:__ Contains feature types extracted by TAFeatureExtraction.  
 __TAPaper:__ Contains Matlab, C++ codes from different academic sources.
