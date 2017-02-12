@@ -24,7 +24,8 @@ namespace TAFeaExt
 
 		enum TypeOfGlobalDescriptor
 		{
-			SUM_EUC_DISTANCES_TO_CENTER = 1	//< Euc Distance of each vertex inside the patch to the center of the patch
+			SUM_EUC_DISTANCES_TO_CENTER = 1,	//< Euc Distance of each vertex inside the patch to the center of the patch
+			SHAPE_DISTRIBUTION_HISTOGRAM		//< Histogram of the shape distribution: http://graphics.stanford.edu/courses/cs468-08-fall/pdf/osada.pdf	
 		};
 
 		virtual ~PatchBasedPerVertexFeatureExtraction();
