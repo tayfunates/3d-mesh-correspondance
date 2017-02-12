@@ -128,6 +128,7 @@
     <ClInclude Include="..\..\..\include\IntrinsicWaveDescExtraction.h" />
     <ClInclude Include="..\..\..\include\OnEdgeAvgGeoDistExtraction.h" />
     <ClInclude Include="..\..\..\include\PatchBasedPerVertexFeatureExtraction.h" />
+    <ClInclude Include="..\..\..\include\PatchBasedShapeDistributionDescExtraction.h" />
     <ClInclude Include="..\..\..\include\PatchBasedSumOfCenterDistancesExtraction.h" />
     <ClInclude Include="..\..\..\include\TAFeatureExtraction.h" />
   </ItemGroup>
@@ -148,6 +149,7 @@
     <ClCompile Include="..\..\..\src\IntrinsicWaveDescExtraction.cpp" />
     <ClCompile Include="..\..\..\src\OnEdgeAvgGeoDistExtraction.cpp" />
     <ClCompile Include="..\..\..\src\PatchBasedPerVertexFeatureExtraction.cpp" />
+    <ClCompile Include="..\..\..\src\PatchBasedShapeDistributionDescExtraction.cpp" />
     <ClCompile Include="..\..\..\src\PatchBasedSumOfCenterDistancesExtraction.cpp" />
     <ClCompile Include="..\..\..\src\TAFeatureExtraction.cpp" />
   </ItemGroup>
