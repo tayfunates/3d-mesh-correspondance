@@ -3,6 +3,14 @@
 
 #include "PatchBasedPerVertexFeatureExtraction.h"
 
+namespace TACore
+{
+	template<class T, int N>
+	class NDimVector;
+
+	typedef NDimVector<double, 3> Vector3D;
+}
+
 namespace TAFeaExt
 {
 
@@ -78,8 +86,66 @@ namespace TAFeaExt
 		*/
 		virtual Result calcFeature(TriangularMesh* triMesh, const int& id, const PatchList& patchesVertexIds, LocalFeaturePtr& outFeaturePtr);
 
+		/**
+		* @brief	Creates samples from the patch for the distribution function encapsulated in the object
+		*			There are two different sampling method which is also encapculated in the object
+		*
+		* @param	triMesh TriangularMesh
+		* @param	patch patch extracted around a vertex
+		* @param	sampleCount Number of samples to be extracted
+		* @param	[out] outFeaturePtr samples extracted
+		* @return	void
+		*/
+		void createSamplesFromPatch(TriangularMesh* triMesh, const SinglePatch& patch, const int& sampleCount, std::vector<double>& samples) const;
+
+		double createSample(TriangularMesh* triMesh, const SinglePatch& patch) const;
+		double createBiasedVertexSample(TriangularMesh* triMesh, const SinglePatch& patch) const;
+		double createUnbiasedSurfaceSample(TriangularMesh* triMesh, const SinglePatch& patch) const;
+		int getNumberOfRandomPointsForASample() const; 
+
+		/**
+		* @brief	Calculates the angle between two vector constructed from 3 points in radians between [0, pi]
+		*			Angle between pt1 ----> pt2 and pt1 ----> pt3
+		*
+		* @param	pt1 First point
+		* @param	pt2 Second point
+		* @param	pt3 Third point
+		* @return	double, angle between three points
+		*/
+		double calcAngleBetweenThreePoints(const Vector3D& pt1, const Vector3D& pt2, const Vector3D& pt3) const;
+
+		/**
+		* @brief	Calculates the L2 distance between 2 points
+		*
+		* @param	pt1 First point
+		* @param	pt2 Second point
+		* @return	double, distance between 2 points
+		*/
+		double calcDistanceBetweenTwoPoints(const Vector3D& pt1, const Vector3D& pt2) const;
+
+		/**
+		* @brief	Calculates the area inside the three points
+		*
+		* @param	pt1 First point
+		* @param	pt2 Second point
+		* @param	pt3 Third point
+		* @return	double, area between three points
+		*/
+		double calcAreaInsideThreePoints(const Vector3D& pt1, const Vector3D& pt2, const Vector3D& pt3) const;
+
+		/**
+		* @brief	Calculates the volume inside the four points
+		*			
+		* @param	pt1 First point
+		* @param	pt2 Second point
+		* @param	pt3 Third point
+		* @param	pt4 Fourth point
+		* @return	double, volume inside three points
+		*/
+		double calcVolumeInsideFourPoints(const Vector3D& pt1, const Vector3D& pt2, const Vector3D& pt3, const Vector3D& pt4) const;
+
 	private:
-		ShapeDistributionFunction	m_DistributionFunction;				//< Shape distribution function, see the comments in the enumaration
+		ShapeDistributionFunction	m_DistributionFunction;				//< Shape distribution function from which the samples of the histogram will be extracted, see the comments in the enumaration
 		SamplingMethod				m_SamplingMethod;					//< Sampling method, see the comments in the enumaration
 		float						m_fSampleCountDecrementRatio;		//< For all patches, default number of samples is PatchSize * (PatchSize - 1) divided by 2. This ratio decrements this sample count for efficiency reasons																	//< Since number of samples dependson the patch size, the counts in histogram bins must be normalized with the sample size making it a probability density function.
 
