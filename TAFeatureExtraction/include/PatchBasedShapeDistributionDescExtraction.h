@@ -88,12 +88,12 @@ namespace TAFeaExt
 
 		/**
 		* @brief	Creates samples from the patch for the distribution function encapsulated in the object
-		*			There are two different sampling method which is also encapculated in the object
+		*			There are two different sampling method from them one is encapculated in the object
 		*
 		* @param	triMesh TriangularMesh
 		* @param	patch patch extracted around a vertex
 		* @param	sampleCount Number of samples to be extracted
-		* @param	[out] outFeaturePtr samples extracted
+		* @param	[out] samples Samples extracted
 		* @return	void
 		*/
 		void createSamplesFromPatch(TriangularMesh* triMesh, const SinglePatch& patch, const int& sampleCount, std::vector<double>& samples) const;
@@ -143,6 +143,15 @@ namespace TAFeaExt
 		* @return	double, volume inside three points
 		*/
 		double calcVolumeInsideFourPoints(const Vector3D& pt1, const Vector3D& pt2, const Vector3D& pt3, const Vector3D& pt4) const;
+
+		/**
+		* @brief	Writes the histogram given to visualize the contents to the file provided
+		*
+		* @param	histogram Histogram to be printed
+		* @param	filePath File to be written
+		* @return	void
+		*/
+		void writeHistogram(const std::vector<double>& histogram, const std::string& filePath);
 
 	private:
 		ShapeDistributionFunction	m_DistributionFunction;				//< Shape distribution function from which the samples of the histogram will be extracted, see the comments in the enumaration

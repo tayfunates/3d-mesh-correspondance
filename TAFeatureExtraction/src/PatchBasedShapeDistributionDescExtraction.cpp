@@ -4,6 +4,8 @@
 #include <core/NDimVector.h>
 #include <core/StdVectorUtil.h>
 #include <unordered_set>
+#include <fstream>
+#include <time.h>
 
 namespace TAFeaExt
 {
@@ -14,7 +16,7 @@ namespace TAFeaExt
 
 	PatchBasedShapeDistributionDescExtraction::PatchBasedShapeDistributionDescExtraction()
 	{
-		this->m_DistributionFunction = ANGLE_BETWEEN_THREE_RANDOM_POINTS;
+		this->m_DistributionFunction = DISTANCE_BETWEEN_TWO_RANDOM_POINTS;
 		this->m_SamplingMethod = BIASED_VERTEX_SAMPLING;
 		this->m_fSampleCountDecrementRatio = 1.0f;
 	}
@@ -96,7 +98,7 @@ namespace TAFeaExt
 		//A vertex will contain a vector for each patch defining the probability distribution function of the samples
 		//Each sample will be counted inside the corresponding bins
 		//Therefore descriptor has the size of numberOfPatches * numberOfBins
-		pDesc->m_vDescriptor = std::vector<std::vector<double> >(numberOfPatchesV, std::vector<double>(this->m_nNumberOfBins));
+		pDesc->m_vDescriptor = std::vector<std::vector<double> >(numberOfPatchesV, std::vector<double>(this->m_nNumberOfBins, 0.0));
 
 		for (size_t patchIdx = 0; patchIdx < numberOfPatchesV; patchIdx++)
 		{
@@ -104,13 +106,35 @@ namespace TAFeaExt
 
 			//Number of samples depends on the patch size
 			//This will be different for different patchs and for different meshes
-			//Normalization will be required in order to compare pathches correctly: Histogram ---> PDF
 			const int sampleCount = int(float(aPatch.size() * (aPatch.size() - 1)) * 0.5f * this->m_fSampleCountDecrementRatio);
 
-			
+			//create all samples
+			srand(time(NULL));
+			std::vector<double> samples;
+			createSamplesFromPatch(triMesh, aPatch, sampleCount, samples);
 
-			getchar();
+			const double minSample = *(std::min_element(samples.begin(), samples.end()));
+			const double maxSample = *(std::max_element(samples.begin(), samples.end()));
+
+			//Fill the histogram corresponding to the patch
+			std::vector<double>& patchHistogram = pDesc->m_vDescriptor[patchIdx];
+
+			//Calculate the bin size
+			const double binSize = (maxSample - minSample) / this->m_nNumberOfBins;
+
+			//for each sample find the corresponding bin and update the histogram
+			for (size_t sampleIdx = 0; sampleIdx < samples.size(); sampleIdx++)
+			{
+				int binIndex = int((samples[sampleIdx] - minSample) / binSize);
+				if (binIndex >= this->m_nNumberOfBins) binIndex = this->m_nNumberOfBins - 1;
+				else if (binIndex < 0) binIndex = 0;
+
+				patchHistogram[binIndex] += 1.0;
+			}
+			patchHistogram = patchHistogram / (double(samples.size()));
 		}
+
+		outFeaturePtr = LocalFeaturePtr(pDesc);
 
 		return TACore::TACORE_OK;
 	}
@@ -123,8 +147,15 @@ namespace TAFeaExt
 			samples[i] = createSample(triMesh, patch);
 		}
 
-		//TO DO:
-		//Normalization and etc.
+		if (this->m_DistributionFunction == DISTANCE_BETWEEN_FIXED_AND_RANDOM_POINT ||
+			this->m_DistributionFunction == DISTANCE_BETWEEN_TWO_RANDOM_POINTS ||
+			this->m_DistributionFunction == SQRT_OF_AREA_OF_THREE_RANDOM_POINTS ||
+			this->m_DistributionFunction == CUBE_ROOT_OF_VOLUME_OF_FOUR_RANDOM_POINTS)
+		{
+			//Normalization
+			const double maxSample = *(std::max_element(samples.begin(), samples.end()));
+			samples = samples / maxSample;
+		}
 	}
 
 	double PatchBasedShapeDistributionDescExtraction::createSample(TriangularMesh* triMesh, const SinglePatch& patch) const
@@ -248,5 +279,32 @@ namespace TAFeaExt
 		Vector3D pt3ToPt4(pt3, pt4);
 
 		return abs(pt1ToPt4  % (pt2ToPt4 * pt3ToPt4)) / 6.0;
+	}
+
+	void PatchBasedShapeDistributionDescExtraction::writeHistogram(const std::vector<double>& histogram, const std::string& filePath)
+	{
+		std::ofstream out(filePath, std::ios::app);
+
+		if (out.is_open())
+		{
+			int y_max = int(*std::max_element(histogram.begin(), histogram.end()));
+			for (int y = y_max; y > 0; --y) {
+				for (size_t i = 0; i < histogram.size(); i++)
+				{
+					if (histogram[i] < y)
+					{
+						out << " ";
+					}
+					else
+					{
+						out << "O";
+					}
+				}
+				out << std::endl;
+			}
+			out << "***************************************************************************************" << std::endl;
+			out.close();
+		}
+
 	}
 }

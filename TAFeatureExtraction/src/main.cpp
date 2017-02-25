@@ -12,6 +12,7 @@
 #include "IntrinsicWaveDesc.h"
 #include "HeatKernelSignatureDesc.h"
 #include "PatchBasedSumOfCenterDistances.h"
+#include "PatchBasedShapeDistributionHistogram.h"
 
 //Extractors
 #include "OnEdgeAvgGeoDistExtraction.h"
@@ -19,6 +20,7 @@
 #include "GeodesicDistanceMatrixExtraction.h"
 #include "PatchBasedPerVertexFeatureExtraction.h"
 #include "PatchBasedSumOfCenterDistancesExtraction.h"
+#include "PatchBasedShapeDistributionDescExtraction.h"
 #include "HKSDescExtraction.h"
 
 using namespace TACore;
@@ -34,7 +36,7 @@ int mainRet(int ret, std::string message)
 	return ret;
 }
 
-int GlobalDescForLocalPatchesTestApp(int argc, char* argv[])
+int GlobalDescForLocalPatchesTestSumOfCenterDistancesApp(int argc, char* argv[])
 {
 	// Parse args
 	TACore::ArgParser parser("TAShapeTest", "Loads, Saves, Shows different types of shapes");
@@ -58,31 +60,88 @@ int GlobalDescForLocalPatchesTestApp(int argc, char* argv[])
 	TriangularMesh* triMesh = (TriangularMesh*)(mesh.getShape());
 
 	TAFeaExt::PatchBasedSumOfCenterDistancesExtraction patchBasedExtractor;
-	patchBasedExtractor.setMinGeodesicDistance(10.f);
-	patchBasedExtractor.setMaxGeodesicDistance(300.0f);
+	patchBasedExtractor.setMinGeodesicDistance(0.01f);
+	patchBasedExtractor.setMaxGeodesicDistance(1.0f);
 	patchBasedExtractor.setNumberOfPatches(20);
 
-	std::vector<double> distances;
 	std::vector<LocalFeaturePtr> feas;
 	patchBasedExtractor.extract(triMesh, feas);
 
-	PatchBasedSumOfCenterDistances* feaV0 = (PatchBasedSumOfCenterDistances*)(feas[126].get());
+	std::vector<double> magnitudes(feas.size());
 	for (size_t v = 0; v < feas.size(); v++)
 	{
 		PatchBasedSumOfCenterDistances* feaVV = (PatchBasedSumOfCenterDistances*)(feas[v].get());
-		const double l2Distance = StdVecL2Distance(feaVV->m_vDescriptor, feaV0->m_vDescriptor);
-		distances.push_back(l2Distance);
+		magnitudes[v] = StdVecL2Norm(feaVV->m_vDescriptor);
 	}
 
-	const double maxDistance = *std::max_element(distances.begin(), distances.end());
-	const double minDistance = *std::min_element(distances.begin(), distances.end());
+	const double maxMag = *std::max_element(magnitudes.begin(), magnitudes.end());
+	const double minMag = *std::min_element(magnitudes.begin(), magnitudes.end());
 
-	for (size_t i = 0; i < distances.size(); i++)
+	for (size_t i = 0; i < magnitudes.size(); i++)
 	{
-		distances[i] = (distances[i] - minDistance) / (maxDistance - minDistance);
+		magnitudes[i] = (magnitudes[i] - minMag) / (maxMag - minMag);
 	}
 
-	mesh.showVertexColors(distances, 126);
+	mesh.showVertexColors(magnitudes);
+	return mainRet(1, "Main Test Successfully Ended");
+}
+
+int GlobalDescForLocalPatchesTestShapeDistributionApp(int argc, char* argv[])
+{
+	// Parse args
+	TACore::ArgParser parser("TAShapeTest", "Loads, Saves, Shows different types of shapes");
+	parser.addArg("input", "", true, 1, "", "Input shape file to be loaded");
+	parser.addArg("output", "", true, 1, "", "Output shape file to be saved");
+
+	if (!parser.parseCommandLine(argc, argv))
+	{
+		mainRet(-1, "Command line parameters cannot be parsed correctly");
+	}
+
+	std::string inputFile = parser.get("input");
+	std::string outputFile = parser.get("output");
+
+	ThreeDimOIShape mesh;
+	if (mesh.load(inputFile.c_str()) != TACORE_OK)
+	{
+		return mainRet(1, "Mesh cannot be loaded correctly");
+	}
+
+	TriangularMesh* triMesh = (TriangularMesh*)(mesh.getShape());
+
+	TAFeaExt::PatchBasedShapeDistributionDescExtraction patchBasedExtractor;
+	patchBasedExtractor.setMinGeodesicDistance(20.f);
+	patchBasedExtractor.setMaxGeodesicDistance(50.0f);
+	patchBasedExtractor.setNumberOfPatches(4);
+	patchBasedExtractor.setSampleCountDecrementRatio(1.0f);
+	patchBasedExtractor.setSamplingMethod(TAFeaExt::PatchBasedShapeDistributionDescExtraction::BIASED_VERTEX_SAMPLING);
+	patchBasedExtractor.setShapeDistributionFunction(TAFeaExt::PatchBasedShapeDistributionDescExtraction::DISTANCE_BETWEEN_FIXED_AND_RANDOM_POINT);
+
+	std::vector<LocalFeaturePtr> feas;
+	patchBasedExtractor.extract(triMesh, feas);
+
+	std::vector<double> magnitudes(feas.size());
+	for (size_t v = 0; v < feas.size(); v++)
+	{
+		PatchBasedShapeDistributionHistogram* feaVV = (PatchBasedShapeDistributionHistogram*)(feas[v].get());
+		std::vector<double> vertexPatchMagnitudes(feaVV->m_vDescriptor.size());
+		for (size_t patchIdx = 0; patchIdx < vertexPatchMagnitudes.size(); patchIdx++)
+		{
+			vertexPatchMagnitudes[patchIdx] = StdVecL2Norm(feaVV->m_vDescriptor[patchIdx]);
+		}
+
+		magnitudes[v] = StdVecL2Norm(vertexPatchMagnitudes);
+	}
+
+	const double maxMag = *std::max_element(magnitudes.begin(), magnitudes.end());
+	const double minMag = *std::min_element(magnitudes.begin(), magnitudes.end());
+
+	for (size_t i = 0; i < magnitudes.size(); i++)
+	{
+		magnitudes[i] = (magnitudes[i] - minMag) / (maxMag - minMag);
+	}
+
+	mesh.showVertexColors(magnitudes);
 	return mainRet(1, "Main Test Successfully Ended");
 }
 
@@ -114,15 +173,10 @@ int OnEdgeAvgDistExtractionTestApp(int argc, char* argv[])
 	avgGeoExtractor.extract(triMesh, feas);
 
 	std::vector<double> distances(feas.size());
-
-	AvgGeodesicDistance* avgGeoDistFeaPtr = (AvgGeodesicDistance*)(feas[126].get());
-	const float referenceAvgGeoDistance = avgGeoDistFeaPtr->m_distance;
 	for (size_t v = 0; v < feas.size(); v++)
 	{
 		AvgGeodesicDistance* avgGeoDistFeaPtr = (AvgGeodesicDistance*)(feas[v].get());
-		const float queryAvgGeoDistance = avgGeoDistFeaPtr->m_distance;
-		const float diffQueryReference = referenceAvgGeoDistance - queryAvgGeoDistance;
-		distances[v] = sqrt(diffQueryReference * diffQueryReference);
+		distances[v] = avgGeoDistFeaPtr->m_distance;
 	}
 
 	const double maxDistance = *std::max_element(distances.begin(), distances.end());
@@ -133,7 +187,7 @@ int OnEdgeAvgDistExtractionTestApp(int argc, char* argv[])
 		distances[i] = (distances[i] - minDistance) / (maxDistance - minDistance);
 	}
 
-	mesh.showVertexColors(distances, 126);
+	mesh.showVertexColors(distances);
 	return mainRet(1, "Main Test Successfully Ended");
 }
 
@@ -168,27 +222,25 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 	hksExtractor.setUseEigenValuesForTimeBoundaries(true);
 	hksExtractor.setTypeOfLaplacian(TAFeaExt::HKSDescExtraction::STAR_LAPLACIAN);
 
-	std::vector<double> distances;
 	std::vector<LocalFeaturePtr> feas;
 	hksExtractor.extract(triMesh, feas);
 
-	HeatKernelSignatureDesc* hksV0 = (HeatKernelSignatureDesc*)(feas[126].get());
+	std::vector<double> magnitudes(feas.size());
 	for (size_t v = 0; v < feas.size(); v++)
 	{
 		HeatKernelSignatureDesc* hksVV = (HeatKernelSignatureDesc*)(feas[v].get());
-		const double l2Distance = StdVecL2Distance(hksVV->m_vDescriptor, hksV0->m_vDescriptor);
-		distances.push_back(l2Distance);
+		magnitudes[v] = StdVecL2Norm(hksVV->m_vDescriptor);
 	}
 
-	const double maxDistance = *std::max_element(distances.begin(), distances.end());
-	const double minDistance = *std::min_element(distances.begin(), distances.end());
+	const double maxMag = *std::max_element(magnitudes.begin(), magnitudes.end());
+	const double minMag = *std::min_element(magnitudes.begin(), magnitudes.end());
 
-	for (size_t i = 0; i < distances.size(); i++)
+	for (size_t i = 0; i < magnitudes.size(); i++)
 	{
-		distances[i] = (distances[i] - minDistance) / (maxDistance - minDistance);
+		magnitudes[i] = (magnitudes[i] - minMag) / (maxMag - minMag);
 	}
 
-	mesh.showVertexColors(distances, 126);
+	mesh.showVertexColors(magnitudes);
 	return mainRet(1, "Main Test Successfully Ended");
 }
 
@@ -236,7 +288,8 @@ int IntrinsicWaveExtractionTestAPP(int argc, char* argv[])
 int main(int argc, char* argv[])
 {
 	/*return IntrinsicWaveExtractionTestAPP(argc, argv);*/
-	/*return HKSExtractionTestAPP(argc, argv*/
+	/*return HKSExtractionTestAPP(argc, argv);*/
 	/*return OnEdgeAvgDistExtractionTestApp(argc, argv);*/
-	return GlobalDescForLocalPatchesTestApp(argc, argv);
+	return GlobalDescForLocalPatchesTestSumOfCenterDistancesApp(argc, argv);
+	/*return GlobalDescForLocalPatchesTestShapeDistributionApp(argc, argv);*/
 }
