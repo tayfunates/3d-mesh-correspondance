@@ -96,7 +96,7 @@ namespace TAFeaExt
 				Vertex* patchVertex = triMesh->verts[aPatch[w]];
 				sumOfCenterDistances += Vector3D::L2Distance(patchCenter, Vector3D(patchVertex->coords[0], patchVertex->coords[1], patchVertex->coords[2]));
 			}
-
+			sumOfCenterDistances /= aPatch.size();
 			pDesc->m_vDescriptor[patchIdx] = sumOfCenterDistances;
 		}
 

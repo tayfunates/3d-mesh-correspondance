@@ -60,8 +60,8 @@ int GlobalDescForLocalPatchesTestSumOfCenterDistancesApp(int argc, char* argv[])
 	TriangularMesh* triMesh = (TriangularMesh*)(mesh.getShape());
 
 	TAFeaExt::PatchBasedSumOfCenterDistancesExtraction patchBasedExtractor;
-	patchBasedExtractor.setMinGeodesicDistance(0.01f);
-	patchBasedExtractor.setMaxGeodesicDistance(1.0f);
+	patchBasedExtractor.setMinGeodesicDistance(20.0f);
+	patchBasedExtractor.setMaxGeodesicDistance(100.0f);
 	patchBasedExtractor.setNumberOfPatches(20);
 
 	std::vector<LocalFeaturePtr> feas;
