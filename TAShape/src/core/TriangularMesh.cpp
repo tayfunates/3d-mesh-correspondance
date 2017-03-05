@@ -239,7 +239,7 @@ namespace TAShape
 		return addEdge(v, w);
 	}
 
-	float TriangularMesh::eucDistanceBetween(Vertex *v1, Vertex *v2)
+	float TriangularMesh::eucDistanceBetween(Vertex *v1, Vertex *v2) const
 	{
 		float diffZero = v1->coords[0] - v2->coords[0];
 		float diffOne = v1->coords[1] - v2->coords[1];
@@ -340,5 +340,21 @@ namespace TAShape
 		}
 		return sum;
 	}
-	
+
+	float TriangularMesh::calcMaxEucDistanceBetweenTwoVertices() const
+	{
+		float maxEucDistance = 0.0;
+		for (int v = 0; v < verts.size(); v++)
+		{
+			for (int w = 0; w < v; w++)
+			{
+				const float currEucDistance = eucDistanceBetween(verts[v], verts[w]);
+				if (currEucDistance > maxEucDistance)
+				{
+					maxEucDistance = currEucDistance;
+				}
+			}
+		}
+		return maxEucDistance;
+	}
 }

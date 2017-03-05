@@ -146,7 +146,7 @@ namespace TAShape
 		* @param			[i] v2, Pointer to other vertexs
 		* @return			Euc distance between two
 		*/
-		float eucDistanceBetween(Vertex *v1, Vertex *v2);
+		float eucDistanceBetween(Vertex *v1, Vertex *v2) const;
 
 		/**
 		* @brief			Calculates and assigns the normals for each triangle
@@ -180,6 +180,12 @@ namespace TAShape
 		* @return			Total surface area
 		*/
 		float calcTotalSurfaceArea() const;
+
+		/**
+		* @brief			Calculates the maximum euc distance between two vertices inside the mesh
+		* @return			Maximum euc distance in the mesh
+		*/
+		float calcMaxEucDistanceBetweenTwoVertices() const;
 	};
 
 }
