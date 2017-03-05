@@ -102,6 +102,27 @@ namespace TAShape
 		TACore::Result loadObj(const char* fName);
 
 		/**
+		* @brief			Saves the TriangularMesh..
+		* @param			[in] fName Path to file.
+		* @param			[in] pVertMagnitudes Some special magnitudes assigned to each vertex to find the color of the vertex
+		* @return			TACORE_OK successfully saved.
+		* @return			TACORE_BAD_ARGS if the size of color vector is not equal to zero or vertex count
+		* @return			TACORE_INVALID_OPERATION if the extension is not supported
+		* @return			TACORE_FILE_ERROR if the file cannot be opened
+		*/
+		TACore::Result save(const char* fName, const std::vector<double>& pVertMagnitudes = std::vector<double>());
+
+		/**
+		* @brief			Saves the TriangularMesh by writing .ply file.
+		* @param			[in] fName Path to .ply file.
+		* @param			[in] pVertMagnitudes Some special magnitudes assigned to each vertex to find the color of the vertex
+		* @return			TACORE_OK successfully saved.
+		* @return			TACORE_BAD_ARGS if the size of color vector is not equal to zero or vertex count
+		* @return			TACORE_FILE_ERROR if the file cannot be opened
+		*/
+		TACore::Result savePly(const char* fName, const std::vector<double>& pVertMagnitudes = std::vector<double>());
+
+		/**
 		* @brief			Creates a simple cumbe TriangularMesh
 		* @param			[in] sl Size of cube edges
 		* @return			TACORE_OK successfully created.

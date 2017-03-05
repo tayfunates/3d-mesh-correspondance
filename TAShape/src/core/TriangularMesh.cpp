@@ -1,6 +1,7 @@
 #include <core/TriangularMesh.h>
 #include <core/PathUtil.h>
 #include <core/NDimVector.h>
+#include <core/ColorPalette.h>
 
 namespace TAShape
 {
@@ -146,6 +147,62 @@ namespace TAShape
 		fclose(fPtr);
 
 		std::cout << "Mesh has " << (int)tris.size() << " tris, " << (int)verts.size() << " verts, " << (int)edges.size() << " edges\nInitialization done\n";
+		return TACore::TACORE_OK;
+	}
+
+	TACore::Result TriangularMesh::save(const char* fName, const std::vector<double>& pVertMagnitudes)
+	{
+		const std::string ext = TACore::PathUtil::getExtension(std::string(fName));
+		if (ext == "ply")
+		{
+			return savePly(fName, pVertMagnitudes);
+		}
+		return TACore::TACORE_INVALID_OPERATION;
+	}
+
+	TACore::Result TriangularMesh::savePly(const char* fName, const std::vector<double>& pVertMagnitudes)
+	{
+		TACORE_CHECK_ARGS(pVertMagnitudes.size() == 0 || pVertMagnitudes.size() == verts.size());
+
+		FILE* fPtr;
+		if (!(fPtr = fopen(fName, "w")))
+		{
+			return TACore::TACORE_FILE_ERROR;
+		}
+		
+		fprintf(fPtr, "ply\n");
+		fprintf(fPtr, "format ascii 1.0\n");
+		fprintf(fPtr, "element vertex %d\n", verts.size());
+		fprintf(fPtr, "property float32 x\n");
+		fprintf(fPtr, "property float32 y\n");
+		fprintf(fPtr, "property float32 z\n");
+		fprintf(fPtr, "property uchar diffuse_red\n");
+		fprintf(fPtr, "property uchar diffuse_green\n");
+		fprintf(fPtr, "property uchar diffuse_blue\n");
+		fprintf(fPtr, "element face %d\n", tris.size());
+		fprintf(fPtr, "property list uint8 int32 vertex_indices\n");
+		fprintf(fPtr, "end_header\n");
+
+		TACore::ColorPalette colorPalette(1.0f / verts.size());
+
+		for (int v = 0; v < verts.size(); v++)
+		{
+			fprintf(fPtr, "%f %f %f ", verts[v]->coords[0], verts[v]->coords[1], verts[v]->coords[2]);
+			if (pVertMagnitudes.size() > 0)
+			{
+				unsigned char r, g, b;
+				colorPalette.getColor(pVertMagnitudes[v], r, g, b);
+				fprintf(fPtr, "%d %d %d ", (int)r, (int)g, (int)b);
+			}
+			fprintf(fPtr, "\n");
+		}
+
+		for (int t = 0; t < tris.size(); t++)
+		{
+			fprintf(fPtr, "%d %d %d %d\n", 3, tris[t]->v1i, tris[t]->v2i, tris[t]->v3i);
+		}
+
+		fclose(fPtr);
 		return TACore::TACORE_OK;
 	}
 
