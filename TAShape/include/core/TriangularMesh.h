@@ -186,6 +186,18 @@ namespace TAShape
 		* @return			Maximum euc distance in the mesh
 		*/
 		float calcMaxEucDistanceBetweenTwoVertices() const;
+
+		/**
+		* @brief			Calculates the maximum area between three vertices inside the mesh
+		* @return			Maximum area of three vertices in the mesh
+		*/
+		float calcMaxAreaBetweenThreeVertices() const;
+
+		/**
+		* @brief			Calculates the maximum volume of the tetrahedron between four vertices inside the mesh
+		* @return			Maximum volume of tetrahedron between four vertices in the mesh
+		*/
+		float calcMaxVolumeOfTetrahedronBetweenFourVertices() const;
 	};
 
 }

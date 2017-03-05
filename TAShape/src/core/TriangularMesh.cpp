@@ -343,7 +343,7 @@ namespace TAShape
 
 	float TriangularMesh::calcMaxEucDistanceBetweenTwoVertices() const
 	{
-		float maxEucDistance = 0.0;
+		float maxEucDistance = 0.0f;
 		for (int v = 0; v < verts.size(); v++)
 		{
 			for (int w = 0; w < v; w++)
@@ -356,5 +356,68 @@ namespace TAShape
 			}
 		}
 		return maxEucDistance;
+	}
+
+	float TriangularMesh::calcMaxAreaBetweenThreeVertices() const
+	{
+		float maxArea = 0.0f;
+		for (int v = 0; v < verts.size(); v++)
+		{
+			for (int w = 0; w < v; w++)
+			{
+				for (int u = 0; u < w; u++)
+				{
+					TACore::Vector3D A(verts[v]->coords[0], verts[v]->coords[1], verts[v]->coords[2]);
+					TACore::Vector3D B(verts[w]->coords[0], verts[w]->coords[1], verts[w]->coords[2]);
+					TACore::Vector3D C(verts[u]->coords[0], verts[u]->coords[1], verts[u]->coords[2]);
+
+					TACore::Vector3D AB(A, B);
+					TACore::Vector3D AC(A, C);
+
+					double angle = TACore::Vector3D::getAngleBetweenTwo(AB, AC);
+
+					float currArea = float(.5 * AB.norm() * AC.norm() * sin(angle));
+
+					if (currArea > maxArea)
+					{
+						maxArea = currArea;
+					}
+				}
+			}
+		}
+		return maxArea;
+	}
+
+	float TriangularMesh::calcMaxVolumeOfTetrahedronBetweenFourVertices() const
+	{
+		float maxVolume = 0.0f;
+		for (int v = 0; v < verts.size(); v++)
+		{
+			for (int w = 0; w < v; w++)
+			{
+				for (int u = 0; u < w; u++)
+				{
+					for (int y = 0; y < u; y++)
+					{
+						TACore::Vector3D A(verts[v]->coords[0], verts[v]->coords[1], verts[v]->coords[2]);
+						TACore::Vector3D B(verts[w]->coords[0], verts[w]->coords[1], verts[w]->coords[2]);
+						TACore::Vector3D C(verts[u]->coords[0], verts[u]->coords[1], verts[u]->coords[2]);
+						TACore::Vector3D D(verts[y]->coords[0], verts[y]->coords[1], verts[y]->coords[2]);
+
+						TACore::Vector3D pt1ToPt4(A, D);
+						TACore::Vector3D pt2ToPt4(B, D);
+						TACore::Vector3D pt3ToPt4(C, D);
+
+						float currVolume = abs(pt1ToPt4 % (pt2ToPt4 * pt3ToPt4)) / 6.0;
+
+						if (currVolume > maxVolume)
+						{
+							maxVolume = currVolume;
+						}
+					}
+				}
+			}
+		}
+		return maxVolume;
 	}
 }
