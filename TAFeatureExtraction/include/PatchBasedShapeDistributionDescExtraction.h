@@ -33,7 +33,7 @@ namespace TAFeaExt
 			DISTANCE_BETWEEN_FIXED_AND_RANDOM_POINT,	//http://graphics.stanford.edu/courses/cs468-08-fall/pdf/osada.pdf --> 4.1 D1
 			DISTANCE_BETWEEN_TWO_RANDOM_POINTS,			//http://graphics.stanford.edu/courses/cs468-08-fall/pdf/osada.pdf --> 4.1 D2
 			SQRT_OF_AREA_OF_THREE_RANDOM_POINTS,		//http://graphics.stanford.edu/courses/cs468-08-fall/pdf/osada.pdf --> 4.1 D3
-			CUBE_ROOT_OF_VOLUME_OF_FOUR_RANDOM_POINTS,	//http://graphics.stanford.edu/courses/cs468-08-fall/pdf/osada.pdf --> 4.1 D4
+			CBRT_OF_VOLUME_OF_FOUR_RANDOM_POINTS,		//http://graphics.stanford.edu/courses/cs468-08-fall/pdf/osada.pdf --> 4.1 D4
 		};
 
 		//http://graphics.stanford.edu/courses/cs468-08-fall/pdf/osada.pdf 4.2, Importance of sampling method
@@ -46,12 +46,15 @@ namespace TAFeaExt
 		//Setters
 		void setShapeDistributionFunction(const ShapeDistributionFunction& shapeDistributionFunction);
 		void setSamplingMethod(const SamplingMethod& samplingMethod);
-		void setSampleCountDecrementRatio(const float& sampleCountDecrementRatio);
+		void setSampleCount(const int& sampleCount);
+		void setNumberOfBins(const int& numberOfBins);
 
 		//Getters
 		ShapeDistributionFunction getShapeDistributionFunction() const;
 		SamplingMethod getSamplingMethod() const;
-		float getSampleCountDecrementRatio() const;
+		int getSampleCount() const;
+		int getNumberOfBins() const;
+
 
 		/**
 		* @brief	Gets the type of the global descriptor extracted from each patch
@@ -156,9 +159,10 @@ namespace TAFeaExt
 	private:
 		ShapeDistributionFunction	m_DistributionFunction;				//< Shape distribution function from which the samples of the histogram will be extracted, see the comments in the enumaration
 		SamplingMethod				m_SamplingMethod;					//< Sampling method, see the comments in the enumaration
-		float						m_fSampleCountDecrementRatio;		//< For all patches, default number of samples is PatchSize * (PatchSize - 1) divided by 2. This ratio decrements this sample count for efficiency reasons																	//< Since number of samples dependson the patch size, the counts in histogram bins must be normalized with the sample size making it a probability density function.
-
-		const static int			m_nNumberOfBins = 64;				//< Number of bins for all histograms for all patches
+		double						m_lfMaxPossibleSample;				//< Possible maximum value of the sample among the mesh
+		double						m_lfMinPossibleSample;				//< Possible minimum value of the sample among the mesh
+		int							m_nNumberOfBins;					//< Number of bins in a patch histogram
+		int							m_nSampleCount;						//< Number of samples for a patch histogram
 	};
 }
 

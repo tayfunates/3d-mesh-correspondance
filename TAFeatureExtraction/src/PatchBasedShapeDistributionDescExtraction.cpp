@@ -18,14 +18,20 @@ namespace TAFeaExt
 	{
 		this->m_DistributionFunction = DISTANCE_BETWEEN_TWO_RANDOM_POINTS;
 		this->m_SamplingMethod = BIASED_VERTEX_SAMPLING;
-		this->m_fSampleCountDecrementRatio = 1.0f;
+		this->m_lfMaxPossibleSample = 1.0;
+		this->m_lfMinPossibleSample = 0.0;
+		this->m_nNumberOfBins = 8;
+		this->m_nSampleCount = 256;
 	}
 
 	PatchBasedShapeDistributionDescExtraction::PatchBasedShapeDistributionDescExtraction(const PatchBasedShapeDistributionDescExtraction& other)
 	{
 		this->m_DistributionFunction = other.m_DistributionFunction;
 		this->m_SamplingMethod = other.m_SamplingMethod;
-		this->m_fSampleCountDecrementRatio = other.m_fSampleCountDecrementRatio;
+		this->m_lfMaxPossibleSample = other.m_lfMaxPossibleSample;
+		this->m_lfMinPossibleSample = other.m_lfMaxPossibleSample;
+		this->m_nNumberOfBins = other.m_nNumberOfBins;
+		this->m_nSampleCount = other.m_nSampleCount;
 	}
 
 	void PatchBasedShapeDistributionDescExtraction::setShapeDistributionFunction(const ShapeDistributionFunction& shapeDistributionFunction)
@@ -50,14 +56,24 @@ namespace TAFeaExt
 		return this->m_SamplingMethod;
 	}
 
-	void PatchBasedShapeDistributionDescExtraction::setSampleCountDecrementRatio(const float& sampleCountDecrementRatio)
+	void PatchBasedShapeDistributionDescExtraction::setSampleCount(const int& sampleCount)
 	{
-		this->m_fSampleCountDecrementRatio = sampleCountDecrementRatio;
+		this->m_nSampleCount = sampleCount;
 	}
 
-	float PatchBasedShapeDistributionDescExtraction::getSampleCountDecrementRatio() const
+	int PatchBasedShapeDistributionDescExtraction::getSampleCount() const
 	{
-		return this->m_fSampleCountDecrementRatio;
+		return this->m_nSampleCount;
+	}
+
+	void PatchBasedShapeDistributionDescExtraction::setNumberOfBins(const int& numberOfBins)
+	{
+		this->m_nNumberOfBins = numberOfBins;
+	}
+
+	int PatchBasedShapeDistributionDescExtraction::getNumberOfBins() const
+	{
+		return this->m_nNumberOfBins;
 	}
 
 	PatchBasedPerVertexFeatureExtraction::TypeOfGlobalDescriptor PatchBasedShapeDistributionDescExtraction::getGlobalDescriptorType() const
@@ -70,8 +86,28 @@ namespace TAFeaExt
 		TACORE_CHECK_ARGS(triMesh != NULL);
 		TACORE_CHECK_ARGS(listOfPatchLists.size() > 0);
 
+		const double M_PI = 3.14159265;
+
 		const size_t verSize = triMesh->verts.size();
 		outFeatures = std::vector<LocalFeaturePtr>(verSize);
+
+		if (this->m_DistributionFunction == DISTANCE_BETWEEN_FIXED_AND_RANDOM_POINT ||
+			this->m_DistributionFunction == DISTANCE_BETWEEN_TWO_RANDOM_POINTS)
+		{
+			this->m_lfMaxPossibleSample = triMesh->calcMaxEucDistanceBetweenTwoVertices();
+		}
+		else if (this->m_DistributionFunction == ANGLE_BETWEEN_THREE_RANDOM_POINTS)
+		{
+			this->m_lfMaxPossibleSample = M_PI;
+		}
+		else if (this->m_DistributionFunction == SQRT_OF_AREA_OF_THREE_RANDOM_POINTS)
+		{
+			this->m_lfMaxPossibleSample = sqrt(triMesh->calcMaxAreaBetweenThreeVertices());
+		}
+		else if (this->m_DistributionFunction == CBRT_OF_VOLUME_OF_FOUR_RANDOM_POINTS)
+		{
+			this->m_lfMaxPossibleSample = cbrt(triMesh->calcMaxVolumeOfTetrahedronBetweenFourVertices());
+		}
 
 		for (size_t v = 0; v < verSize; v++)
 		{
@@ -104,28 +140,21 @@ namespace TAFeaExt
 		{
 			const SinglePatch& aPatch = patchesVertexIds[patchIdx];
 
-			//Number of samples depends on the patch size
-			//This will be different for different patchs and for different meshes
-			const int sampleCount = int(float(aPatch.size() * (aPatch.size() - 1)) * 0.5f * this->m_fSampleCountDecrementRatio);
-
 			//create all samples
 			srand(time(NULL));
 			std::vector<double> samples;
-			createSamplesFromPatch(triMesh, aPatch, sampleCount, samples);
-
-			const double minSample = *(std::min_element(samples.begin(), samples.end()));
-			const double maxSample = *(std::max_element(samples.begin(), samples.end()));
+			createSamplesFromPatch(triMesh, aPatch, this->m_nSampleCount, samples);
 
 			//Fill the histogram corresponding to the patch
 			std::vector<double>& patchHistogram = pDesc->m_vDescriptor[patchIdx];
 
 			//Calculate the bin size
-			const double binSize = (maxSample - minSample) / this->m_nNumberOfBins;
+			const double binSize = (this->m_lfMaxPossibleSample - this->m_lfMinPossibleSample) / this->m_nNumberOfBins;
 
 			//for each sample find the corresponding bin and update the histogram
 			for (size_t sampleIdx = 0; sampleIdx < samples.size(); sampleIdx++)
 			{
-				int binIndex = int((samples[sampleIdx] - minSample) / binSize);
+				int binIndex = int((samples[sampleIdx] - this->m_lfMinPossibleSample) / binSize);
 				if (binIndex >= this->m_nNumberOfBins) binIndex = this->m_nNumberOfBins - 1;
 				else if (binIndex < 0) binIndex = 0;
 
@@ -146,16 +175,6 @@ namespace TAFeaExt
 		{
 			samples[i] = createSample(triMesh, patch);
 		}
-
-		if (this->m_DistributionFunction == DISTANCE_BETWEEN_FIXED_AND_RANDOM_POINT ||
-			this->m_DistributionFunction == DISTANCE_BETWEEN_TWO_RANDOM_POINTS ||
-			this->m_DistributionFunction == SQRT_OF_AREA_OF_THREE_RANDOM_POINTS ||
-			this->m_DistributionFunction == CUBE_ROOT_OF_VOLUME_OF_FOUR_RANDOM_POINTS)
-		{
-			//Normalization
-			const double maxSample = *(std::max_element(samples.begin(), samples.end()));
-			samples = samples / maxSample;
-		}
 	}
 
 	double PatchBasedShapeDistributionDescExtraction::createSample(TriangularMesh* triMesh, const SinglePatch& patch) const
@@ -175,7 +194,7 @@ namespace TAFeaExt
 		while (randomVertices.size() < numberOfRandomPoints)
 		{
 			int randomVertexId = rand() % patch.size();
-			randomVertices.insert(triMesh->verts[randomVertexId]);
+			randomVertices.insert(triMesh->verts[patch[randomVertexId]]);
 		}
 
 		std::unordered_set<Vertex*>::iterator ptItr = randomVertices.begin();
@@ -187,12 +206,12 @@ namespace TAFeaExt
 			Vector3D pt2((*ptItr)->coords[0], (*ptItr)->coords[1], (*ptItr)->coords[2]); ptItr++;
 			Vector3D pt3((*ptItr)->coords[0], (*ptItr)->coords[1], (*ptItr)->coords[2]);
 
-			ret = calcAngleBetweenThreePoints(pt1, pt2, pt2);
+			ret = calcAngleBetweenThreePoints(pt1, pt2, pt3);
 		}
 		else if (this->m_DistributionFunction == DISTANCE_BETWEEN_FIXED_AND_RANDOM_POINT)
 		{
 			//The index of a fixed point is always 0
-			Vector3D pt1(triMesh->verts[0]->coords[0], triMesh->verts[0]->coords[1], triMesh->verts[0]->coords[2]);
+			Vector3D pt1(triMesh->verts[patch[0]]->coords[0], triMesh->verts[patch[0]]->coords[1], triMesh->verts[patch[0]]->coords[2]);
 			Vector3D pt2((*ptItr)->coords[0], (*ptItr)->coords[1], (*ptItr)->coords[2]);
 
 			ret = calcDistanceBetweenTwoPoints(pt1, pt2);
@@ -212,7 +231,7 @@ namespace TAFeaExt
 
 			ret = sqrt(calcAreaInsideThreePoints(pt1, pt2, pt3));
 		}
-		else if (this->m_DistributionFunction == CUBE_ROOT_OF_VOLUME_OF_FOUR_RANDOM_POINTS)
+		else if (this->m_DistributionFunction == CBRT_OF_VOLUME_OF_FOUR_RANDOM_POINTS)
 		{
 			Vector3D pt1((*ptItr)->coords[0], (*ptItr)->coords[1], (*ptItr)->coords[2]); ptItr++;
 			Vector3D pt2((*ptItr)->coords[0], (*ptItr)->coords[1], (*ptItr)->coords[2]); ptItr++;
@@ -240,7 +259,7 @@ namespace TAFeaExt
 			case DISTANCE_BETWEEN_FIXED_AND_RANDOM_POINT: ret = 1; break;
 			case DISTANCE_BETWEEN_TWO_RANDOM_POINTS: ret = 2; break;
 			case SQRT_OF_AREA_OF_THREE_RANDOM_POINTS: ret = 3; break;
-			case CUBE_ROOT_OF_VOLUME_OF_FOUR_RANDOM_POINTS: ret = 4; break;
+			case CBRT_OF_VOLUME_OF_FOUR_RANDOM_POINTS: ret = 4; break;
 		}
 
 		return ret;
