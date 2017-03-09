@@ -126,6 +126,7 @@
     <ClInclude Include="..\..\..\include\PatchBasedShapeDistributionHistogram.h" />
     <ClInclude Include="..\..\..\include\PatchBasedSumOfCenterDistances.h" />
     <ClInclude Include="..\..\..\include\TAFeature.h" />
+    <ClInclude Include="..\..\..\include\TAFeatureFileIO.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\AvgGeodesicDistance.cpp" />
@@ -134,6 +135,7 @@
     <ClCompile Include="..\..\..\src\IntrinsicWaveDesc.cpp" />
     <ClCompile Include="..\..\..\src\PatchBasedShapeDistributionHistogram.cpp" />
     <ClCompile Include="..\..\..\src\PatchBasedSumOfCenterDistances.cpp" />
+    <ClCompile Include="..\..\..\src\TAFeatureFileIO.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
