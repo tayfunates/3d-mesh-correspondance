@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PCLShapeProvider", "..\..\.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OIShapeProvider", "..\..\..\TAShape\build\vs2013\OIShapeProvider\OIShapeProvider.vcxproj", "{3B175427-BBFD-40B4-92F0-4B7752F3797F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MultiParameterPerVertexDescriptorRun", "MultiParameterPerVertexDescriptorRun\MultiParameterPerVertexDescriptorRun.vcxproj", "{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -103,6 +105,14 @@ Global
 		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Release|Win32.Build.0 = Release|Win32
 		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Release|x64.ActiveCfg = Release|x64
 		{3B175427-BBFD-40B4-92F0-4B7752F3797F}.Release|x64.Build.0 = Release|x64
+		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Debug|ARM.ActiveCfg = Debug|Win32
+		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Debug|Win32.Build.0 = Debug|Win32
+		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Debug|x64.ActiveCfg = Debug|Win32
+		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Release|ARM.ActiveCfg = Release|Win32
+		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Release|Win32.ActiveCfg = Release|Win32
+		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Release|Win32.Build.0 = Release|Win32
+		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
