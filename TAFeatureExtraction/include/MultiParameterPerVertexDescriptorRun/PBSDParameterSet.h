@@ -32,7 +32,7 @@ public:
 	//Ostream operator
 	friend std::ostream& operator<<(std::ostream& o, const PBSDParameterSet& paramSet);
 
-	std::string getName(const std::string& meshName) const;
+	std::string getName(const std::string& meshName, const size_t& parameterSetId) const;
 
 	static std::vector<PBSDParameterSet> createPermutations(const PBSDParameterSet& minValues, const PBSDParameterSet& maxValues, const PBSDParameterSet& incrementValues);
 };

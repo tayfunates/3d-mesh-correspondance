@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 			patchBasedExtractor.extract(&triMesh, feas);
 
 			//Get the name of permutation. This will be used as the base names for the output files
-			const std::string permutationName = permutation.getName(TACore::PathUtil::getFileNameFromPath(inputMeshFile));
+			const std::string permutationName = permutation.getName(TACore::PathUtil::getFileNameFromPath(inputMeshFile), permId);
 
 			//Write the binary file of features
 			const std::string featureFilePath = TACore::PathUtil::joinPath(outFolder, TACore::PathUtil::addExtension(permutationName, "fea"));

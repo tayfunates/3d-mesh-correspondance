@@ -1,5 +1,6 @@
 #include "MultiParameterPerVertexDescriptorRun/PBSDParameterSet.h"
 #include <core/StringUtil.h>
+#include <iomanip>
 
 PBSDParameterSet::PBSDParameterSet()
 {
@@ -56,9 +57,12 @@ std::vector<PBSDParameterSet> PBSDParameterSet::createPermutations(const PBSDPar
 	return result;
 }
 
-std::string PBSDParameterSet::getName(const std::string& meshName) const
+std::string PBSDParameterSet::getName(const std::string& meshName, const size_t& parameterSetId) const
 {
-	const std::string name = meshName +
+	std::stringstream ss;
+	ss << std::setfill('0') << std::setw(10) << parameterSetId;
+	const std::string name = meshName + "_" +
+		ss.str() + "_" +
 		"_MinGD_" + TACore::StringUtil::str(this->m_fMinGeodesicDistance) +
 		"_MaxGD_" + TACore::StringUtil::str(this->m_fMaxGeodesicDistance) +
 		"_NOP_" + TACore::StringUtil::str(this->m_nNumberOfPatches) +
