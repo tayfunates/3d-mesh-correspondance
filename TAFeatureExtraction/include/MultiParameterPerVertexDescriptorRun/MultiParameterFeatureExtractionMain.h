@@ -29,7 +29,9 @@ public:
 	*
 	* @param	argc Number of command line arguments
 	* @param	argv List of command line arguments
-	* @return	TACORE_OK if everything goes fine
+	* @return	MPFER_OK if everything goes fine
+	* @return	MPFER_COMMAND_LINE_PARSE_ERROR if command line cannot be parsed correctly
+	* @return	MPFER_MESH_LOAD_ERROR if mesh cannot be loaded correctly
 	*/
 	static Result run(int argc, char* argv[]);
 };
