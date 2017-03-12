@@ -21,9 +21,15 @@
     <ClCompile Include="..\..\..\src\MultiParameterPerVertexDescriptorRun\PBSDParameterSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\MultiParameterPerVertexDescriptorRun\MultiParameterFeatureExtractionMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\MultiParameterPerVertexDescriptorRun\PBSDParameterSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\MultiParameterPerVertexDescriptorRun\MultiParameterFeatureExtractionMain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

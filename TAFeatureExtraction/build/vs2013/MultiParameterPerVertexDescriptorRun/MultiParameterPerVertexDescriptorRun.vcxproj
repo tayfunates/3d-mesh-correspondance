@@ -122,9 +122,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\MultiParameterPerVertexDescriptorRun\main.cpp" />
+    <ClCompile Include="..\..\..\src\MultiParameterPerVertexDescriptorRun\MultiParameterFeatureExtractionMain.cpp" />
     <ClCompile Include="..\..\..\src\MultiParameterPerVertexDescriptorRun\PBSDParameterSet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\MultiParameterPerVertexDescriptorRun\MultiParameterFeatureExtractionMain.h" />
     <ClInclude Include="..\..\..\include\MultiParameterPerVertexDescriptorRun\PBSDParameterSet.h" />
   </ItemGroup>
   <ItemGroup>
