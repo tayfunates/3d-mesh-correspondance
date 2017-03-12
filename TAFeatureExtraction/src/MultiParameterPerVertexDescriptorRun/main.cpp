@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <MultiParameterPerVertexDescriptorRun/MultiParameterFeatureExtractionMain.h>
+#include <MultiParameterPerVertexDescriptorRun/MultiParameterFeatureComparisonMain.h>
 
 int mainRet(int ret, std::string message)
 {
@@ -39,7 +40,22 @@ int main(int argc, char* argv[])
 
 	else if (mainMode == 1)
 	{
-
+		MultiParameterFeatureComparisonMain::Result res = MultiParameterFeatureComparisonMain::run(argc, argv);
+		if (res == MultiParameterFeatureComparisonMain::MPFCR_COMMAND_LINE_PARSE_ERROR)
+		{
+			runResultMessage = "Command Line Cannot Be Parsed Correctly";
+			runResultCode = -1;
+		}
+		else if (res == MultiParameterFeatureComparisonMain::MPFCR_MESH_LOAD_ERROR)
+		{
+			runResultMessage = "Mesh Cannot Be Loaded Correctly";
+			runResultCode = -1;
+		}
+		else if (res == MultiParameterFeatureComparisonMain::MPFCR_FILE_ERROR)
+		{
+			runResultMessage = "Output File Cannot Be Created Correctly";
+			runResultCode = -1;
+		}
 	}
 
 	return mainRet(runResultCode, runResultMessage);
