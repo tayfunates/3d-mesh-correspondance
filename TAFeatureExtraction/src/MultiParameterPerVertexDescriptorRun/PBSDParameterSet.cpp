@@ -62,7 +62,7 @@ std::string PBSDParameterSet::getName(const std::string& meshName, const size_t&
 	std::stringstream ss;
 	ss << std::setfill('0') << std::setw(10) << parameterSetId;
 	const std::string name = meshName + "_" +
-		ss.str() + "_" +
+		ss.str() +
 		"_MinGD_" + TACore::StringUtil::str(this->m_fMinGeodesicDistance) +
 		"_MaxGD_" + TACore::StringUtil::str(this->m_fMaxGeodesicDistance) +
 		"_NOP_" + TACore::StringUtil::str(this->m_nNumberOfPatches) +
