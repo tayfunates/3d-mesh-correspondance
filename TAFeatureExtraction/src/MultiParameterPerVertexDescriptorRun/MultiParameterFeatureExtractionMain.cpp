@@ -18,7 +18,7 @@ MultiParameterFeatureExtractionMain::Result MultiParameterFeatureExtractionMain:
 	Result res = MPFER_OK;
 
 	// Parse args
-	TACore::ArgParser parser("MultiParameterPerVertexDescriptionRun", "Runs feature extraction tool for a specified feature for a set of parametes");
+	TACore::ArgParser parser("MultiParameterFeatureExtractionMain::Run", "Runs feature extraction tool for a specified feature for a set of parametes");
 	parser.addArg("input-mesh", "", true, 1, "", "Input shape file to be loaded");
 	parser.addArg("desc-type", "", true, 1, "", "Type of the descriptor extracted");
 	parser.addArg("ref-vertex", "", false, 1, "", "Reference vertex which is compared to other vertices"); //If this is given, a color ply file is also created as output
