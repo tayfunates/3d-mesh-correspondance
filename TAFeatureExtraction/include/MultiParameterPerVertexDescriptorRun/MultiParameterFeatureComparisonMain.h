@@ -68,6 +68,22 @@ private:
 	static std::map<int, std::vector<double> > createPermutationIdToMagnitudesMapForPBSD(const std::vector<std::string>& featureFilePaths, const int& refVertex);
 
 	/**
+	* @brief	Read feature file names and create permutation id to parameter names and values map
+	*			Permutation id must be in the first location of the split of the file name
+	*			Split is done according to "_" character
+	*			Example file name is given below:
+	*				0000000064_MinGD_20_MaxGD_50_NOP_10_NOB_24_SC_128_SM_1_SDF_1.fea
+	*			For the example above, 64 is the permutation id, so it is a key in the map
+	*			The values of that key is the vector of pairs 
+	*			Pairs contain the parameter name, such as MinGD
+	*			and the parameter value, such as 20
+	*
+	* @param	featureFilePaths List of feature file paths
+	* @return	Permutation id to parameter name-value pair lists
+	*/
+	static std::map<int, std::vector< std::pair< std::string, double > > > createPermutationIdToParameterValuesMap(const std::vector<std::string>& featureFilePaths);
+
+	/**
 	* @brief	Extracts average geodesic distances and creates magnitude vector according to a reference vertex
 	*			Magnitudes are normalized (0 to 1) so that they can be compared with others
 	*			Magnitudes represent the distances of all vertices to the reference vertex
@@ -79,7 +95,10 @@ private:
 	static std::vector<double> createAGDMagnitudes(TAShape::TriangularMesh* triMesh, const int& refVertex);
 
 	//TO DO: Comment when completed
-	static Result generateComparisonResult(const std::vector<double>& referenceMagnitudes, const std::map<int, std::vector<double> >& permutationIdToSourceMagnitudesMap, const std::string& outFileName);
+	static Result generateComparisonResult(const std::vector<double>& referenceMagnitudes,
+											const std::map<int, std::vector<double> >& permutationIdToSourceMagnitudesMap, 
+											const std::map<int, std::vector< std::pair< std::string, double > > >& permutationIdToParametersMap, 
+											const std::string& outFileName);
 };
 
 #endif

@@ -68,8 +68,12 @@ MultiParameterFeatureComparisonMain::Result MultiParameterFeatureComparisonMain:
 				extractAGDReference = true;
 			}
 
+			//Create the permutation id to source parameters map
+			std::map<int, std::vector< std::pair< std::string, double > > > srcPermutationParameters = createPermutationIdToParameterValuesMap(featureFilePaths);
+
 			//Comparison values of the source features from all permutation of parameters
 			std::map<int, std::vector<double> > srcPermutationMagnitudes;
+			
 			if (readPBSDSourcePermutations == true)
 			{
 				srcPermutationMagnitudes = createPermutationIdToMagnitudesMapForPBSD(featureFilePaths, refVertex);
@@ -81,7 +85,7 @@ MultiParameterFeatureComparisonMain::Result MultiParameterFeatureComparisonMain:
 				refMagnitudes = createAGDMagnitudes(&triMesh, refVertex);
 			}
 
-			res = generateComparisonResult(refMagnitudes, srcPermutationMagnitudes, outReportPath);
+			res = generateComparisonResult(refMagnitudes, srcPermutationMagnitudes, srcPermutationParameters, outReportPath);
 		}
 	}
 	return res;
@@ -102,7 +106,7 @@ std::map<int, std::vector<double> > MultiParameterFeatureComparisonMain::createP
 		}
 
 		const std::string filePath = featureFilePaths[i];
-		const std::string fileName = TACore::PathUtil::getFileNameFromPath(filePath);
+		const std::string fileName = TACore::PathUtil::stripExtension(TACore::PathUtil::getFileNameFromPath(filePath));
 
 		std::vector<std::string> splitValues = TACore::StringUtil::split(fileName, '_');
 
@@ -164,7 +168,10 @@ std::vector<double> MultiParameterFeatureComparisonMain::createAGDMagnitudes(TAS
 	return magnitudes;
 }
 
-MultiParameterFeatureComparisonMain::Result MultiParameterFeatureComparisonMain::generateComparisonResult(const std::vector<double>& referenceMagnitudes, const std::map<int, std::vector<double> >& permutationIdToSourceMagnitudesMap, const std::string& outFileName)
+MultiParameterFeatureComparisonMain::Result MultiParameterFeatureComparisonMain::generateComparisonResult(const std::vector<double>& referenceMagnitudes, 
+																											const std::map<int, std::vector<double> >& permutationIdToSourceMagnitudesMap, 
+																											const std::map<int, std::vector< std::pair< std::string, double > > >& permutationIdToParametersMap, 
+																											const std::string& outFileName)
 {
 	Result res = MPFCR_OK;
 
@@ -182,7 +189,13 @@ MultiParameterFeatureComparisonMain::Result MultiParameterFeatureComparisonMain:
 		std::map<double, int>::const_iterator scitr = scoreMap.begin();
 		for (; scitr != scoreMap.end(); scitr++)
 		{
-			out << scitr->first << " --> " << scitr->second << std::endl;
+			const std::vector< std::pair< std::string, double > >& paramVals = permutationIdToParametersMap.find(scitr->second)->second;
+			out << scitr->first << " --> " << scitr->second << " - ";
+			for (size_t i = 0; i < paramVals.size(); i++)
+			{
+				out << paramVals[i].first << "=" << paramVals[i].second << ", ";
+			}
+			out << std::endl;
 		}
 
 		std::cout << "Report Generation is Completed..." << std::endl;
@@ -194,4 +207,28 @@ MultiParameterFeatureComparisonMain::Result MultiParameterFeatureComparisonMain:
 		res = MPFCR_FILE_ERROR;
 	}
 	return res;
+}
+
+std::map<int, std::vector< std::pair< std::string, double > > > MultiParameterFeatureComparisonMain::createPermutationIdToParameterValuesMap(const std::vector<std::string>& featureFilePaths)
+{
+	std::map<int, std::vector< std::pair< std::string, double > > > resultMap;
+	for (size_t i = 0; i < featureFilePaths.size(); i++)
+	{
+		const std::string filePath = featureFilePaths[i];
+		const std::string fileName = TACore::PathUtil::stripExtension(TACore::PathUtil::getFileNameFromPath(filePath));
+
+		std::vector<std::string> splitValues = TACore::StringUtil::split(fileName, '_');
+
+		const int permutationId = TACore::StringUtil::strToVal<int>(splitValues[0]); //permutationId must be in the 0th index.
+
+		resultMap[permutationId] = std::vector < std::pair< std::string, double > >() ;
+
+		//Starting from 1, read the parameter names and values
+		for (size_t p = 1; p < splitValues.size(); p += 2)
+		{
+			resultMap[permutationId].push_back(std::make_pair(splitValues[p], TACore::StringUtil::strToVal<double>(splitValues[p + 1])));
+		}
+	}
+
+	return resultMap;
 }
