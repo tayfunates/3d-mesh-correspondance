@@ -92,6 +92,15 @@ std::map<int, std::vector<double> > MultiParameterFeatureComparisonMain::createP
 	std::map<int, std::vector<double> > resultMap;
 	for (size_t i = 0; i < featureFilePaths.size(); i++)
 	{
+		if (i < featureFilePaths.size() - 1)
+		{
+			std::cout << "%" << (100 * i) / featureFilePaths.size() << " completed for parsing the feature files" << "\r";
+		}
+		else
+		{
+			std::cout << "%" << 100 << " completed for parsing the feature files" << "\n";
+		}
+
 		const std::string filePath = featureFilePaths[i];
 		const std::string fileName = TACore::PathUtil::getFileNameFromPath(filePath);
 
