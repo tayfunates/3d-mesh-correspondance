@@ -1,5 +1,6 @@
 #include "core/TAMatrix.h"
 #include <cstring>
+#include <fstream>
 
 namespace TACore
 {
@@ -100,6 +101,64 @@ namespace TACore
 	int TAMatrix<T>::cols() const
 	{
 		return m_nCols;
+	}
+
+	template <class T>
+	bool TAMatrix<T>::saveBinary(const std::string& filePath)
+	{
+		bool res = true;
+		std::ofstream out(filePath, std::ios::out | std::ios::binary);
+		if (out.is_open())
+		{
+			out.write((char*)&(m_nRows), sizeof(m_nRows));
+			out.write((char*)&(m_nCols), sizeof(m_nCols));
+
+			for (int i = 0; i < m_nRows; i++)
+			{
+				for (int j = 0; j < m_nCols; j++)
+				{
+					out.write((char*)&(m_ppMatrix[i][j]), sizeof(T));
+				}
+			}
+
+			out.close();
+		}
+		else
+		{
+			res = false;
+		}
+		return res;
+	}
+
+	template <class T>
+	bool TAMatrix<T>::loadBinary(const std::string& filePath)
+	{
+		bool res = true;
+		std::ifstream inp(filePath, std::ios::in | std::ios::binary);
+		if (inp.is_open())
+		{
+			clear();
+			int rows, cols;
+			inp.read((char*)(&rows), sizeof(rows));
+			inp.read((char*)(&cols), sizeof(cols));
+
+			init(rows, cols);
+
+			for (int i = 0; i < m_nRows; i++)
+			{
+				for (int j = 0; j < m_nCols; j++)
+				{
+					inp.read((char*)&(m_ppMatrix[i][j]), sizeof(T));
+				}
+			}
+
+			inp.close();
+		}
+		else
+		{
+			res = false;
+		}
+		return res;
 	}
 
 	template class TAMatrix<float>;

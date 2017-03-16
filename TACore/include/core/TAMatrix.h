@@ -27,6 +27,9 @@ namespace TACore
 
 		void print(std::ostream& o) const;
 
+		bool saveBinary(const std::string& filePath);
+		bool loadBinary(const std::string& filePath);
+
 	private:
 		T**		m_ppMatrix;
 		int		m_nRows;
