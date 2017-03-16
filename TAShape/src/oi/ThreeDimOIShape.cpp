@@ -160,7 +160,7 @@ namespace TAShape
 			}
 			avgEdgeLength /= minSizeCheck;
 
-			float specialVertexRadius = avgEdgeLength * 1.5f;
+			float specialVertexRadius = avgEdgeLength;
 
 			SoSeparator *specialVertexSeparator = OIPainter::getVertexSphereSep(this->m_p3DShape->verts[pSpecialVertexId],
 																				specialVertexRadius,
