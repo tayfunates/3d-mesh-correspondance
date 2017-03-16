@@ -48,12 +48,14 @@ namespace TAFeaExt
 		void setSamplingMethod(const SamplingMethod& samplingMethod);
 		void setSampleCount(const int& sampleCount);
 		void setNumberOfBins(const int& numberOfBins);
+		void setMaxPossibleSampleValue(const double& maxPossibleVal);
 
 		//Getters
 		ShapeDistributionFunction getShapeDistributionFunction() const;
 		SamplingMethod getSamplingMethod() const;
 		int getSampleCount() const;
 		int getNumberOfBins() const;
+		double getMaxPossibleSampleValue() const;
 
 
 		/**

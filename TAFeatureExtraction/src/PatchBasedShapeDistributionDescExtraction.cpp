@@ -18,8 +18,13 @@ namespace TAFeaExt
 	{
 		this->m_DistributionFunction = DISTANCE_BETWEEN_TWO_RANDOM_POINTS;
 		this->m_SamplingMethod = BIASED_VERTEX_SAMPLING;
-		this->m_lfMaxPossibleSample = 1.0;
+
+		//Use negative value to check whether it is set or not. If set before do not calculate it because of efficiency
+		this->m_lfMaxPossibleSample = -1.0;
+
+		//Min value is always 0 currently. No set function is available for it
 		this->m_lfMinPossibleSample = 0.0;
+
 		this->m_nNumberOfBins = 8;
 		this->m_nSampleCount = 256;
 	}
@@ -76,6 +81,16 @@ namespace TAFeaExt
 		return this->m_nNumberOfBins;
 	}
 
+	void PatchBasedShapeDistributionDescExtraction::setMaxPossibleSampleValue(const double& maxPossibleVal)
+	{
+		this->m_lfMaxPossibleSample = maxPossibleVal;
+	}
+
+	double PatchBasedShapeDistributionDescExtraction::getMaxPossibleSampleValue() const
+	{
+		return this->m_lfMaxPossibleSample;
+	}
+
 	PatchBasedPerVertexFeatureExtraction::TypeOfGlobalDescriptor PatchBasedShapeDistributionDescExtraction::getGlobalDescriptorType() const
 	{
 		return PatchBasedPerVertexFeatureExtraction::SHAPE_DISTRIBUTION_HISTOGRAM;
@@ -91,22 +106,28 @@ namespace TAFeaExt
 		const size_t verSize = triMesh->verts.size();
 		outFeatures = std::vector<LocalFeaturePtr>(verSize);
 
-		if (this->m_DistributionFunction == DISTANCE_BETWEEN_FIXED_AND_RANDOM_POINT ||
-			this->m_DistributionFunction == DISTANCE_BETWEEN_TWO_RANDOM_POINTS)
-		{
-			this->m_lfMaxPossibleSample = triMesh->calcMaxEucDistanceBetweenTwoVertices();
-		}
-		else if (this->m_DistributionFunction == ANGLE_BETWEEN_THREE_RANDOM_POINTS)
+		//if angle is the case, setting or not setting does not affect the value of max val
+		if (this->m_DistributionFunction == ANGLE_BETWEEN_THREE_RANDOM_POINTS)
 		{
 			this->m_lfMaxPossibleSample = M_PI;
 		}
-		else if (this->m_DistributionFunction == SQRT_OF_AREA_OF_THREE_RANDOM_POINTS)
+
+		//Check whether it is set or not. If not set its value will be -1.0
+		if (this->m_lfMaxPossibleSample < 0.0f)
 		{
-			this->m_lfMaxPossibleSample = sqrt(triMesh->calcMaxAreaBetweenThreeVertices());
-		}
-		else if (this->m_DistributionFunction == CBRT_OF_VOLUME_OF_FOUR_RANDOM_POINTS)
-		{
-			this->m_lfMaxPossibleSample = cbrt(triMesh->calcMaxVolumeOfTetrahedronBetweenFourVertices());
+			if (this->m_DistributionFunction == DISTANCE_BETWEEN_FIXED_AND_RANDOM_POINT ||
+				this->m_DistributionFunction == DISTANCE_BETWEEN_TWO_RANDOM_POINTS)
+			{
+				this->m_lfMaxPossibleSample = triMesh->calcMaxEucDistanceBetweenTwoVertices();
+			}
+			else if (this->m_DistributionFunction == SQRT_OF_AREA_OF_THREE_RANDOM_POINTS)
+			{
+				this->m_lfMaxPossibleSample = sqrt(triMesh->calcMaxAreaBetweenThreeVertices());
+			}
+			else if (this->m_DistributionFunction == CBRT_OF_VOLUME_OF_FOUR_RANDOM_POINTS)
+			{
+				this->m_lfMaxPossibleSample = cbrt(triMesh->calcMaxVolumeOfTetrahedronBetweenFourVertices());
+			}
 		}
 
 		for (size_t v = 0; v < verSize; v++)
