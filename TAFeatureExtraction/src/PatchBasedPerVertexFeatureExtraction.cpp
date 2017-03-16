@@ -11,12 +11,18 @@ namespace TAFeaExt
 
 	PatchBasedPerVertexFeatureExtraction::PatchBasedPerVertexFeatureExtraction()
 	{
-
+		m_fMinGeodesicRadius = 0.0f;
+		m_fMaxGeodesicRadius = 0.0f;
+		m_nNumberOfPatches = 0;
+		m_pGeodeticDistanceMatrix = NULL;
 	}
 
 	PatchBasedPerVertexFeatureExtraction::PatchBasedPerVertexFeatureExtraction(const PatchBasedPerVertexFeatureExtraction& other)
 	{
-
+		m_fMinGeodesicRadius = other.m_fMinGeodesicRadius;
+		m_fMaxGeodesicRadius = other.m_fMaxGeodesicRadius;
+		m_nNumberOfPatches = other.m_nNumberOfPatches;
+		m_pGeodeticDistanceMatrix = other.m_pGeodeticDistanceMatrix;
 	}
 
 	Result PatchBasedPerVertexFeatureExtraction::extract(PolygonMesh *mesh, std::vector<LocalFeaturePtr>& outFeatures)
@@ -34,12 +40,16 @@ namespace TAFeaExt
 		GeodesicDistanceMatrixExtraction geoDistMatrixExtraction;
 		geoDistMatrixExtraction.setGeodesicDistanceType(GeodesicDistanceMatrix::ON_EDGE_GEODESIC);
 
-		GlobalFeaturePtr globalFeaPtr;
-		result = geoDistMatrixExtraction.extract(mesh, globalFeaPtr);
-		GeodesicDistanceMatrix *geoDistMatPtr = (GeodesicDistanceMatrix*)(globalFeaPtr.get());
+		//If geodesic distance matrix is not set, calculate it
+		GlobalFeaturePtr globalFeaPtr; //Let it live if calculate the matrix
+		if (this->m_pGeodeticDistanceMatrix == NULL)
+		{	
+			result = geoDistMatrixExtraction.extract(mesh, globalFeaPtr);
+			m_pGeodeticDistanceMatrix = (GeodesicDistanceMatrix*)(globalFeaPtr.get());
+		}
 
 		std::vector<PatchList> patchesForAll;
-		result = createPatches(triMesh, geoDistMatPtr->m_GeoMatrix, this->m_fMinGeodesicRadius, this->m_fMaxGeodesicRadius, this->m_nNumberOfPatches, patchesForAll);
+		result = createPatches(triMesh, m_pGeodeticDistanceMatrix->m_GeoMatrix, this->m_fMinGeodesicRadius, this->m_fMaxGeodesicRadius, this->m_nNumberOfPatches, patchesForAll);
 
 		if (result == TACore::TACORE_OK)
 		{
@@ -181,5 +191,10 @@ namespace TAFeaExt
 	int PatchBasedPerVertexFeatureExtraction::getNumberOfPatches() const
 	{
 		return this->m_nNumberOfPatches;
+	}
+
+	void PatchBasedPerVertexFeatureExtraction::setGeodesicDistanceMatrix(TAFea::GeodesicDistanceMatrix* gdMatrix)
+	{
+		this->m_pGeodeticDistanceMatrix = gdMatrix;
 	}
 }

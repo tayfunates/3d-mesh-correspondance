@@ -14,6 +14,11 @@ namespace TACore
 	class TAMatrix;
 }
 
+namespace TAFea
+{
+	class GeodesicDistanceMatrix;
+};
+
 namespace TAFeaExt
 {
 	class PatchBasedPerVertexFeatureExtraction : public PerVertexFeatureExtraction
@@ -46,6 +51,7 @@ namespace TAFeaExt
 		virtual void setMinGeodesicDistance(const float& minGeoDistance);
 		virtual void setMaxGeodesicDistance(const float& maxGeoDistance);
 		virtual void setNumberOfPatches(const int& noOfPatches);
+		virtual void setGeodesicDistanceMatrix(TAFea::GeodesicDistanceMatrix* gdMatrix);
 
 		//Getters
 		virtual float getMinGeodesicDistance() const;
@@ -53,9 +59,10 @@ namespace TAFeaExt
 		virtual int getNumberOfPatches() const;
 
 	private:
-		float m_fMinGeodesicRadius;		//< Minimum value for geodesic distance from which the smallest patch is created
-		float m_fMaxGeodesicRadius;		//< Maximum value for geodesic distance from which the biggest patch is created
-		int m_nNumberOfPatches;			//< Number of patches which will be the size of the output descriptor
+		float m_fMinGeodesicRadius;									//< Minimum value for geodesic distance from which the smallest patch is created
+		float m_fMaxGeodesicRadius;									//< Maximum value for geodesic distance from which the biggest patch is created
+		int m_nNumberOfPatches;										//< Number of patches which will be the size of the output descriptor
+		TAFea::GeodesicDistanceMatrix* m_pGeodeticDistanceMatrix;	//< Geodesic Distance Matrix used in the extraction. De-allocation is the responsibilty of the users of this class (No Getter)		
 
 	protected:
 
