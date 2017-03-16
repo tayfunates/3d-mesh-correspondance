@@ -4,6 +4,8 @@
 #include <core/CommandLineParser.h>
 #include <core/Timer.h>
 #include <core/StdVectorUtil.h>
+#include <core/StringUtil.h>
+#include <core/PathUtil.h>
 
 #include <oi/ThreeDimOIShape.h>
 
@@ -99,7 +101,6 @@ int GlobalDescForLocalPatchesTestShapeDistributionApp(int argc, char* argv[])
 	}
 
 	std::string inputFile = parser.get("input");
-	std::string outputFile = parser.get("output");
 
 	ThreeDimOIShape mesh;
 	if (mesh.load(inputFile.c_str()) != TACORE_OK)
@@ -111,14 +112,18 @@ int GlobalDescForLocalPatchesTestShapeDistributionApp(int argc, char* argv[])
 
 	TAFeaExt::PatchBasedShapeDistributionDescExtraction patchBasedExtractor;
 	patchBasedExtractor.setMinGeodesicDistance(20.f);
-	patchBasedExtractor.setMaxGeodesicDistance(50.0f);
-	patchBasedExtractor.setNumberOfPatches(4);
-	patchBasedExtractor.setSampleCountDecrementRatio(1.0f);
+	patchBasedExtractor.setMaxGeodesicDistance(300);
+	patchBasedExtractor.setNumberOfPatches(30);
+	patchBasedExtractor.setNumberOfBins(8);
+	patchBasedExtractor.setSampleCount(1024);
 	patchBasedExtractor.setSamplingMethod(TAFeaExt::PatchBasedShapeDistributionDescExtraction::BIASED_VERTEX_SAMPLING);
 	patchBasedExtractor.setShapeDistributionFunction(TAFeaExt::PatchBasedShapeDistributionDescExtraction::DISTANCE_BETWEEN_FIXED_AND_RANDOM_POINT);
 
 	std::vector<LocalFeaturePtr> feas;
 	patchBasedExtractor.extract(triMesh, feas);
+
+	const int referenceVertexId = 126;
+	PatchBasedShapeDistributionHistogram* feaV_Src = (PatchBasedShapeDistributionHistogram*)(feas[referenceVertexId].get());
 
 	std::vector<double> magnitudes(feas.size());
 	for (size_t v = 0; v < feas.size(); v++)
@@ -127,9 +132,8 @@ int GlobalDescForLocalPatchesTestShapeDistributionApp(int argc, char* argv[])
 		std::vector<double> vertexPatchMagnitudes(feaVV->m_vDescriptor.size());
 		for (size_t patchIdx = 0; patchIdx < vertexPatchMagnitudes.size(); patchIdx++)
 		{
-			vertexPatchMagnitudes[patchIdx] = StdVecL2Norm(feaVV->m_vDescriptor[patchIdx]);
+			vertexPatchMagnitudes[patchIdx] = StdVecL2Norm(feaVV->m_vDescriptor[patchIdx] - feaV_Src->m_vDescriptor[patchIdx]);
 		}
-
 		magnitudes[v] = StdVecL2Norm(vertexPatchMagnitudes);
 	}
 
@@ -141,7 +145,8 @@ int GlobalDescForLocalPatchesTestShapeDistributionApp(int argc, char* argv[])
 		magnitudes[i] = (magnitudes[i] - minMag) / (maxMag - minMag);
 	}
 
-	mesh.showVertexColors(magnitudes);
+	mesh.showVertexColors(magnitudes, referenceVertexId);
+
 	return mainRet(1, "Main Test Successfully Ended");
 }
 
@@ -225,11 +230,13 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 	std::vector<LocalFeaturePtr> feas;
 	hksExtractor.extract(triMesh, feas);
 
+	HeatKernelSignatureDesc* hksV_Src = (HeatKernelSignatureDesc*)(feas[126].get());
+
 	std::vector<double> magnitudes(feas.size());
 	for (size_t v = 0; v < feas.size(); v++)
 	{
 		HeatKernelSignatureDesc* hksVV = (HeatKernelSignatureDesc*)(feas[v].get());
-		magnitudes[v] = StdVecL2Norm(hksVV->m_vDescriptor);
+		magnitudes[v] = StdVecL2Norm(hksVV->m_vDescriptor - hksV_Src->m_vDescriptor);
 	}
 
 	const double maxMag = *std::max_element(magnitudes.begin(), magnitudes.end());
@@ -240,7 +247,7 @@ int HKSExtractionTestAPP(int argc, char* argv[])
 		magnitudes[i] = (magnitudes[i] - minMag) / (maxMag - minMag);
 	}
 
-	mesh.showVertexColors(magnitudes);
+	mesh.showVertexColors(magnitudes, 126);
 	return mainRet(1, "Main Test Successfully Ended");
 }
 
@@ -290,6 +297,6 @@ int main(int argc, char* argv[])
 	/*return IntrinsicWaveExtractionTestAPP(argc, argv);*/
 	/*return HKSExtractionTestAPP(argc, argv);*/
 	/*return OnEdgeAvgDistExtractionTestApp(argc, argv);*/
-	return GlobalDescForLocalPatchesTestSumOfCenterDistancesApp(argc, argv);
-	/*return GlobalDescForLocalPatchesTestShapeDistributionApp(argc, argv);*/
+	/*return GlobalDescForLocalPatchesTestSumOfCenterDistancesApp(argc, argv);*/
+	return GlobalDescForLocalPatchesTestShapeDistributionApp(argc, argv);
 }
