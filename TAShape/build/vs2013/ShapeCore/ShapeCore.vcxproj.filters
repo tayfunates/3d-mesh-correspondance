@@ -30,6 +30,9 @@
     <ClInclude Include="..\..\..\include\core\PolygonMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\core\TriMeshAuxInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\core\ThreeDimShape.cpp">
@@ -39,6 +42,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\TriangularMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\TriMeshAuxInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

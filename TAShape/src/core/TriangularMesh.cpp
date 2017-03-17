@@ -2,6 +2,7 @@
 #include <core/PathUtil.h>
 #include <core/NDimVector.h>
 #include <core/ColorPalette.h>
+#include <core/TriMeshAuxInfo.h>
 
 namespace TAShape
 {
@@ -403,6 +404,15 @@ namespace TAShape
 		float maxEucDistance = 0.0f;
 		for (int v = 0; v < verts.size(); v++)
 		{
+			if (v < verts.size() - 1)
+			{
+				std::cout << "%" << (100 * v) / verts.size() << " completed for calculating MaxEucDistanceBetweenTwoVertices" << "\r";
+			}
+			else
+			{
+				std::cout << "%" << 100 << " completed for calculating MaxEucDistanceBetweenTwoVertices" << "\n";
+			}
+
 			for (int w = 0; w < v; w++)
 			{
 				const float currEucDistance = eucDistanceBetween(verts[v], verts[w]);
@@ -420,6 +430,15 @@ namespace TAShape
 		float maxArea = 0.0f;
 		for (int v = 0; v < verts.size(); v++)
 		{
+			if (v < verts.size() - 1)
+			{
+				std::cout << "%" << (100 * v) / verts.size() << " completed for calculating MaxAreaBetweenThreeVertices" << "\r";
+			}
+			else
+			{
+				std::cout << "%" << 100 << " completed for calculating MaxAreaBetweenThreeVertices" << "\n";
+			}
+
 			for (int w = 0; w < v; w++)
 			{
 				for (int u = 0; u < w; u++)
@@ -450,6 +469,15 @@ namespace TAShape
 		float maxVolume = 0.0f;
 		for (int v = 0; v < verts.size(); v++)
 		{
+			if (v < verts.size() - 1)
+			{
+				std::cout << "%" << (100 * v) / verts.size() << " completed for calculating MaxVolumeOfTetrahedronBetweenFourVertices" << "\r";
+			}
+			else
+			{
+				std::cout << "%" << 100 << " completed for calculating MaxVolumeOfTetrahedronBetweenFourVertices" << "\n";
+			}
+
 			for (int w = 0; w < v; w++)
 			{
 				for (int u = 0; u < w; u++)
@@ -476,5 +504,14 @@ namespace TAShape
 			}
 		}
 		return maxVolume;
+	}
+
+	TriMeshAuxInfo TriangularMesh::calcAuxInfo() const
+	{
+		TriMeshAuxInfo res;
+		res.m_lfMaxEucDistanceBetweenTwoVertices = calcMaxEucDistanceBetweenTwoVertices();
+		res.m_lfMaxAreaOfTriangleConstructedByThreeVertices = calcMaxAreaBetweenThreeVertices();
+		res.m_lfMaxVolumeOfTetrahedronConstructedByForVertices = calcMaxVolumeOfTetrahedronBetweenFourVertices();
+		return res;
 	}
 }

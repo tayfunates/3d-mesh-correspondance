@@ -186,11 +186,13 @@
     <ClInclude Include="..\..\..\include\core\TriangularMesh.h" />
     <ClInclude Include="..\..\..\include\core\TAVector.h" />
     <ClInclude Include="..\..\..\include\core\ThreeDimShape.h" />
+    <ClInclude Include="..\..\..\include\core\TriMeshAuxInfo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\core\TriangularMesh.cpp" />
     <ClCompile Include="..\..\..\src\core\TAVector.cpp" />
     <ClCompile Include="..\..\..\src\core\ThreeDimShape.cpp" />
+    <ClCompile Include="..\..\..\src\core\TriMeshAuxInfo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

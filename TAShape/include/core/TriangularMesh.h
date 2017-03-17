@@ -8,6 +8,11 @@
 
 namespace TAShape
 {
+	class TriMeshAuxInfo;
+}
+
+namespace TAShape
+{
 	class Triangle
 	{
 	public:
@@ -219,6 +224,14 @@ namespace TAShape
 		* @return			Maximum volume of tetrahedron between four vertices in the mesh
 		*/
 		float calcMaxVolumeOfTetrahedronBetweenFourVertices() const;
+
+		/**
+		* @brief			Calculates and gets the auxilary of info of the mesh
+		*					Auxilary information contains some parameters about the mesh encapsulated in TriMeshAuxInfo class
+		* @return			TriMeshAuxInfo
+		*/
+		TriMeshAuxInfo calcAuxInfo() const;
+
 	};
 
 }
