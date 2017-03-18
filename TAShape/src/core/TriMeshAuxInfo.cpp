@@ -26,8 +26,8 @@ namespace TAShape
 		if (out.is_open())
 		{
 			out << std::setprecision(16) << "MaxPossibleEucDistanceBetweenTwoVertices" << m_FileDelimeter << m_lfMaxEucDistanceBetweenTwoVertices << std::endl;
-			out << std::setprecision(16) << "MaxPossibleSqrtAreaConstructedByThreeVertices" << m_FileDelimeter << m_lfMaxAreaOfTriangleConstructedByThreeVertices << std::endl;
-			out << std::setprecision(16) << "MaxPossibleCbrtVolumeConstructedByFourVertices" << m_FileDelimeter << m_lfMaxVolumeOfTetrahedronConstructedByForVertices << std::endl;
+			out << std::setprecision(16) << "MaxPossibleAreaConstructedByThreeVertices" << m_FileDelimeter << m_lfMaxAreaOfTriangleConstructedByThreeVertices << std::endl;
+			out << std::setprecision(16) << "MaxPossibleVolumeConstructedByFourVertices" << m_FileDelimeter << m_lfMaxVolumeOfTetrahedronConstructedByForVertices << std::endl;
 
 			out.close();
 		}
@@ -71,8 +71,8 @@ namespace TAShape
 
 	void TriMeshAuxInfo::print() const
 	{
-		std::cout << "MaxPossibleEucDistanceBetweenTwoVertices" << m_FileDelimeter << m_lfMaxEucDistanceBetweenTwoVertices << std::endl;
-		std::cout << "MaxPossibleSqrtAreaConstructedByThreeVertices" << m_FileDelimeter << m_lfMaxAreaOfTriangleConstructedByThreeVertices << std::endl;
-		std::cout << "MaxPossibleCbrtVolumeConstructedByFourVertices" << m_FileDelimeter << m_lfMaxVolumeOfTetrahedronConstructedByForVertices << std::endl;
+		std::cout << std::setprecision(16) << "MaxPossibleEucDistanceBetweenTwoVertices" << m_FileDelimeter << m_lfMaxEucDistanceBetweenTwoVertices << std::endl;
+		std::cout << std::setprecision(16) << "MaxPossibleAreaConstructedByThreeVertices" << m_FileDelimeter << m_lfMaxAreaOfTriangleConstructedByThreeVertices << std::endl;
+		std::cout << std::setprecision(16) << "MaxPossibleVolumeConstructedByFourVertices" << m_FileDelimeter << m_lfMaxVolumeOfTetrahedronConstructedByForVertices << std::endl;
 	}
 }
