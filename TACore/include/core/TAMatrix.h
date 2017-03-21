@@ -31,7 +31,7 @@ namespace TACore
 		bool loadBinary(const std::string& filePath);
 
 	private:
-		T**		m_ppMatrix;
+		T*		m_ppMatrix;
 		int		m_nRows;
 		int		m_nCols;
 	};

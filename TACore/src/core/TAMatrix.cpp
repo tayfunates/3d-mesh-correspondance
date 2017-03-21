@@ -21,11 +21,7 @@ namespace TACore
 	template <class T>
 	void TAMatrix<T>::init(int rows, int cols)
 	{
-		m_ppMatrix = new T*[rows];
-		for (int r = 0; r < rows; r++)
-		{
-			m_ppMatrix[r] = new T[cols];
-		}
+		m_ppMatrix = new T [rows*cols];
 		m_nCols = cols;
 		m_nRows = rows;
 	}
@@ -35,14 +31,6 @@ namespace TACore
 	{
 		if (m_ppMatrix != NULL)
 		{
-			for (int r = 0; r < m_nRows; r++)
-			{
-				if (m_ppMatrix[r] != NULL)
-				{
-					delete[] m_ppMatrix[r];
-					m_ppMatrix[r] = NULL;
-				}
-			}
 			delete[] m_ppMatrix;
 			m_ppMatrix = NULL;
 		}
@@ -53,25 +41,25 @@ namespace TACore
 	template <class T>
 	T* TAMatrix<T>::getRow(int row) const
 	{
-		return m_ppMatrix[row];
+		return m_ppMatrix + (row * m_nCols);
 	}
 
 	template <class T>
 	void TAMatrix<T>::setRow(T* rowData, int row)
 	{
-		std::memcpy(m_ppMatrix[row], rowData, m_nCols * sizeof(T));
+		std::memcpy(getRow(row), rowData, m_nCols * sizeof(T));
 	}
 
 	template <class T>
 	T TAMatrix<T>::getVal(int row, int col) const
 	{
-		return m_ppMatrix[row][col];
+		return m_ppMatrix[row * m_nCols + col];
 	}
 
 	template <class T>
 	void TAMatrix<T>::setVal(int row, int col, T val)
 	{
-		m_ppMatrix[row][col] = val;
+		m_ppMatrix[row * m_nCols + col] = val;
 	}
 
 	template <class T>
@@ -83,7 +71,7 @@ namespace TACore
 			o << "( ";
 			for (int c = 0; c < m_nCols; c++)
 			{
-				o << m_ppMatrix[r][c] << " ";
+				o << m_ppMatrix[r * m_nCols + c] << " ";
 			}
 			o << " )";
 			o << std::endl;
@@ -117,7 +105,7 @@ namespace TACore
 			{
 				for (int j = 0; j < m_nCols; j++)
 				{
-					out.write((char*)&(m_ppMatrix[i][j]), sizeof(T));
+					out.write((char*)&(m_ppMatrix[i * m_nCols + j]), sizeof(T));
 				}
 			}
 
@@ -148,7 +136,7 @@ namespace TACore
 			{
 				for (int j = 0; j < m_nCols; j++)
 				{
-					inp.read((char*)&(m_ppMatrix[i][j]), sizeof(T));
+					inp.read((char*)&(m_ppMatrix[i * m_nCols + j]), sizeof(T));
 				}
 			}
 
