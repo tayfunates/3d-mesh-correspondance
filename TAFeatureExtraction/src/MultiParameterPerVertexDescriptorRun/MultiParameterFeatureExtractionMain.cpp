@@ -8,6 +8,7 @@
 #include <TAFeatureFileIO.h>
 
 //Descriptors
+#include "GeodesicDistanceMatrix.h"
 #include "PatchBasedShapeDistributionHistogram.h"
 
 //Extractors
@@ -21,6 +22,7 @@ MultiParameterFeatureExtractionMain::Result MultiParameterFeatureExtractionMain:
 	TACore::ArgParser parser("MultiParameterFeatureExtractionMain::Run", "Runs feature extraction tool for a specified feature for a set of parametes");
 	parser.addArg("input-mesh", "", true, 1, "", "Input shape file to be loaded");
 	parser.addArg("desc-type", "", true, 1, "", "Type of the descriptor extracted");
+	parser.addArg("gd-matrix-path", "", true, 1, "", "Geodesic distance matrix of the mesh for efficiency");
 	parser.addArg("out-fea-folder", "", true, 1, "", "The folder in which the output feature files are created");
 	parser.addArg("ref-vertex", "", false, 1, "", "Reference vertex which is compared to other vertices"); //If this is given, a color ply file is also created as output
 	parser.addArg("out-ply-folder", "", false, 1, "", "The folder in which the output ply files are created");
@@ -34,6 +36,7 @@ MultiParameterFeatureExtractionMain::Result MultiParameterFeatureExtractionMain:
 	{
 		std::string inputMeshFile = parser.get("input-mesh");
 		std::string descType = parser.get("desc-type");
+		std::string gdMatrixPath = parser.get("gd-matrix-path");
 		std::string outFeaFolder = parser.get("out-fea-folder");
 		int refVertex = -1;
 		if (parser.exists("ref-vertex"))
@@ -68,6 +71,10 @@ MultiParameterFeatureExtractionMain::Result MultiParameterFeatureExtractionMain:
 
 			if (runPBSDPermutations == true)
 			{
+				//Read Geodesic Distance Matrix
+				TAFea::GeodesicDistanceMatrix gdMatrix;
+				gdMatrix.m_GeoMatrix.loadBinary(gdMatrixPath);
+
 				PBSDParameterSet minValues(20.0f, 50.0f, 10, 8, 128, 1, 1);
 				PBSDParameterSet maxValues(21.0f, 301.0f, 50, 32, 1024, 2, 4);
 				PBSDParameterSet incrValues(10.0f, 50.0f, 20, 8, 128, 10, 1);
@@ -80,6 +87,7 @@ MultiParameterFeatureExtractionMain::Result MultiParameterFeatureExtractionMain:
 					const PBSDParameterSet& permutation = permutations[permId];
 
 					TAFeaExt::PatchBasedShapeDistributionDescExtraction patchBasedExtractor;
+					patchBasedExtractor.setGeodesicDistanceMatrix(&gdMatrix);
 					patchBasedExtractor.setMinGeodesicDistance(permutation.m_fMinGeodesicDistance);
 					patchBasedExtractor.setMaxGeodesicDistance(permutation.m_fMaxGeodesicDistance);
 					patchBasedExtractor.setNumberOfPatches(permutation.m_nNumberOfPatches);
