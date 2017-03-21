@@ -21,8 +21,9 @@ MultiParameterFeatureExtractionMain::Result MultiParameterFeatureExtractionMain:
 	TACore::ArgParser parser("MultiParameterFeatureExtractionMain::Run", "Runs feature extraction tool for a specified feature for a set of parametes");
 	parser.addArg("input-mesh", "", true, 1, "", "Input shape file to be loaded");
 	parser.addArg("desc-type", "", true, 1, "", "Type of the descriptor extracted");
+	parser.addArg("out-fea-folder", "", true, 1, "", "The folder in which the output feature files are created");
 	parser.addArg("ref-vertex", "", false, 1, "", "Reference vertex which is compared to other vertices"); //If this is given, a color ply file is also created as output
-	parser.addArg("out-folder", "", true, 1, "", "The folder in which the output files are created");
+	parser.addArg("out-ply-folder", "", false, 1, "", "The folder in which the output ply files are created");
 
 	if (!parser.parseCommandLine(argc, argv))
 	{
@@ -33,15 +34,20 @@ MultiParameterFeatureExtractionMain::Result MultiParameterFeatureExtractionMain:
 	{
 		std::string inputMeshFile = parser.get("input-mesh");
 		std::string descType = parser.get("desc-type");
+		std::string outFeaFolder = parser.get("out-fea-folder");
 		int refVertex = -1;
 		if (parser.exists("ref-vertex"))
 		{
 			refVertex = parser.getInt("ref-vertex");
 		}
-		std::string outFolder = parser.get("out-folder");
+		std::string outPlyFolder = "";
+		if (parser.exists("out-ply-folder"))
+		{
+			outPlyFolder = parser.get("out-ply-folder");
+		}	
 
 		//Decide whether or not to create ply outputs
-		const bool createComparisonPly = (refVertex != -1);
+		const bool createComparisonPly = (refVertex != -1) && (outPlyFolder != "");
 
 		//Read the mesh
 		TAShape::TriangularMesh triMesh;
@@ -89,7 +95,7 @@ MultiParameterFeatureExtractionMain::Result MultiParameterFeatureExtractionMain:
 					const std::string permutationName = permutation.getName(TACore::PathUtil::getFileNameFromPath(inputMeshFile), permId);
 
 					//Write the binary file of features
-					const std::string featureFilePath = TACore::PathUtil::joinPath(outFolder, TACore::PathUtil::addExtension(permutationName, "fea"));
+					const std::string featureFilePath = TACore::PathUtil::joinPath(outFeaFolder, TACore::PathUtil::addExtension(permutationName, "fea"));
 					TAFea::TAFeatureFileIO::writePBSDInBinary(feas, featureFilePath);
 
 					//Write ply file with color according to a reference vertex
@@ -117,7 +123,7 @@ MultiParameterFeatureExtractionMain::Result MultiParameterFeatureExtractionMain:
 							magnitudes[i] = (magnitudes[i] - minMag) / (maxMag - minMag);
 						}
 
-						const std::string plyFilePath = TACore::PathUtil::joinPath(outFolder, TACore::PathUtil::addExtension(permutationName, "ply"));
+						const std::string plyFilePath = TACore::PathUtil::joinPath(outPlyFolder, TACore::PathUtil::addExtension(permutationName, "ply"));
 						triMesh.save(plyFilePath.c_str(), magnitudes);
 					}
 				}
