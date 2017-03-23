@@ -1,6 +1,7 @@
 #include "PatchBasedPerVertexFeatureExtraction.h"
 #include <core/TriangularMesh.h>
 #include "GeodesicDistanceMatrixExtraction.h"
+#include <fstream>
 
 namespace TAFeaExt
 {
@@ -23,6 +24,7 @@ namespace TAFeaExt
 		m_fMaxGeodesicRadius = other.m_fMaxGeodesicRadius;
 		m_nNumberOfPatches = other.m_nNumberOfPatches;
 		m_pGeodeticDistanceMatrix = other.m_pGeodeticDistanceMatrix;
+		m_PatchesForAllVertices = other.m_PatchesForAllVertices;
 	}
 
 	Result PatchBasedPerVertexFeatureExtraction::extract(PolygonMesh *mesh, std::vector<LocalFeaturePtr>& outFeatures)
@@ -48,12 +50,14 @@ namespace TAFeaExt
 			m_pGeodeticDistanceMatrix = (GeodesicDistanceMatrix*)(globalFeaPtr.get());
 		}
 
-		std::vector<PatchList> patchesForAll;
-		result = createPatches(triMesh, m_pGeodeticDistanceMatrix->m_GeoMatrix, this->m_fMinGeodesicRadius, this->m_fMaxGeodesicRadius, this->m_nNumberOfPatches, patchesForAll);
+		if (!(this->m_PatchesForAllVertices.size() > 0))
+		{
+			result = createPatches(triMesh, m_pGeodeticDistanceMatrix->m_GeoMatrix, this->m_fMinGeodesicRadius, this->m_fMaxGeodesicRadius, this->m_nNumberOfPatches, this->m_PatchesForAllVertices);
+		}
 
 		if (result == TACore::TACORE_OK)
 		{
-			result = calcFeature(triMesh, patchesForAll, outFeatures);
+			result = calcFeature(triMesh, this->m_PatchesForAllVertices, outFeatures);
 		}
 
 		return result;
@@ -196,5 +200,101 @@ namespace TAFeaExt
 	void PatchBasedPerVertexFeatureExtraction::setGeodesicDistanceMatrix(TAFea::GeodesicDistanceMatrix* gdMatrix)
 	{
 		this->m_pGeodeticDistanceMatrix = gdMatrix;
+	}
+
+	void PatchBasedPerVertexFeatureExtraction::setPatchesForAllVertices(const std::vector<PatchList>& patchesForAll)
+	{
+		this->m_PatchesForAllVertices = patchesForAll;
+	}
+
+	std::vector<PatchBasedPerVertexFeatureExtraction::PatchList> PatchBasedPerVertexFeatureExtraction::getPatchesForAllVertices() const
+	{
+		return this->m_PatchesForAllVertices;
+	}
+
+	Result PatchBasedPerVertexFeatureExtraction::savePatchesInBinary(const std::vector<PatchList>& patchesForAll, const std::string& pathToFile)
+	{
+		Result res = TACORE_OK;
+		std::ofstream out(pathToFile, std::ios::out | std::ios::binary);
+		if (out.is_open())
+		{
+			const size_t numberOfVertices = patchesForAll.size();
+			out.write((char*)&(numberOfVertices), sizeof(numberOfVertices));
+
+			if (numberOfVertices > 0)
+			{
+				const size_t numberOfPatchesPerVertex = patchesForAll[0].size();
+				out.write((char*)&(numberOfPatchesPerVertex), sizeof(numberOfPatchesPerVertex));
+
+				for (size_t v = 0; v < numberOfVertices; v++)
+				{
+					for (size_t p = 0; p < numberOfPatchesPerVertex; p++)
+					{
+						const size_t patchSize = patchesForAll[v][p].size();
+						out.write((char*)&(patchSize), sizeof(patchSize));
+						for (size_t pv = 0; pv < patchSize; pv++)
+						{
+							int patchVertexIdx = patchesForAll[v][p][pv];
+							out.write((char*)&(patchVertexIdx), sizeof(patchVertexIdx));
+						}
+					}
+				}
+
+			}
+
+			out.close();
+		}
+		else
+		{
+			res = TACORE_FILE_ERROR;
+		}
+
+		return res;
+	}
+
+	Result PatchBasedPerVertexFeatureExtraction::loadPatchesInBinary(const std::string& pathToFile, std::vector<PatchList>& patchesForAll)
+	{
+		Result res = TACORE_OK;
+		std::ifstream inp(pathToFile, std::ios::in | std::ios::binary);
+		if (inp.is_open())
+		{
+			size_t numberOfVertices;
+			inp.read((char*)&(numberOfVertices), sizeof(numberOfVertices));
+
+			if (numberOfVertices > 0)
+			{
+				size_t numberOfPatchesPerVertex;
+				inp.read((char*)&(numberOfPatchesPerVertex), sizeof(numberOfPatchesPerVertex));
+
+				patchesForAll = std::vector<PatchList>(numberOfVertices, PatchList(numberOfPatchesPerVertex, SinglePatch()));
+
+				for (size_t v = 0; v < numberOfVertices; v++)
+				{
+					for (size_t p = 0; p < numberOfPatchesPerVertex; p++)
+					{
+						size_t patchSize;
+						inp.read((char*)&(patchSize), sizeof(patchSize));
+
+						patchesForAll[v][p] = SinglePatch(patchSize);
+
+						for (size_t pv = 0; pv < patchSize; pv++)
+						{
+							int patchVertexIdx;
+							inp.read((char*)&(patchVertexIdx), sizeof(patchVertexIdx));
+							patchesForAll[v][p][pv] = patchVertexIdx;
+						}
+					}
+				}
+
+			}
+
+			inp.close();
+		}
+		else
+		{
+			res = TACORE_FILE_ERROR;
+		}
+
+		return res;
 	}
 }

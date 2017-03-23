@@ -52,17 +52,20 @@ namespace TAFeaExt
 		virtual void setMaxGeodesicDistance(const float& maxGeoDistance);
 		virtual void setNumberOfPatches(const int& noOfPatches);
 		virtual void setGeodesicDistanceMatrix(TAFea::GeodesicDistanceMatrix* gdMatrix);
+		virtual void setPatchesForAllVertices(const std::vector<PatchList>& patchesForAll);
 
 		//Getters
 		virtual float getMinGeodesicDistance() const;
 		virtual float getMaxGeodesicDistance() const;
 		virtual int getNumberOfPatches() const;
+		virtual std::vector<PatchList> getPatchesForAllVertices() const;
 
 	private:
 		float m_fMinGeodesicRadius;									//< Minimum value for geodesic distance from which the smallest patch is created
 		float m_fMaxGeodesicRadius;									//< Maximum value for geodesic distance from which the biggest patch is created
 		int m_nNumberOfPatches;										//< Number of patches which will be the size of the output descriptor
-		TAFea::GeodesicDistanceMatrix* m_pGeodeticDistanceMatrix;	//< Geodesic Distance Matrix used in the extraction. De-allocation is the responsibilty of the users of this class (No Getter)		
+		TAFea::GeodesicDistanceMatrix* m_pGeodeticDistanceMatrix;	//< Geodesic Distance Matrix used in the extraction. De-allocation is the responsibilty of the users of this class (No Getter)	
+		std::vector<PatchList> m_PatchesForAllVertices;				//< List of patch list for all vertices of the corresponding mesh.
 
 	protected:
 
@@ -118,6 +121,26 @@ namespace TAFeaExt
 		* @return	TACORE_BAD_ARGS if triMesh is NULL
 		*/
 		virtual Result createPatches(TriangularMesh* triMesh, const TAMatrix<float>& distanceMatrix, const float& minRadius, const float& maxRadius, const int& noOfPatches, std::vector<PatchList>& listOfPatchLists);
+
+		/**
+		* @brief	Saves the patches given in binary format
+		*
+		* @param	patchesForAll Patches of all vertices
+		* @param	pathToFile patches of all vertices to be saved
+		* @return	TACORE_OK if everything goes fine
+		* @return	TACORE_FILE_ERROR if the file cannot be opened
+		*/
+		Result savePatchesInBinary(const std::vector<PatchList>& patchesForAll, const std::string& pathToFile);
+
+		/**
+		* @brief	Loads the patches given in binary format
+		*
+		* @param	pathToFile patches of all vertices
+		* @param	[out] patchesForAll Patches of all vertices to be loaded
+		* @return	TACORE_OK if everything goes fine
+		* @return	TACORE_FILE_ERROR if the file cannot be opened
+		*/
+		Result loadPatchesInBinary(const std::string& pathToFile, std::vector<PatchList>& patchesForAll);
 
 		/**
 		* @brief	Calculates features from extracted patches for ALL VERTICES
