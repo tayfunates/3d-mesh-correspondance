@@ -113,6 +113,7 @@ Global
 		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Release|Win32.ActiveCfg = Release|Win32
 		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Release|Win32.Build.0 = Release|Win32
 		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Release|x64.ActiveCfg = Release|x64
+		{29ED2F18-A3FB-493F-9CBC-142E0C6BE67E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
