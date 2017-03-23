@@ -103,7 +103,9 @@ MultiParameterFeatureExtractionMain::Result MultiParameterFeatureExtractionMain:
 					patchBasedExtractor.setSamplingMethod(TAFeaExt::PatchBasedShapeDistributionDescExtraction::SamplingMethod(permutation.m_nSamplingMethod));
 					patchBasedExtractor.setShapeDistributionFunction(TAFeaExt::PatchBasedShapeDistributionDescExtraction::ShapeDistributionFunction(permutation.m_nShapeDistributionFunction));
 					if (TAFeaExt::PatchBasedShapeDistributionDescExtraction::ShapeDistributionFunction(permutation.m_nShapeDistributionFunction)
-						== TAFeaExt::PatchBasedShapeDistributionDescExtraction::DISTANCE_BETWEEN_TWO_RANDOM_POINTS)
+						== TAFeaExt::PatchBasedShapeDistributionDescExtraction::DISTANCE_BETWEEN_TWO_RANDOM_POINTS
+						|| TAFeaExt::PatchBasedShapeDistributionDescExtraction::ShapeDistributionFunction(permutation.m_nShapeDistributionFunction)
+						== TAFeaExt::PatchBasedShapeDistributionDescExtraction::DISTANCE_BETWEEN_FIXED_AND_RANDOM_POINT)
 					{
 						patchBasedExtractor.setMaxPossibleSampleValue(auxInfo.m_lfMaxEucDistanceBetweenTwoVertices);
 					}
